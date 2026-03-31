@@ -1,16 +1,6 @@
-// كود إضافي لجلب معلومات الجهاز والـ IP
-async function getDeviceDetails() {
-    let deviceInfo = `📱 الجهاز: ${navigator.platform}\n🌐 المتصفح: ${navigator.userAgent}\n🔋 البطارية: `;
-    
-    try {
-        const battery = await navigator.getBattery();
-        deviceInfo += `${(battery.level * 100).toFixed(0)}%`;
-    } catch (e) {
-        deviceInfo += "غير معروفة";
-    }
-    
+
     return deviceInfo;
-}
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
