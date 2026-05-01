@@ -3,74 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>كاشف الحقول والمجالات</title>
+    <title>S25 Ultra Security Radar</title>
     <style>
-        body { background-color: #000; color: #0f0; font-family: 'Courier New', monospace; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        #value { font-size: 80px; margin: 20px; text-shadow: 0 0 20px #0f0; }
-        .status { font-size: 20px; color: #fff; }
-        .warning { color: #f00; animation: blink 0.5s infinite; display: none; }
-        @keyframes blink { 50% { opacity: 0; } }
-        button { background: #0f0; color: #000; border: none; padding: 15px 30px; font-weight: bold; border-radius: 5px; cursor: pointer; }
+        body { background-color: #050505; color: #00ff41; font-family: 'Segoe UI', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        .radar-circle { width: 250px; height: 250px; border: 2px solid #00ff41; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); }
+        #value { font-size: 60px; font-weight: bold; }
+        .label { font-size: 14px; color: #888; margin-top: 10px; }
+        #status { font-size: 18px; margin-top: 20px; font-weight: bold; height: 30px; }
+        .warning { color: #ff3b30; animation: blink 0.6s infinite; }
+        @keyframes blink { 50% { opacity: 0.3; } }
+        button { background: #00ff41; color: #000; border: none; padding: 15px 40px; border-radius: 30px; font-weight: bold; cursor: pointer; font-size: 18px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="status">قوة الحقل المغناطيسي المحيط</div>
-    <div id="value">0</div>
-    <div id="alert" class="warning">⚠️ تحذير: تم رصد جسم مشبوه!</div>
-    <br>
-    <button onclick="startApp()">تشغيل الحساس</button>
+    <div class="radar-circle">
+        <div id="value">0</div>
+    </div>
+    <div class="label">قوة الإشارة الكهرومغناطيسية</div>
+    <div id="status">اضغط للتشغيل</div>
+    
+    <button id="startBtn" onclick="initRadar()">بدء المسح الأمني</button>
 
-    <script>
-        let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+<script>
+    let audioCtx;
+    let baseValue = 0;
+    let isInitialized = false;
+
+    function beep(freq) {
+        if(!audioCtx) return;
+        let osc = audioCtx.createOscillator();
+        let gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.frequency.value = freq;
+        osc.type = 'square';
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+    }
+
+    async function initRadar() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        document.getElementById('startBtn').style.display = 'none';
         
-        // دالة لإصدار صوت "الزمور"
-        function beep(frequency = 440, duration = 100) {
-            let oscillator = audioCtx.createOscillator();
-            let gainNode = audioCtx.createGain();
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            oscillator.frequency.value = frequency;
-            oscillator.type = "square"; // صوت حاد يشبه الأجهزة الأمنية
-            oscillator.start();
-            setTimeout(() => oscillator.stop(), duration);
+        // طلب الصلاحيات للأجهزة التي تتطلب ذلك (مثل آيفون أو بعض تحديثات أندرويد)
+        if (typeof DeviceMotionEvent.requestPermission === 'function') {
+            const permission = await DeviceMotionEvent.requestPermission();
+            if (permission !== 'granted') return alert("يجب السماح بالوصول للحساسات!");
         }
 
-        function startApp() {
-            audioCtx.resume();
-            document.querySelector('button').style.display = 'none';
+        window.addEventListener('devicemotion', handleMotion);
+        document.getElementById('status').innerText = "جاري المعايرة... ثبت يدك";
+        setTimeout(() => { isInitialized = true; }, 2000);
+    }
 
-            // تفقد إذا كان الحساس مدعوماً (يعمل في المتصفحات الحديثة وبحاجة HTTPS)
-            if ('MagnticSensor' in window || 'LinearAccelerationSensor' in window) {
-                // ملاحظة: أغلب المتصفحات تستخدم DeviceOrientationEvent للوصول للحساسات
-            }
+    function handleMotion(event) {
+        let x = event.accelerationIncludingGravity.x || 0;
+        let y = event.accelerationIncludingGravity.y || 0;
+        let z = event.accelerationIncludingGravity.z || 0;
 
-            window.addEventListener('deviceorientationmagnetometer', (event) => {
-                // بعض الهواتف تدعم هذا الحدث مباشرة
-            });
-
-            // الطريقة الأكثر شيوعاً والمتوافقة مع الكروم
-            window.addEventListener('devicemotion', (event) => {
-                let totalForce = Math.sqrt(
-                    Math.pow(event.accelerationIncludingGravity.x, 2) +
-                    Math.pow(event.accelerationIncludingGravity.y, 2) +
-                    Math.pow(event.accelerationIncludingGravity.z, 2)
-                );
-
-                // تقريب القيمة للعرض
-                let displayVal = Math.round(totalForce * 10);
-                document.getElementById('value').innerText = displayVal;
-
-                // إذا زادت القوة عن حد معين (يعني اقترب من جسم معدني أو إلكتروني)
-                if (displayVal > 150) { 
-                    document.getElementById('alert').style.display = 'block';
-                    beep(880, 150); // إصدار صوت زمور حاد
-                    if (navigator.vibrate) navigator.vibrate(200); // اهتزاز الهاتف
-                } else {
-                    document.getElementById('alert').style.display = 'none';
-                }
-            });
+        // حساب القوة الكلية للحقل (المغناطيسي + الجاذبية)
+        let rawMag = Math.sqrt(x*x + y*y + z*z) * 10;
+        
+        if (!isInitialized) {
+            baseValue = rawMag;
+            return;
         }
-    </script>
+
+        // حساب القيمة الصافية بعد طرح الجاذبية الأرضية
+        let finalMag = Math.abs(rawMag - baseValue);
+        let displayValue = Math.round(finalMag * 5); // تكبير الإشارة للوضوح
+
+        document.getElementById('value').innerText = displayValue;
+
+        let statusEl = document.getElementById('status');
+        statusEl.className = "";
+
+        if (displayValue > 350) {
+            statusEl.innerText = "⚠️ تحذير: كتلة معدنية كبيرة (حديد)";
+            statusEl.classList.add('warning');
+            beep(400);
+            if (navigator.vibrate) navigator.vibrate(100);
+        } else if (displayValue > 120 && displayValue <= 350) {
+            statusEl.innerText = "🚨 تنبيه: نبض إلكتروني (احتمال كاميرا)";
+            statusEl.style.color = "#007aff"; 
+            beep(900);
+        } else if (displayValue > 40) {
+            statusEl.innerText = "فحص: إشارة ضعيفة";
+            statusEl.style.color = "#ffcc00";
+        } else {
+            statusEl.innerText = "الوضع آمن - لا يوجد أهداف";
+            statusEl.style.color = "#00ff41";
+        }
+    }
+</script>
 </body>
 </html>
