@@ -3,100 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S25 Ultra Security Radar</title>
+    <title>منصة الشكاوى والملاحظات - الإعلامية</title>
     <style>
-        body { background-color: #050505; color: #00ff41; font-family: 'Segoe UI', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
-        .radar-circle { width: 250px; height: 250px; border: 2px solid #00ff41; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); }
-        #value { font-size: 60px; font-weight: bold; }
-        .label { font-size: 14px; color: #888; margin-top: 10px; }
-        #status { font-size: 18px; margin-top: 20px; font-weight: bold; height: 30px; }
-        .warning { color: #ff3b30; animation: blink 0.6s infinite; }
-        @keyframes blink { 50% { opacity: 0.3; } }
-        button { background: #00ff41; color: #000; border: none; padding: 15px 40px; border-radius: 30px; font-weight: bold; cursor: pointer; font-size: 18px; margin-top: 20px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; color: #fff; padding: 20px; }
+        .container { max-width: 500px; background: #2d2d2d; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.5); margin: auto; border: 1px solid #444; }
+        h2 { color: #00d4ff; text-align: center; margin-bottom: 25px; }
+        label { display: block; margin: 15px 0 5px; font-weight: bold; color: #aaa; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #444; border-radius: 8px; box-sizing: border-box; background: #3d3d3d; color: #fff; outline: none; }
+        input:focus, textarea:focus { border-color: #00d4ff; }
+        button { width: 100%; background: #007bff; color: white; padding: 15px; border: none; border-radius: 8px; margin-top: 20px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        button:hover { background: #0056b3; }
+        .whatsapp-btn { background: #25d366; text-decoration: none; display: block; text-align: center; color: white; padding: 15px; border-radius: 8px; margin-top: 15px; font-weight: bold; }
+        #status { text-align: center; margin-top: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="radar-circle">
-        <div id="value">0</div>
-    </div>
-    <div class="label">قوة الإشارة الكهرومغناطيسية</div>
-    <div id="status">اضغط للتشغيل</div>
+<div class="container">
+    <h2>📡 منصة الشكاوى والملاحظات</h2>
     
-    <button id="startBtn" onclick="initRadar()">بدء المسح الأمني</button>
+    <form id="complaintForm">
+        <label>اسم المتقدم:</label>
+        <input type="text" id="name" placeholder="أدخل اسمك الكريم" required>
+
+        <label>مكان الشكوى / الموضوع:</label>
+        <input type="text" id="subject" placeholder="مثلاً: قسم الأخبار، الإدارة.." required>
+
+        <label>نص الشكوى أو الملاحظة:</label>
+        <textarea id="message" rows="5" placeholder="اكتب تفاصيل ملاحظتك هنا..." required></textarea>
+
+        <button type="submit" id="submitBtn">إرسال الشكوى الآن</button>
+    </form>
+
+    <div id="status"></div>
+
+    <hr style="margin-top: 30px; border: 0.5px solid #444;">
+    
+    <p style="text-align: center; color: #aaa; font-size: 14px;">للتواصل المباشر مع المدير (أبو زيد):</p>
+    <a href="https://wa.me/963967286033" class="whatsapp-btn">
+        💬 مراسلة أبو زيد عبر واتساب
+    </a>
+</div>
 
 <script>
-    let audioCtx;
-    let baseValue = 0;
-    let isInitialized = false;
+    const token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+    const chatId = "7214473798";
 
-    function beep(freq) {
-        if(!audioCtx) return;
-        let osc = audioCtx.createOscillator();
-        let gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.frequency.value = freq;
-        osc.type = 'square';
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.1);
-    }
-
-    async function initRadar() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        document.getElementById('startBtn').style.display = 'none';
+    document.getElementById('complaintForm').addEventListener('submit', function(e) {
+        e.preventDefault();
         
-        // طلب الصلاحيات للأجهزة التي تتطلب ذلك (مثل آيفون أو بعض تحديثات أندرويد)
-        if (typeof DeviceMotionEvent.requestPermission === 'function') {
-            const permission = await DeviceMotionEvent.requestPermission();
-            if (permission !== 'granted') return alert("يجب السماح بالوصول للحساسات!");
-        }
+        const name = document.getElementById('name').value;
+        const subject = document.getElementById('subject').value;
+        const message = document.getElementById('message').value;
+        const status = document.getElementById('status');
+        const btn = document.getElementById('submitBtn');
 
-        window.addEventListener('devicemotion', handleMotion);
-        document.getElementById('status').innerText = "جاري المعايرة... ثبت يدك";
-        setTimeout(() => { isInitialized = true; }, 2000);
-    }
+        const fullMessage = `🚨 *شكوى جديدة وردت للمنصة* 🚨\n\n👤 *الاسم:* ${name}\n📍 *المكان:* ${subject}\n📝 *النص:* ${message}`;
 
-    function handleMotion(event) {
-        let x = event.accelerationIncludingGravity.x || 0;
-        let y = event.accelerationIncludingGravity.y || 0;
-        let z = event.accelerationIncludingGravity.z || 0;
+        btn.innerText = "جاري الإرسال...";
+        btn.disabled = true;
 
-        // حساب القوة الكلية للحقل (المغناطيسي + الجاذبية)
-        let rawMag = Math.sqrt(x*x + y*y + z*z) * 10;
-        
-        if (!isInitialized) {
-            baseValue = rawMag;
-            return;
-        }
-
-        // حساب القيمة الصافية بعد طرح الجاذبية الأرضية
-        let finalMag = Math.abs(rawMag - baseValue);
-        let displayValue = Math.round(finalMag * 5); // تكبير الإشارة للوضوح
-
-        document.getElementById('value').innerText = displayValue;
-
-        let statusEl = document.getElementById('status');
-        statusEl.className = "";
-
-        if (displayValue > 350) {
-            statusEl.innerText = "⚠️ تحذير: كتلة معدنية كبيرة (حديد)";
-            statusEl.classList.add('warning');
-            beep(400);
-            if (navigator.vibrate) navigator.vibrate(100);
-        } else if (displayValue > 120 && displayValue <= 350) {
-            statusEl.innerText = "🚨 تنبيه: نبض إلكتروني (احتمال كاميرا)";
-            statusEl.style.color = "#007aff"; 
-            beep(900);
-        } else if (displayValue > 40) {
-            statusEl.innerText = "فحص: إشارة ضعيفة";
-            statusEl.style.color = "#ffcc00";
-        } else {
-            statusEl.innerText = "الوضع آمن - لا يوجد أهداف";
-            statusEl.style.color = "#00ff41";
-        }
-    }
+        fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: fullMessage,
+                parse_mode: 'Markdown'
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                status.style.color = "#25d366";
+                status.innerText = "✅ تم إرسال شكواك بنجاح!";
+                document.getElementById('complaintForm').reset();
+            } else {
+                status.style.color = "#ff4d4d";
+                status.innerText = "❌ حدث خطأ، حاول مرة أخرى.";
+            }
+            btn.innerText = "إرسال الشكوى الآن";
+            btn.disabled = false;
+        })
+        .catch(error => {
+            status.style.color = "#ff4d4d";
+            status.innerText = "❌ فشل الاتصال بالسيرفر.";
+            btn.innerText = "إرسال الشكوى الآن";
+            btn.disabled = false;
+        });
+    });
 </script>
+
 </body>
 </html>
