@@ -1,64 +1,31 @@
-cat << 'EOF' > templates/index.html
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قناص التهديدات الأمنية</title>
+    <title>Khaled_altweel99 - Profile Clone</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f0f12; color: #ffffff; text-align: center; padding: 20px; margin: 0; }
-        .container { max-width: 550px; margin: 40px auto; background: #16161a; padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.6); border: 1px solid #24242b; }
-        h1 { color: #00ffcc; margin-bottom: 5px; font-size: 26px; }
-        p { color: #8a8a98; font-size: 14px; margin-bottom: 25px; }
-        input[type="text"] { width: 90%; padding: 12px; margin: 15px 0; border-radius: 6px; border: 1px solid #2d2d38; background: #1f1f26; color: #fff; font-size: 15px; text-align: left; direction: ltr; }
-        button { width: 95%; padding: 14px; background-color: #00ffcc; color: #0f0f12; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .result { margin-top: 25px; padding: 15px; border-radius: 6px; display: none; text-align: right; line-height: 1.6; }
-        .danger { background-color: rgba(114, 28, 36, 0.2); border: 1px solid #ff4a5a; color: #ff919a; }
-        .safe { background-color: rgba(21, 87, 36, 0.2); border: 1px solid #00ff87; color: #91ffc4; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; background: #fafafa; }
+        .profile-container { max-width: 935px; margin: 0 auto; padding: 20px; }
+        .header { display: flex; align-items: center; gap: 50px; }
+        .avatar { width: 150px; height: 150px; border-radius: 50%; background: #dbdbdb; }
+        .info h1 { font-size: 28px; font-weight: 300; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 50px; }
+        .post { aspect-ratio: 1/1; background: #efefef; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🛡️ قناص التهديدات الأمنية</h1>
-        <p>رادار فحص الروابط عبر VirusTotal</p>
-        <hr style="border: 0; border-top: 1px solid #24242b; margin-bottom: 20px;">
-        <input type="text" id="urlInput" placeholder="https://example.com">
-        <button onclick="scanUrl()">اقنص الرابط وافحصه</button>
-        <div class="result" id="resultBox"></div>
+    <div class="profile-container">
+        <div class="header">
+            <div class="avatar"></div>
+            <div class="info">
+                <h1>Khaled_altweel99</h1>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="post"></div>
+            <div class="post"></div>
+            <div class="post"></div>
+        </div>
     </div>
-    <script>
-        async function scanUrl() {
-            const url = document.getElementById('urlInput').value;
-            const resultBox = document.getElementById('resultBox');
-            if(!url) return;
-            resultBox.style.display = 'block';
-            resultBox.className = 'result safe';
-            resultBox.innerHTML = '⏳ جاري التحليل والاتصال بالرادار...';
-            try {
-                const response = await fetch('/scan_url', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: url })
-                });
-                const data = await response.json();
-                if(data.error) {
-                    resultBox.className = 'result danger';
-                    resultBox.innerHTML = '❌ خطأ: ' + data.error;
-                } else {
-                    if(data.malicious > 0) {
-                        resultBox.className = 'result danger';
-                        resultBox.innerHTML = `🚨 <strong>الرابط مشبوه!</strong><br>• المحركات المكتشفة: ${data.malicious}<br>• إجمالي الفحوصات: ${data.total}`;
-                    } else {
-                        resultBox.className = 'result safe';
-                        resultBox.innerHTML = `✅ <strong>الرابط آمن ونظيف تماماً!</strong><br>• لم يعثر الرادار على أي تهديد من أصل ${data.total} محرك أمني.`;
-                    }
-                }
-            } catch (err) {
-                resultBox.className = 'result danger';
-                resultBox.innerHTML = '❌ فشل الاتصال بالسيرفر.';
-            }
-        }
-    </script>
 </body>
 </html>
-EOF
