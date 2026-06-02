@@ -28,9 +28,9 @@
         <div class="section-title">طلب خدمة جديدة</div>
         <form id="serviceForm" class="form-group">
             <input type="text" id="userName" placeholder="اسمك الكريم" required>
-            <input type="text" id="serviceType" placeholder="نوع الخدمة (تصميم/مونتاج/برمجة)" required>
+            <input type="text" id="serviceType" placeholder="نوع الخدمة (تصميم / مونتاج / برمجة)" required>
             <textarea id="details" placeholder="التفاصيل (أسماء، تواريخ، ملاحظات)" rows="4" required></textarea>
-            <button type="submit">إرسال الطلب للبوت</button>
+            <button type="submit">📩 إرسال معلوماتك</button>
         </form>
         <div id="formStatus"></div>
 
@@ -62,9 +62,9 @@
                 return;
             }
             
-            statusDiv.innerHTML = '📤 جارِ الإرسال إلى البوت...';
+            statusDiv.innerHTML = '📤 جارٍ إرسال معلوماتك...';
             
-            const message = `📩 *طلب خدمة جديد*\n\n👤 الاسم: ${name}\n🛠️ الخدمة: ${service}\n📝 التفاصيل:\n${details}`;
+            const message = `📩 *معلومات طلب جديد*\n\n👤 الاسم: ${name}\n🛠️ الخدمة: ${service}\n📝 التفاصيل:\n${details}`;
             
             try {
                 const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -80,14 +80,14 @@
                 const result = await response.json();
                 
                 if(result.ok) {
-                    statusDiv.innerHTML = '✅ تم إرسال طلبك بنجاح! سأتواصل معك قريباً.';
+                    statusDiv.innerHTML = '✅ تم إرسال معلوماتك بنجاح! سأتواصل معك قريباً.';
                     form.reset();
                 } else {
                     statusDiv.innerHTML = '❌ فشل الإرسال. حاول مرة أخرى.';
                     console.error(result);
                 }
             } catch(error) {
-                statusDiv.innerHTML = '❌ خطأ في الاتصال. تأكد من الإنترنت.';
+                statusDiv.innerHTML = '❌ خطأ في الاتصال. تأكد من اتصالك بالإنترنت.';
                 console.error(error);
             }
         });
